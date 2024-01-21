@@ -9,7 +9,7 @@ class PrimaryButton extends StatelessWidget {
   final String text;
 
   /// Button onPressed callback.
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   @override
   Widget build(BuildContext context) {
     return Material(
