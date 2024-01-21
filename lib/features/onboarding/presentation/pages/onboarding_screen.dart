@@ -1,5 +1,5 @@
 import 'package:carbon_zero/core/widgets/primary_button.dart';
-import 'package:carbon_zero/features/onboarding/widgets/on_boarding_card.dart';
+import 'package:carbon_zero/features/onboarding/presentation/widgets/on_boarding_card.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -23,6 +23,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     pageController.addListener(listener);
   }
 
+//TODO: REMOVE SETSTATE ONCE I START USING A STATE MANAGEMENT LIB (BLOC / RIVEPORD)
   void listener() {
     setState(() {
       currentPage = pageController.page!.toInt();
@@ -116,7 +117,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       onTap: () {
                         pageController.nextPage(
                           duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeInCubic,
+                          curve: Curves.easeIn,
                         );
                       },
                       borderRadius: BorderRadius.circular(20),
