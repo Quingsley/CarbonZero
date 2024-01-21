@@ -18,6 +18,7 @@ class CarbonZero extends StatelessWidget {
       title: 'CarbonZero',
       darkTheme: darkTheme,
       theme: lightTheme,
+      themeMode: ThemeMode.dark,
       routeInformationParser: AppRoutes.router.routeInformationParser,
       routeInformationProvider: AppRoutes.router.routeInformationProvider,
       routerDelegate: AppRoutes.router.routerDelegate,

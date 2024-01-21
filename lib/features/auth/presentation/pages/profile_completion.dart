@@ -12,19 +12,25 @@ class ProfileSetupComplete extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Column(
-        children: [
-          const OnBoardingCard(
-            title: "You're all set up !",
-            description: 'Time to join the fight against climate change',
-            image: 'assets/images/storage_work.svg',
-          ),
-          const Spacer(),
-          PrimaryButton(text: 'Continue', onPressed: () => context.go('/home')),
-          const SizedBox(
-            height: 20,
-          ),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: Column(
+          children: [
+            const OnBoardingCard(
+              title: "You're all set up !",
+              description: 'Time to join the fight against climate change',
+              image: 'assets/images/storage_work.svg',
+            ),
+            const Spacer(),
+            PrimaryButton(
+              text: 'Continue',
+              onPressed: () => context.go('/home'),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+          ],
+        ),
       ),
     );
   }

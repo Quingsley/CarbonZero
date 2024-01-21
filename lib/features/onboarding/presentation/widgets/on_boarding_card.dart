@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg_provider/flutter_svg_provider.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 ///[OnBoardingCard] widget.
 class OnBoardingCard extends StatelessWidget {
@@ -24,11 +24,9 @@ class OnBoardingCard extends StatelessWidget {
     return Column(
       // mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Image(
+        SvgPicture.asset(
+          image,
           width: MediaQuery.sizeOf(context).width * .8,
-          image: Svg(
-            image,
-          ),
         ),
         SizedBox(
           height: MediaQuery.sizeOf(context).height * .1,
