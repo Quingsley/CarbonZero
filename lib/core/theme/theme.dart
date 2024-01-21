@@ -73,6 +73,9 @@ final darkTheme = FlexThemeData.dark(
   keyColors: const FlexKeyColors(
     useSecondary: true,
     useTertiary: true,
+    keepPrimary: true,
+    keepSecondary: true,
+    keepTertiary: true,
   ),
   tones: FlexTones.jolly(Brightness.dark),
   visualDensity: FlexColorScheme.comfortablePlatformDensity,
@@ -81,6 +84,3 @@ final darkTheme = FlexThemeData.dark(
   // To use the Playground font, add GoogleFonts package and uncomment
   fontFamily: GoogleFonts.quicksand().fontFamily,
 );
-// If you do not have a themeMode switch, uncomment this line
-// to let the device system mode control the theme mode:
-// themeMode: ThemeMode.system,
