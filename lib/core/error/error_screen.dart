@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 /// show [ErrorScreen] widget when user navigates to unknown occurs.
 class ErrorScreen extends StatelessWidget {
@@ -13,12 +14,27 @@ class ErrorScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.error,
       body: Center(
-        child: Text(
-          message,
-          style: Theme.of(context)
-              .textTheme
-              .headlineSmall
-              ?.copyWith(color: Theme.of(context).colorScheme.onError),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              message,
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineSmall
+                  ?.copyWith(color: Theme.of(context).colorScheme.onError),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            TextButton(
+              onPressed: () => context.go('/'),
+              child: Text(
+                'Go to Home Screen',
+                style: Theme.of(context).textTheme.displaySmall,
+              ),
+            ),
+          ],
         ),
       ),
     );
