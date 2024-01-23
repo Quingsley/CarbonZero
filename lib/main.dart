@@ -1,8 +1,10 @@
 import 'package:carbon_zero/core/theme/theme.dart';
 import 'package:carbon_zero/routes/app_routes.dart';
+import 'package:carbon_zero/services/local_storage.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+Future<void> main() async {
+  await LocalStorage().init();
   runApp(const CarbonZero());
 }
 
@@ -18,7 +20,7 @@ class CarbonZero extends StatelessWidget {
       title: 'CarbonZero',
       darkTheme: darkTheme,
       theme: lightTheme,
-      themeMode: ThemeMode.dark,
+      // themeMode: ThemeMode.dark,
       routeInformationParser: AppRoutes.router.routeInformationParser,
       routeInformationProvider: AppRoutes.router.routeInformationProvider,
       routerDelegate: AppRoutes.router.routerDelegate,
