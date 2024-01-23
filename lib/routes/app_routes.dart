@@ -28,6 +28,9 @@ class AppRoutes {
   static final router = GoRouter(
     navigatorKey: AppRoutes._rootNavigator,
     initialLocation: '/',
+    redirect: (context, state) {
+      return null;
+    },
     debugLogDiagnostics: true,
     errorBuilder: (context, state) => ErrorScreen(
       message: state.error?.message ?? state.error.toString(),
