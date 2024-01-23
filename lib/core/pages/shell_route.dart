@@ -1,9 +1,10 @@
 import 'package:carbon_zero/core/constants/constants.dart';
-import 'package:carbon_zero/core/widgets/bottom_bar_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
-/// [TabShellRoute] is used to wrap
+/// [TabShellRoute] is used to wrap the tabs of the application
+/// and uses go router to manage the state of the tabs
 class TabShellRoute extends StatelessWidget {
   /// constructor call
   const TabShellRoute({required this.navigationShell, Key? key})
@@ -27,47 +28,91 @@ class TabShellRoute extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: navigationShell,
-      bottomNavigationBar: BottomAppBar(
-        color: Theme.of(context).colorScheme.surface,
-        height: 70,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            BottomBarItem(
-              onPressed: () => _goBranch(AppTabs.home.index),
-              label: 'Home',
-              isSelected: AppTabs.home.index == navigationShell.currentIndex,
-              iconPath: 'assets/images/home.svg',
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: navigationShell.currentIndex,
+        onDestinationSelected: _goBranch,
+        destinations: [
+          NavigationDestination(
+            icon: SvgPicture.asset(
+              'assets/images/home.svg',
+              // width: 10,
+              colorFilter: ColorFilter.mode(
+                AppTabs.home.index == navigationShell.currentIndex
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context)
+                        .colorScheme
+                        .onBackground
+                        .withOpacity(.62),
+                BlendMode.srcIn,
+              ),
             ),
-            BottomBarItem(
-              onPressed: () => _goBranch(AppTabs.statistics.index),
-              label: 'Statistics',
-              isSelected:
-                  AppTabs.statistics.index == navigationShell.currentIndex,
-              iconPath: 'assets/images/statistics.svg',
+            label: 'Home',
+          ),
+          NavigationDestination(
+            icon: SvgPicture.asset(
+              'assets/images/statistics.svg',
+              // width: 10,
+              colorFilter: ColorFilter.mode(
+                AppTabs.statistics.index == navigationShell.currentIndex
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context)
+                        .colorScheme
+                        .onBackground
+                        .withOpacity(.62),
+                BlendMode.srcIn,
+              ),
             ),
-            BottomBarItem(
-              onPressed: () => _goBranch(AppTabs.community.index),
-              label: 'Community',
-              isSelected:
-                  AppTabs.community.index == navigationShell.currentIndex,
-              iconPath: 'assets/images/community.svg',
+            label: 'Statistics',
+          ),
+          NavigationDestination(
+            icon: SvgPicture.asset(
+              'assets/images/community.svg',
+              // width: 10,
+              colorFilter: ColorFilter.mode(
+                AppTabs.community.index == navigationShell.currentIndex
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context)
+                        .colorScheme
+                        .onBackground
+                        .withOpacity(.62),
+                BlendMode.srcIn,
+              ),
             ),
-            BottomBarItem(
-              onPressed: () => _goBranch(AppTabs.community.index),
-              label: 'Rewards',
-              isSelected: AppTabs.rewards.index == navigationShell.currentIndex,
-              iconPath: 'assets/images/rewards.svg',
+            label: 'Community',
+          ),
+          NavigationDestination(
+            icon: SvgPicture.asset(
+              'assets/images/rewards.svg',
+              // width: 10,
+              colorFilter: ColorFilter.mode(
+                AppTabs.rewards.index == navigationShell.currentIndex
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context)
+                        .colorScheme
+                        .onBackground
+                        .withOpacity(.62),
+                BlendMode.srcIn,
+              ),
             ),
-            BottomBarItem(
-              onPressed: () => _goBranch(AppTabs.settings.index),
-              label: 'Settings',
-              isSelected:
-                  AppTabs.settings.index == navigationShell.currentIndex,
-              iconPath: 'assets/images/settings.svg',
+            label: 'Rewards',
+          ),
+          NavigationDestination(
+            icon: SvgPicture.asset(
+              'assets/images/settings.svg',
+              // width: 10,
+              colorFilter: ColorFilter.mode(
+                AppTabs.settings.index == navigationShell.currentIndex
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context)
+                        .colorScheme
+                        .onBackground
+                        .withOpacity(.62),
+                BlendMode.srcIn,
+              ),
             ),
-          ],
-        ),
+            label: 'Settings',
+          ),
+        ],
       ),
     );
   }
