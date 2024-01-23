@@ -1,3 +1,4 @@
+import 'package:carbon_zero/services/local_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -8,8 +9,13 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future.delayed(const Duration(seconds: 2), () {
-      context.go('/onboarding');
+    Future.delayed(const Duration(seconds: 2), () async {
+      await LocalStorage().readOnboarding();
+      if (LocalStorage.didUserOnboard) {
+        if (context.mounted) context.go('/auth');
+      } else {
+        if (context.mounted) context.go('/onboarding');
+      }
     });
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
