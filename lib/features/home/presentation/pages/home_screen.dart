@@ -1,4 +1,5 @@
 import 'package:carbon_zero/core/extensions.dart';
+import 'package:carbon_zero/features/home/presentation/widgets/activity_tile.dart';
 import 'package:carbon_zero/features/home/presentation/widgets/carbon_foot_print.dart';
 import 'package:carbon_zero/features/home/presentation/widgets/home_card.dart';
 import 'package:flutter/material.dart';
@@ -119,26 +120,25 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Expanded(
               child: ListView(
-                children: [
-                  const Text(
+                children: const [
+                  Text(
                     'Latest activities',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  ListTile(
-                    leading: const Icon(Icons.ev_station_rounded),
-                    title: const Text('19 km electric car'),
-                    subtitle: const Text('500 n2c points'),
-                    trailing: Text.rich(
-                      TextSpan(
-                        text: '-500gr ',
-                        children: [
-                          TextSpan(
-                            text: 'Co2',
-                            style: TextStyle(color: Colors.grey[500]),
-                          ),
-                        ],
-                      ),
-                    ),
+                  ActivityTile(
+                    icon: Icons.ev_station,
+                    title: '19 km electric car',
+                    subtitle: '500 n2c points',
+                  ),
+                  ActivityTile(
+                    icon: Icons.recycling,
+                    title: 'Recycling',
+                    subtitle: '500 n2c points',
+                  ),
+                  ActivityTile(
+                    icon: Icons.pedal_bike,
+                    title: '20km biking',
+                    subtitle: '500 n2c points',
                   ),
                 ],
               ),
