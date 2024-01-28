@@ -1,5 +1,6 @@
 import 'package:carbon_zero/core/extensions.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 /// shows the users communities with the button to continue chatting
 class UserCommunityCard extends StatelessWidget {
@@ -58,7 +59,7 @@ class UserCommunityCard extends StatelessWidget {
               ),
               // const Spacer(),
               OutlinedButton(
-                onPressed: () {},
+                onPressed: () => context.go('/community/inbox'),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: context.colors.primary,
                   side: BorderSide(color: context.colors.primary),
