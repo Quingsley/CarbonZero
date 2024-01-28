@@ -53,19 +53,19 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   title: 'Carbon tracking made simple',
                   description:
                       'Discover eco friendly alternatives\nand make sustainable choices with\n ease',
-                  image: 'assets/images/ecology _light.svg',
+                  image: 'assets/images/ecology_light.svg',
                 ),
                 OnBoardingCard(
                   title: 'Be a climate hero',
                   description:
                       'Easily track your carbon footprint\nand make positive change for the planet',
-                  image: 'assets/images/hobby _activity.svg',
+                  image: 'assets/images/hobby_activity.svg',
                 ),
                 OnBoardingCard(
                   title: 'Go green with ease',
                   description:
                       'Reduce your carbon footprint, one step at a time',
-                  image: 'assets/images/nature _gardening.svg',
+                  image: 'assets/images/nature_gardening.svg',
                 ),
               ],
             ),
