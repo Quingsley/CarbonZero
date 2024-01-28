@@ -5,6 +5,7 @@ import 'package:carbon_zero/features/auth/presentation/pages/profile_completion.
 import 'package:carbon_zero/features/auth/presentation/pages/profile_photo.dart';
 import 'package:carbon_zero/features/auth/presentation/pages/signup_screen.dart';
 import 'package:carbon_zero/features/community/presentation/pages/community.dart';
+import 'package:carbon_zero/features/community/presentation/pages/community_details.dart';
 import 'package:carbon_zero/features/home/presentation/pages/home_screen.dart';
 import 'package:carbon_zero/features/onboarding/presentation/pages/onboarding_screen.dart';
 import 'package:carbon_zero/features/rewards/presentation/pages/rewards/presentation/pages/rewards_screen.dart';
@@ -27,9 +28,9 @@ class AppRoutes {
   /// GoRouter instance.
   static final router = GoRouter(
     navigatorKey: AppRoutes._rootNavigator,
-    initialLocation: '/',
+    initialLocation: '/home', // change back to '/'
     redirect: (context, state) {
-      return null;
+      return null; // add once auth is in place
     },
     debugLogDiagnostics: true,
     errorBuilder: (context, state) => ErrorScreen(
@@ -96,6 +97,12 @@ class AppRoutes {
               GoRoute(
                 path: '/community',
                 builder: (context, state) => const CommunityScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'details',
+                    builder: (context, state) => const CommunityDetails(),
+                  ),
+                ],
               ),
             ],
           ),
