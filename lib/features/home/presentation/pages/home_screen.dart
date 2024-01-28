@@ -3,6 +3,7 @@ import 'package:carbon_zero/features/home/presentation/widgets/activity_tile.dar
 import 'package:carbon_zero/features/home/presentation/widgets/carbon_foot_print.dart';
 import 'package:carbon_zero/features/home/presentation/widgets/home_card.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 /// [HomeScreen] the home tab of the app contains activities like
 /// the carbon footprint of the user, daily goals, community goal daily tip ,
@@ -72,12 +73,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     IconButton(
                       color: context.colors.primary,
-                      onPressed: () {},
+                      onPressed: () => context.push('/notification'),
                       icon: const Icon(Icons.notifications),
                     ),
-                    const CircleAvatar(
-                      radius: 20,
-                      child: Icon(Icons.person),
+                    IconButton.filled(
+                      onPressed: () => context.push('/profile'),
+                      icon: const Icon(Icons.person),
                     ),
                   ],
                 ),
