@@ -1,4 +1,6 @@
-import 'package:carbon_zero/features/statistics/presentation/widgets/statistcs_card.dart';
+import 'package:carbon_zero/features/statistics/presentation/widgets/activity_progress_card.dart';
+import 'package:carbon_zero/features/statistics/presentation/widgets/bar_chart.dart';
+import 'package:carbon_zero/features/statistics/presentation/widgets/statistics_card.dart';
 import 'package:flutter/material.dart';
 
 /// will show the users statistics of their carbon footprint
@@ -13,12 +15,12 @@ class StatisticsScreen extends StatelessWidget {
         centerTitle: true,
         title: const Text('Statistics'),
       ),
-      body: const Padding(
-        padding: EdgeInsets.all(16),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text.rich(
+            const Text.rich(
               TextSpan(
                 text: 'Average Footprint: ',
                 children: [
@@ -31,10 +33,10 @@ class StatisticsScreen extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 8,
             ),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
@@ -66,6 +68,58 @@ class StatisticsScreen extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            const Text('CO2 Statistics'),
+            const SizedBox(
+              height: 16,
+            ),
+            const SizedBox(
+              height: 150,
+              child: Carbon2StatsBarChart(),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            Expanded(
+              child: ListView(
+                children: const [
+                  Text('Activities'),
+                  // WIll make them dynamic later just
+                  ActivityProgressCard(
+                    activityName: 'Electric Car',
+                    icon: Icons.electric_car,
+                    progress: '40',
+                    color: Colors.redAccent,
+                  ),
+                  ActivityProgressCard(
+                    activityName: 'Recycling',
+                    icon: Icons.recycling,
+                    progress: '85',
+                    color: Colors.green,
+                  ),
+                  ActivityProgressCard(
+                    activityName: 'Biking',
+                    icon: Icons.bike_scooter,
+                    progress: '70',
+                    color: Colors.amber,
+                  ),
+                  ActivityProgressCard(
+                    activityName: 'Recycling',
+                    icon: Icons.water_drop_outlined,
+                    progress: '50',
+                    color: Colors.blueAccent,
+                  ),
+                  ActivityProgressCard(
+                    activityName: 'Reusable waste bags',
+                    icon: Icons.shopping_bag_outlined,
+                    progress: '65',
+                    color: Colors.red,
+                  ),
+                ],
+              ),
             ),
           ],
         ),
