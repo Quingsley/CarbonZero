@@ -6,6 +6,8 @@ class KTextField extends StatefulWidget {
   const KTextField({
     required this.label,
     required this.hintText,
+    required this.controller,
+    this.validator,
     this.isObscured = false,
     super.key,
   });
@@ -18,6 +20,9 @@ class KTextField extends StatefulWidget {
 
   /// used for toggling password visibility
   final bool isObscured;
+
+  final TextEditingController controller;
+  final String? Function(String?)? validator;
 
   @override
   State<KTextField> createState() => _KTextFieldState();
@@ -48,7 +53,9 @@ class _KTextFieldState extends State<KTextField> {
             height: 8,
           ),
           TextFormField(
+            controller: widget.controller,
             obscureText: !showPassword && widget.isObscured,
+            validator: widget.validator,
             decoration: InputDecoration(
               hintText: widget.hintText,
               hintStyle: Theme.of(context).textTheme.labelMedium?.copyWith(
@@ -58,6 +65,16 @@ class _KTextFieldState extends State<KTextField> {
               enabledBorder: outlineInputBorder,
               border: outlineInputBorder,
               focusedBorder: outlineInputBorder,
+              focusedErrorBorder: outlineInputBorder.copyWith(
+                borderSide: BorderSide(
+                  color: Theme.of(context).colorScheme.error,
+                ),
+              ),
+              errorBorder: outlineInputBorder.copyWith(
+                borderSide: BorderSide(
+                  color: Theme.of(context).colorScheme.error,
+                ),
+              ),
               contentPadding:
                   const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
               suffixIcon: widget.isObscured
