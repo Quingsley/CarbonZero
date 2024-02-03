@@ -3,10 +3,18 @@ import 'package:flutter/material.dart';
 /// [PrimaryButton] widget of the app.
 class PrimaryButton extends StatelessWidget {
   /// Create const instance of [PrimaryButton] widget.
-  const PrimaryButton({required this.text, required this.onPressed, super.key});
+  const PrimaryButton({
+    required this.text,
+    required this.onPressed,
+    super.key,
+    this.isLoading = false,
+  });
 
   /// Button text.
   final String text;
+
+  /// will show a loading indicator if true
+  final bool isLoading;
 
   /// Button onPressed callback.
   final VoidCallback? onPressed;
@@ -26,12 +34,19 @@ class PrimaryButton extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              if (isLoading)
+                const CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                ),
+              if (isLoading)
+                const SizedBox(
+                  width: 8,
+                ),
               Text(
                 text,
-                style: Theme.of(context)
-                    .textTheme
-                    .labelLarge
-                    ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
               ),
             ],
           ),
