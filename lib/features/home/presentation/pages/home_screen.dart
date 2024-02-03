@@ -1,22 +1,24 @@
 import 'package:carbon_zero/core/extensions.dart';
+import 'package:carbon_zero/features/auth/presentation/viewmodels/auth_view_model.dart';
 import 'package:carbon_zero/features/home/presentation/widgets/activity_tile.dart';
 import 'package:carbon_zero/features/home/presentation/widgets/carbon_foot_print.dart';
 import 'package:carbon_zero/features/home/presentation/widgets/home_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 /// [HomeScreen] the home tab of the app contains activities like
 /// the carbon footprint of the user, daily goals, community goal daily tip ,
 ///  latest activities
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   /// constructor call
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   bool isDay = true;
   @override
   void didChangeDependencies() {
@@ -26,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final user = ref.watch(authViewModelProvider);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(top: 50, left: 8, right: 8),
@@ -43,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     text: 'Hi ',
                     children: [
                       TextSpan(
-                        text: 'Jane ',
+                        text: user.value?.fName ?? 'there',
                         style: context.textTheme.headlineMedium?.copyWith(
                           color: context.colors.primary,
                         ),
@@ -76,10 +79,19 @@ class _HomeScreenState extends State<HomeScreen> {
                       onPressed: () => context.push('/notification'),
                       icon: const Icon(Icons.notifications),
                     ),
-                    IconButton.filled(
-                      onPressed: () => context.push('/profile'),
-                      icon: const Icon(Icons.person),
-                    ),
+                    if (user.value?.photoId != null)
+                      GestureDetector(
+                        onTap: () => context.go('/profile'),
+                        child: CircleAvatar(
+                          backgroundImage:
+                              NetworkImage(user.value?.photoId ?? ''),
+                        ),
+                      )
+                    else
+                      IconButton.filled(
+                        onPressed: () => context.push('/profile'),
+                        icon: const Icon(Icons.person),
+                      ),
                   ],
                 ),
               ],
