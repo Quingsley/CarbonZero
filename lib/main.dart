@@ -1,3 +1,4 @@
+import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/core/theme/theme.dart';
 
 import 'package:carbon_zero/firebase_options.dart';
@@ -24,12 +25,13 @@ class CarbonZero extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(AppRoutes.router);
+    final isDarkMode = ref.watch(isDarkModeStateProvider);
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'CarbonZero',
       darkTheme: darkTheme,
       theme: lightTheme,
-      // themeMode: ThemeMode.dark,
+      themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
       routeInformationParser: router.routeInformationParser,
       routeInformationProvider: router.routeInformationProvider,
       routerDelegate: router.routerDelegate,
