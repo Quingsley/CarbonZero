@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:carbon_zero/features/auth/data/models/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// This class is used to store data locally on the device
@@ -34,5 +37,28 @@ class LocalStorage {
     final preference = await SharedPreferences.getInstance();
     final value = preference.getString('didUserOnboard');
     if (value != null) didUserOnboard = true;
+  }
+
+  /// stores user data in local storage
+  Future<void> setUser(UserModel user) async {
+    final preference = await SharedPreferences.getInstance();
+    await preference.setString('user', jsonEncode(user.toJson()));
+  }
+
+  /// reads user from local device
+  Future<UserModel?> getUser() async {
+    final preference = await SharedPreferences.getInstance();
+    final data = preference.getString('user');
+    if (data != null) {
+      final json = jsonDecode(data) as Map<String, dynamic>;
+      return UserModel.fromJson(json);
+    }
+    return null;
+  }
+
+  /// removes user data on sign out
+  Future<void> removeUserData() async {
+    final preference = await SharedPreferences.getInstance();
+    await preference.remove('user');
   }
 }
