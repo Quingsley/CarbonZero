@@ -2,6 +2,7 @@ import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/features/community/presentation/widgets/community_card.dart';
 import 'package:carbon_zero/features/community/presentation/widgets/user_community_card.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 /// users will be able to find communities and join them
 /// and have group chats with the members of the community
@@ -115,7 +116,7 @@ class CommunityScreen extends StatelessWidget {
         backgroundColor: context.colors.primary,
         foregroundColor: context.colors.onPrimary,
         tooltip: 'Add a new community',
-        onPressed: () {},
+        onPressed: () => context.go('/community/add-community'),
         child: const Icon(
           Icons.add,
         ),
