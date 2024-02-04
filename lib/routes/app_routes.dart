@@ -6,13 +6,13 @@ import 'package:carbon_zero/features/auth/presentation/pages/login_screen.dart';
 import 'package:carbon_zero/features/auth/presentation/pages/profile_completion.dart';
 import 'package:carbon_zero/features/auth/presentation/pages/profile_photo.dart';
 import 'package:carbon_zero/features/auth/presentation/pages/signup_screen.dart';
+import 'package:carbon_zero/features/community/presentation/pages/add_community.dart';
 import 'package:carbon_zero/features/community/presentation/pages/community.dart';
 import 'package:carbon_zero/features/community/presentation/pages/community_details.dart';
 import 'package:carbon_zero/features/community/presentation/pages/community_inbox.dart';
 import 'package:carbon_zero/features/home/presentation/pages/home_screen.dart';
 import 'package:carbon_zero/features/notification/presentation/pages/notification.dart';
 import 'package:carbon_zero/features/onboarding/presentation/pages/onboarding_screen.dart';
-import 'package:carbon_zero/features/profile/presentation/pages/profile.dart';
 import 'package:carbon_zero/features/rewards/presentation/pages/rewards_screen.dart';
 import 'package:carbon_zero/features/settings/presentation/pages/settings_screen.dart';
 import 'package:carbon_zero/features/splash/presentation/pages/splash_screen.dart';
@@ -44,6 +44,7 @@ class AppRoutes {
         if (state.fullPath == '/auth') {
           return auth.currentUser != null ? '/home' : '/auth'; // look into this
         }
+
         return null;
       },
       debugLogDiagnostics: true,
@@ -125,6 +126,11 @@ class AppRoutes {
                       path: 'inbox', // will make it dynamic /inbox/{name}
                       builder: (context, state) => const CommunityInbox(),
                     ),
+                    GoRoute(
+                      path:
+                          'add-community', // will make it dynamic /inbox/{name}
+                      builder: (context, state) => const AddCommunity(),
+                    ),
                   ],
                 ),
               ],
@@ -148,10 +154,6 @@ class AppRoutes {
               ],
             ),
           ],
-        ),
-        GoRoute(
-          path: '/profile',
-          builder: (context, state) => const Profile(),
         ),
         GoRoute(
           path: '/notification',
