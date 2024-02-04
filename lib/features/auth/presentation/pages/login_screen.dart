@@ -1,4 +1,5 @@
 import 'package:carbon_zero/core/error/failure.dart';
+import 'package:carbon_zero/core/widgets/form_layout.dart';
 import 'package:carbon_zero/core/widgets/primary_button.dart';
 import 'package:carbon_zero/features/auth/presentation/viewmodels/auth_view_model.dart';
 import 'package:carbon_zero/features/auth/presentation/widgets/text_field.dart';
@@ -63,116 +64,90 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(),
-      body: LayoutBuilder(
-        builder: (context, viewportConstraints) {
-          return SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: viewportConstraints.maxHeight,
-              ),
-              child: IntrinsicHeight(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              'Log in 👋',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineMedium
-                                  ?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 24,
-                                  ),
-                            ),
-                            const Spacer(),
-                            TextButton(
-                              onPressed: () => context.go('/auth/sign-up'),
-                              child: Text(
-                                'Sign Up',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headlineSmall
-                                    ?.copyWith(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      fontSize: 18,
-                                    ),
-                              ),
-                            ),
-                          ],
+      body: FormLayout(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Text(
+                    'Log in 👋',
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
                         ),
-                        Text(
-                          'Ready to return to the shadows ?',
-                          style: Theme.of(context).textTheme.labelLarge,
-                          textAlign: TextAlign.left,
-                        ),
-                        const SizedBox(
-                          height: 50,
-                        ),
-                        KTextField(
-                          controller: emailController,
-                          label: 'Email',
-                          hintText: 'Email Address',
-                          validator: (value) {
-                            if (value == null ||
-                                value.isEmpty ||
-                                !value.contains('@')) {
-                              return 'Please enter some text';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        KTextField(
-                          controller: passwordController,
-                          label: 'Password',
-                          hintText: 'Enter Password',
-                          validator: (value) {
-                            if (value == null ||
-                                value.isEmpty ||
-                                value.length < 6) {
-                              return 'Please enter some text';
-                            }
-                            return null;
-                          },
-                          isObscured: true,
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: TextButton(
-                            onPressed: () =>
-                                context.go('/auth/forgot-password'),
-                            child: const Text('Forgot Password ?'),
+                  ),
+                  const Spacer(),
+                  TextButton(
+                    onPressed: () => context.go('/auth/sign-up'),
+                    child: Text(
+                      'Sign Up',
+                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontSize: 18,
                           ),
-                        ),
-                        const Spacer(),
-                        PrimaryButton(
-                          text: 'Log in',
-                          onPressed: !isLoading ? submit : null,
-                          isLoading: isLoading,
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                      ],
                     ),
                   ),
+                ],
+              ),
+              Text(
+                'Ready to return to the shadows ?',
+                style: Theme.of(context).textTheme.labelLarge,
+                textAlign: TextAlign.left,
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              KTextField(
+                controller: emailController,
+                label: 'Email',
+                hintText: 'Email Address',
+                validator: (value) {
+                  if (value == null || value.isEmpty || !value.contains('@')) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              KTextField(
+                controller: passwordController,
+                label: 'Password',
+                hintText: 'Enter Password',
+                validator: (value) {
+                  if (value == null || value.isEmpty || value.length < 6) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
+                isObscured: true,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: TextButton(
+                  onPressed: () => context.go('/auth/forgot-password'),
+                  child: const Text('Forgot Password ?'),
                 ),
               ),
-            ),
-          );
-        },
+              const Spacer(),
+              PrimaryButton(
+                text: 'Log in',
+                onPressed: !isLoading ? submit : null,
+                isLoading: isLoading,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
