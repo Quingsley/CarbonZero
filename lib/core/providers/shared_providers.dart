@@ -22,3 +22,6 @@ final authStateChanges = Provider<Stream<User?>>(
     return auth.authStateChanges();
   },
 );
+
+/// toggles the theme of the app
+final isDarkModeStateProvider = StateProvider<bool>((ref) => false);
