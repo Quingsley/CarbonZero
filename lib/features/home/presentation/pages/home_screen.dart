@@ -81,7 +81,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                     if (user.value?.photoId != null)
                       GestureDetector(
-                        onTap: () => context.go('/profile'),
+                        onTap: () => context.go('/settings'),
                         child: CircleAvatar(
                           backgroundImage:
                               NetworkImage(user.value?.photoId ?? ''),
@@ -89,7 +89,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       )
                     else
                       IconButton.filled(
-                        onPressed: () => context.push('/profile'),
+                        onPressed: () => context.go('/settings'),
                         icon: const Icon(Icons.person),
                       ),
                   ],
