@@ -1,22 +1,22 @@
-import 'dart:io';
-
 import 'package:carbon_zero/core/error/failure.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/features/auth/data/models/user_model.dart';
+import 'package:carbon_zero/services/local_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// [AuthDataSource] class is a remote data source for authentication
 class AuthDataSource {
   /// const constructor
-  AuthDataSource(this._db, this._authInstance, this._storage);
+  AuthDataSource(
+    this._db,
+    this._authInstance,
+  );
 
   /// instance of firebase auth
   final FirebaseAuth _authInstance;
   final FirebaseFirestore _db;
-  final FirebaseStorage _storage;
 
   /// sign up method
   Future<UserModel> signUp(String password, UserModel user) async {
@@ -38,7 +38,7 @@ class AuthDataSource {
           )
           .doc(credentials.user?.uid)
           .set(updatedUser);
-
+      await LocalStorage().setUser(updatedUser);
       return updatedUser;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -59,9 +59,11 @@ class AuthDataSource {
         email: email,
         password: password,
       );
-      final user =
+      final doc =
           await _db.collection('users').doc(credentials.user!.uid).get();
-      return UserModel.fromJson(user.data()!);
+      final user = UserModel.fromJson(doc.data()!);
+      await LocalStorage().setUser(user);
+      return user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         throw Failure(message: 'No user found for that email.');
@@ -75,22 +77,13 @@ class AuthDataSource {
   }
 
   /// upload profile image
-  Future<UserModel> uploadProfileImage(String path, String userId) async {
-    final file = File(path);
-    final storageRef = _storage.ref();
-    final UploadTask? uploadTask;
+  Future<UserModel> uploadProfileImage(String photoUrl, String userId) async {
     try {
-      final name = '$userId.${path.split('.').last}';
-      final profileRef = storageRef.child('profile_images/$name');
-      uploadTask = profileRef.putFile(file.absolute);
-      final snapshot = await uploadTask.whenComplete(() {});
-      final downloadUrl = await snapshot.ref.getDownloadURL();
-      await _db
-          .collection('users')
-          .doc(userId)
-          .update({'photoId': downloadUrl});
-      final user = await _db.collection('users').doc(userId).get();
-      return UserModel.fromJson(user.data()!);
+      await _db.collection('users').doc(userId).update({'photoId': photoUrl});
+      final doc = await _db.collection('users').doc(userId).get();
+      final user = UserModel.fromJson(doc.data()!);
+      await LocalStorage().setUser(user);
+      return user;
     } on FirebaseException catch (e) {
       throw Failure(message: e.message ?? 'something went wrong');
     } catch (e) {
@@ -126,9 +119,33 @@ class AuthDataSource {
   Future<UserModel?> signOut() async {
     try {
       await _authInstance.signOut();
+      await LocalStorage().removeUserData();
       return null;
     } on FirebaseAuthException catch (e) {
       throw Failure(message: e.message ?? 'something went wrong');
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  /// updates user details
+  Future<UserModel> updateUserDetails(UserModel user) async {
+    try {
+      await _db
+          .collection('users')
+          .withConverter<UserModel>(
+            fromFirestore: (snapshot, _) =>
+                UserModel.fromJson(snapshot.data()!),
+            toFirestore: (value, _) => value.toJson(),
+          )
+          .doc(user.userId)
+          .update(user.toJson());
+      final json = await _db.collection('users').doc(user.userId).get();
+      final updatedUser = UserModel.fromJson(json.data()!);
+      await LocalStorage().setUser(updatedUser);
+      return updatedUser;
+    } on FirebaseException catch (e) {
+      throw Failure(message: e.message ?? 'Something went wrong');
     } catch (e) {
       rethrow;
     }
@@ -139,6 +156,5 @@ class AuthDataSource {
 final authDataSourceProvider = Provider<AuthDataSource>((ref) {
   final db = ref.read(dbProvider);
   final authInstance = ref.read(authInstanceProvider);
-  final storageInstance = ref.read(storageProvider);
-  return AuthDataSource(db, authInstance, storageInstance);
+  return AuthDataSource(db, authInstance);
 });
