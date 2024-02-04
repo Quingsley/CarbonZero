@@ -36,6 +36,11 @@ class AuthRepository {
   Future<UserModel?> signOut() {
     return dataSource.signOut();
   }
+
+  /// update the user details
+  Future<UserModel> updateUser(UserModel user) {
+    return dataSource.updateUserDetails(user);
+  }
 }
 
 /// will provide an instance of [AuthRepository]
