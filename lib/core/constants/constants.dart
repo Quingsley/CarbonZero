@@ -28,3 +28,27 @@ enum ImageType {
   /// community image
   community
 }
+
+/// tags
+List<String> hashtags = [
+  '#SustainableLiving',
+  '#EcoFriendlyLife',
+  '#CarbonFootprintChallenge',
+  '#GreenCommunity',
+  '#EcoWarriors',
+  '#ClimateActionNow',
+  '#RenewableRevolution',
+  '#ZeroWasteJourney',
+  '#GreenTechInnovation',
+  '#CleanEnergyFuture',
+  '#EcoConsciousLiving',
+  '#LowCarbonLifestyle',
+  '#SustainableHabits',
+  '#CarbonNeutralGoals',
+  '#PlanetFriendly',
+  '#GreenLivingTips',
+  '#ConsciousConsumption',
+  '#SustainableSolutions',
+  '#ClimateChangeAwareness',
+  '#EarthGuardians',
+];
