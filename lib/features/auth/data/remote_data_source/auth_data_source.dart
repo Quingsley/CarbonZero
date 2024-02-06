@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:carbon_zero/core/error/failure.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/features/auth/data/models/user_model.dart';
@@ -82,6 +84,7 @@ class AuthDataSource {
       await _db.collection('users').doc(userId).update({'photoId': photoUrl});
       final doc = await _db.collection('users').doc(userId).get();
       final user = UserModel.fromJson(doc.data()!);
+      await _authInstance.currentUser?.updatePhotoURL(photoUrl);
       await LocalStorage().setUser(user);
       return user;
     } on FirebaseException catch (e) {
@@ -142,6 +145,8 @@ class AuthDataSource {
           .update(user.toJson());
       final json = await _db.collection('users').doc(user.userId).get();
       final updatedUser = UserModel.fromJson(json.data()!);
+      await _authInstance.currentUser
+          ?.updateDisplayName('${updatedUser.fName} ${updatedUser.lName}');
       await LocalStorage().setUser(updatedUser);
       return updatedUser;
     } on FirebaseException catch (e) {
@@ -150,11 +155,26 @@ class AuthDataSource {
       rethrow;
     }
   }
+
+  /// will get the current [UserModel] snapshot from the db
+  Stream<UserModel?> getCurrentUserSnapshot() {
+    final userStream = _db
+        .collection('users')
+        .withConverter<UserModel>(
+          fromFirestore: (snapshot, _) => UserModel.fromJson(snapshot.data()!),
+          toFirestore: (value, _) => value.toJson(),
+        )
+        .doc(_authInstance.currentUser?.uid)
+        .snapshots()
+        .map((snapshot) => snapshot.data());
+    return userStream;
+  }
 }
 
 /// will provide an instance of [AuthDataSource]
 final authDataSourceProvider = Provider<AuthDataSource>((ref) {
   final db = ref.read(dbProvider);
   final authInstance = ref.read(authInstanceProvider);
+  if (db == null) throw AssertionError('User is not logged in');
   return AuthDataSource(db, authInstance);
 });
