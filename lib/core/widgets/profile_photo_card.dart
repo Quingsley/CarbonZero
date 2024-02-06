@@ -1,6 +1,7 @@
 import 'package:carbon_zero/core/constants/constants.dart';
 import 'package:carbon_zero/core/error/failure.dart';
-import 'package:carbon_zero/features/auth/presentation/viewmodels/auth_view_model.dart';
+import 'package:carbon_zero/core/providers/shared_providers.dart';
+import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
 import 'package:carbon_zero/services/image_upload.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,30 +18,48 @@ class ProfilePhotoCard extends ConsumerStatefulWidget {
 
 class _ProfilePhotoCardState extends ConsumerState<ProfilePhotoCard> {
   String? imagePath;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final user = ref.read(authInstanceProvider);
+    imagePath = user.currentUser?.photoURL;
+  }
+
   @override
   Widget build(BuildContext context) {
     final imageService = ref.watch(imageServiceProvider);
-    final isLoading = imageServiceProvider is AsyncLoading;
-    imagePath = imageService.value;
-    ref.listen(imageServiceProvider, (previous, next) {
-      next.whenOrNull(
-        error: (error, stackTrace) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content:
-                  Text(error is Failure ? error.message : error.toString()),
-            ),
-          );
-        },
-        data: (_) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('photo uploaded successfully'),
-            ),
-          );
-        },
-      );
-    });
+    final isLoading = imageService is AsyncLoading;
+    ref
+      ..listen(imageServiceProvider, (previous, next) {
+        next.whenOrNull(
+          error: (error, stackTrace) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content:
+                    Text(error is Failure ? error.message : error.toString()),
+              ),
+            );
+          },
+          data: (url) {
+            imagePath = url;
+            final auth = ref.read(authStateChangesProvider);
+            if (auth.value != null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('photo uploaded successfully'),
+                ),
+              );
+            }
+          },
+        );
+      })
+      ..listen(authStateChangesProvider, (previous, next) {
+        next.whenData((value) {
+          imagePath = value?.photoURL;
+        });
+      });
     return Align(
       child: Stack(
         clipBehavior: Clip.none,
@@ -81,7 +100,7 @@ class _ProfilePhotoCardState extends ConsumerState<ProfilePhotoCard> {
 
                             await ref
                                 .read(authViewModelProvider.notifier)
-                                .uploadProfileImage(imageService.value!);
+                                .uploadProfileImage(imagePath!);
                           }
                         : null,
                     icon: const Icon(Icons.camera_alt),
