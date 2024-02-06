@@ -28,7 +28,7 @@ class AuthRepository {
   }
 
   /// upload profile image method
-  Future<UserModel> uploadProfileImage(String path, String userId) async {
+  Future<UserModel?> uploadProfileImage(String path, String userId) async {
     return dataSource.uploadProfileImage(path, userId);
   }
 
@@ -40,6 +40,11 @@ class AuthRepository {
   /// update the user details
   Future<UserModel> updateUser(UserModel user) {
     return dataSource.updateUserDetails(user);
+  }
+
+  /// current user model snapshot
+  Stream<UserModel?> getCurrentUserSnapshot() {
+    return dataSource.getCurrentUserSnapshot();
   }
 }
 
