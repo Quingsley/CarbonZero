@@ -1,7 +1,8 @@
 import 'package:carbon_zero/core/error/failure.dart';
+import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/core/widgets/form_layout.dart';
 import 'package:carbon_zero/core/widgets/primary_button.dart';
-import 'package:carbon_zero/features/auth/presentation/viewmodels/auth_view_model.dart';
+import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
 import 'package:carbon_zero/features/auth/presentation/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -54,8 +55,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             ),
           );
         },
-        data: (user) {
-          if (user != null) {
+        data: (_) {
+          final auth = ref.read(authInstanceProvider);
+          if (auth.currentUser?.uid != null) {
             context.go('/home');
           }
         },
@@ -84,10 +86,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     onPressed: () => context.go('/auth/sign-up'),
                     child: Text(
                       'Sign Up',
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontSize: 18,
-                          ),
+                      style:
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontSize: 18,
+                              ),
                     ),
                   ),
                 ],
