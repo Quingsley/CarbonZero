@@ -1,6 +1,6 @@
 import 'package:carbon_zero/core/error/failure.dart';
 import 'package:carbon_zero/core/widgets/primary_button.dart';
-import 'package:carbon_zero/features/auth/presentation/viewmodels/auth_view_model.dart';
+import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
 import 'package:carbon_zero/features/auth/presentation/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
