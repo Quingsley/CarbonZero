@@ -2,7 +2,7 @@ import 'package:carbon_zero/core/error/failure.dart';
 import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/core/widgets/profile_photo_card.dart';
-import 'package:carbon_zero/features/auth/presentation/viewmodels/auth_view_model.dart';
+import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
 import 'package:carbon_zero/features/settings/presentation/widgets/setting_tile.dart';
 import 'package:carbon_zero/features/settings/presentation/widgets/update_names_dialog.dart';
 import 'package:flutter/material.dart';
@@ -18,13 +18,11 @@ class SettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isLoading = authViewModelProvider is AsyncLoading;
-    final user = ref.watch(authViewModelProvider);
+    final user = ref.watch(userStreamProvider);
+
     final isDarkMode = ref.read(isDarkModeStateProvider);
     ref.listen(authViewModelProvider, (previous, next) {
       next.whenOrNull(
-        data: (_) {
-          context.go('/');
-        },
         error: (error, stackTrace) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -48,7 +46,8 @@ class SettingsScreen extends ConsumerWidget {
             const SizedBox(child: ProfilePhotoCard()),
             GestureDetector(
               onTap: () async {
-                await updateUser(context, user.value, ref);
+                final user = ref.read(userStreamProvider);
+                if (context.mounted) await updateUser(context, user.value, ref);
               },
               child: Chip(
                 label: Text('${user.value?.fName} ${user.value?.lName}'),
@@ -86,7 +85,7 @@ class SettingsScreen extends ConsumerWidget {
                   ),
                   SettingsTile(
                     title: 'Community',
-                    onTap: () => context.go('/community'),
+                    onTap: () => context.go('/community/admin'),
                     icon: SvgPicture.asset(
                       'assets/images/community-icon.svg',
                       width: 24,
@@ -110,7 +109,7 @@ class SettingsScreen extends ConsumerWidget {
                             await ref
                                 .read(authViewModelProvider.notifier)
                                 .signOut();
-                            // if (context.mounted) context.go('/');
+                            if (context.mounted) context.go('/');
                           }
                         : () {},
                     icon: isLoading
