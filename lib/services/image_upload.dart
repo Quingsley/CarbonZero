@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:carbon_zero/core/constants/constants.dart';
 import 'package:carbon_zero/core/error/failure.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
-import 'package:carbon_zero/features/auth/presentation/viewmodels/auth_view_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -22,7 +21,7 @@ class ImageUpload extends AsyncNotifier<String?> {
   /// used to pick an image
   Future<void> uploadPhoto(ImageType imageType) async {
     try {
-      final user = ref.read(authViewModelProvider).value;
+      final user = ref.watch(authStateChangesProvider).value;
       final storage = ref.read(storageProvider);
 
       XFile? pickedImage;
@@ -31,14 +30,14 @@ class ImageUpload extends AsyncNotifier<String?> {
 
       state = const AsyncLoading();
       state = await AsyncValue.guard(() async {
-        pickedImage = await _picker.pickImage(source: ImageSource.camera);
+        pickedImage = await _picker.pickImage(source: ImageSource.gallery);
 
         if (pickedImage != null) {
           final extension = pickedImage?.path.split('.').last;
 
           final name = imageType == ImageType.profile
-              ? '${user?.userId}.$extension'
-              : 'community-${user?.userId}.$extension';
+              ? '${user?.uid}.$extension'
+              : 'community-${user?.uid}-${DateTime.timestamp()}.$extension';
 
           final folder = imageType == ImageType.profile
               ? 'profile_images'
