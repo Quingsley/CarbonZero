@@ -1,5 +1,5 @@
 import 'package:carbon_zero/core/extensions.dart';
-import 'package:carbon_zero/features/auth/presentation/viewmodels/auth_view_model.dart';
+import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
 import 'package:carbon_zero/features/home/presentation/widgets/activity_tile.dart';
 import 'package:carbon_zero/features/home/presentation/widgets/carbon_foot_print.dart';
 import 'package:carbon_zero/features/home/presentation/widgets/home_card.dart';
@@ -28,7 +28,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(authViewModelProvider);
+    final user = ref.watch(userStreamProvider);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(top: 50, left: 8, right: 8),
@@ -82,9 +82,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     if (user.value?.photoId != null)
                       GestureDetector(
                         onTap: () => context.go('/settings'),
-                        child: CircleAvatar(
-                          backgroundImage:
-                              NetworkImage(user.value?.photoId ?? ''),
+                        child: user.when(
+                          error: (_, __) => const SizedBox.shrink(),
+                          loading: () => const CircularProgressIndicator(),
+                          data: (value) => CircleAvatar(
+                            backgroundImage:
+                                NetworkImage(user.value?.photoId ?? ''),
+                          ),
                         ),
                       )
                     else
