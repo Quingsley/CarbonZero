@@ -31,7 +31,8 @@ class UserCommunityCard extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             image: DecorationImage(
-              image: AssetImage(image),
+              onError: (exception, stackTrace) => const SizedBox(),
+              image: NetworkImage(image),
               fit: BoxFit.cover,
             ),
           ),
@@ -53,7 +54,7 @@ class UserCommunityCard extends StatelessWidget {
               ),
               Chip(
                 avatar: const Icon(Icons.people_alt),
-                label: Text('$members members'),
+                label: Text('$members ${members == 1 ? "member" : "members"}'),
                 labelPadding: EdgeInsets.zero,
                 side: BorderSide.none,
               ),

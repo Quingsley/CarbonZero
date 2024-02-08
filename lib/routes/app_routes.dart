@@ -6,7 +6,9 @@ import 'package:carbon_zero/features/auth/presentation/pages/login_screen.dart';
 import 'package:carbon_zero/features/auth/presentation/pages/profile_completion.dart';
 import 'package:carbon_zero/features/auth/presentation/pages/profile_photo.dart';
 import 'package:carbon_zero/features/auth/presentation/pages/signup_screen.dart';
+import 'package:carbon_zero/features/community/data/models/community_model.dart';
 import 'package:carbon_zero/features/community/presentation/pages/add_community.dart';
+import 'package:carbon_zero/features/community/presentation/pages/admin_communities.dart';
 import 'package:carbon_zero/features/community/presentation/pages/community.dart';
 import 'package:carbon_zero/features/community/presentation/pages/community_details.dart';
 import 'package:carbon_zero/features/community/presentation/pages/community_inbox.dart';
@@ -35,14 +37,16 @@ class AppRoutes {
   /// GoRouter instance.
   static final router = Provider<GoRouter>((ref) {
     final auth = ref.read(authInstanceProvider);
-    final authState = ref.read(authStateChanges);
+    final authState = ref.read(authStateChangesProvider);
     return GoRouter(
       navigatorKey: AppRoutes._rootNavigator,
       initialLocation: '/',
-      refreshListenable: GoRouterRefreshStream(authState),
+      refreshListenable: GoRouterRefreshStream(auth.authStateChanges()),
       redirect: (context, state) {
         if (state.fullPath == '/auth') {
-          return auth.currentUser != null ? '/home' : '/auth'; // look into this
+          return authState.value?.uid != null
+              ? '/home'
+              : '/auth'; // look into this
         }
 
         return null;
@@ -120,16 +124,27 @@ class AppRoutes {
                   routes: [
                     GoRoute(
                       path: 'details',
-                      builder: (context, state) => const CommunityDetails(),
+                      builder: (context, state) => CommunityDetails(
+                        community: state.extra! as CommunityModel,
+                      ),
                     ),
                     GoRoute(
                       path: 'inbox', // will make it dynamic /inbox/{name}
                       builder: (context, state) => const CommunityInbox(),
                     ),
                     GoRoute(
-                      path:
-                          'add-community', // will make it dynamic /inbox/{name}
-                      builder: (context, state) => const AddCommunity(),
+                      path: 'add-community',
+                      builder: (context, state) {
+                        return AddCommunity(
+                          community: state.extra != null
+                              ? state.extra! as CommunityModel
+                              : null,
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: 'admin',
+                      builder: (context, state) => const AdminCommunities(),
                     ),
                   ],
                 ),

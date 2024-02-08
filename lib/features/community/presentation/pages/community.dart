@@ -1,23 +1,30 @@
+import 'package:carbon_zero/core/error/failure.dart';
 import 'package:carbon_zero/core/extensions.dart';
+import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
+import 'package:carbon_zero/features/community/presentation/view_models/community_view_model.dart';
 import 'package:carbon_zero/features/community/presentation/widgets/community_card.dart';
+import 'package:carbon_zero/features/community/presentation/widgets/community_search.dart';
 import 'package:carbon_zero/features/community/presentation/widgets/user_community_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 /// users will be able to find communities and join them
 /// and have group chats with the members of the community
-class CommunityScreen extends StatelessWidget {
+class CommunityScreen extends ConsumerWidget {
   /// constructor call
   const CommunityScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    const border = OutlineInputBorder(
-      borderSide: BorderSide.none,
-      borderRadius: BorderRadius.all(
-        Radius.circular(12),
-      ),
-    );
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userStreamProvider);
+
+    final getCommunityAsyncValue =
+        ref.watch(getCommunitiesStreamProvider(user.value!.userId!));
+
+    final getUserCommunityAsyncValue =
+        ref.watch(userCommunityStreamProvider(user.value!.userId!));
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Community'),
@@ -28,22 +35,8 @@ class CommunityScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              child: TextField(
-                decoration: InputDecoration(
-                  focusedBorder: border,
-                  enabledBorder: border,
-                  border: border,
-                  contentPadding: EdgeInsets.zero,
-                  hintText: 'Find a community',
-                  filled: true,
-                  fillColor: context.colors.primaryContainer.withOpacity(.62),
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: context.colors.primary,
-                  ),
-                ),
-              ),
+            const SizedBox(
+              child: CommunitySearch(),
             ),
             const SizedBox(height: 8),
             const Text(
@@ -53,26 +46,32 @@ class CommunityScreen extends StatelessWidget {
             const SizedBox(height: 4),
             SizedBox(
               height: 250,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: const [
-                  CommunityCard(
-                    image: 'assets/images/solar_energy.png',
-                    name: 'Renewable Energy',
-                    members: 150,
-                    tags: ['#solar', '#wind', '#hydro'],
-                    description:
-                        'The community is focused on promoting renewable energy',
-                  ),
-                  CommunityCard(
-                    image: 'assets/images/tree_planting.png',
-                    name: 'Tree Planting',
-                    members: 88,
-                    tags: ['#trees', '#planting', '#nature'],
-                    description:
-                        'The community is focused on promoting renewable energy',
-                  ),
-                ],
+              child: getCommunityAsyncValue.when(
+                data: (communities) {
+                  return communities.isNotEmpty
+                      ? ListView.builder(
+                          itemCount: communities.length,
+                          itemBuilder: (context, index) {
+                            return CommunityCard(
+                              community: communities[index],
+                            );
+                          },
+                          scrollDirection: Axis.horizontal,
+                        )
+                      : const Center(
+                          child: Text(
+                            'Nothing to show here, create a community ',
+                          ),
+                        );
+                },
+                error: (error, _) {
+                  return Center(
+                    child: Text(
+                      error is Failure ? error.message : error.toString(),
+                    ),
+                  );
+                },
+                loading: () => const Center(child: CircularProgressIndicator()),
               ),
             ),
             const SizedBox(
@@ -83,30 +82,29 @@ class CommunityScreen extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             Expanded(
-              child: ListView(
-                children: const [
-                  UserCommunityCard(
-                    title: 'Operation Trees',
-                    image: 'assets/images/tree_planting.png',
-                    members: 150,
+              child: getUserCommunityAsyncValue.when(
+                data: (community) {
+                  return community.isNotEmpty
+                      ? ListView.builder(
+                          itemCount: community.length,
+                          itemBuilder: (context, index) {
+                            return UserCommunityCard(
+                              title: community[index].name,
+                              image: community[index].posterId,
+                              members: community[index].members,
+                            );
+                          },
+                        )
+                      : const Text(
+                          'You  have not joined any communities yet , please join one',
+                        );
+                },
+                error: (error, _) => Center(
+                  child: Text(
+                    error is Failure ? error.message : error.toString(),
                   ),
-                  Divider(
-                    thickness: 2,
-                  ),
-                  UserCommunityCard(
-                    title: 'Eco',
-                    image: 'assets/images/eco_leaf.png',
-                    members: 500,
-                  ),
-                  Divider(
-                    thickness: 2,
-                  ),
-                  UserCommunityCard(
-                    title: 'Water Reduction',
-                    image: 'assets/images/water_reduction.png',
-                    members: 200,
-                  ),
-                ],
+                ),
+                loading: () => const Center(child: CircularProgressIndicator()),
               ),
             ),
           ],

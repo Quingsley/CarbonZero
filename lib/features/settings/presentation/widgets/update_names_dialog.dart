@@ -1,8 +1,9 @@
 import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/core/widgets/primary_button.dart';
 import 'package:carbon_zero/features/auth/data/models/user_model.dart';
-import 'package:carbon_zero/features/auth/presentation/viewmodels/auth_view_model.dart';
+import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
 import 'package:carbon_zero/features/auth/presentation/widgets/text_field.dart';
+import 'package:carbon_zero/features/community/presentation/pages/add_community.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -15,11 +16,10 @@ Future<void> updateUser(
 ) async {
   final fNameController = TextEditingController(text: user?.fName);
   final lNameController = TextEditingController(text: user?.lName);
-  final viewModel = ref.read(authViewModelProvider);
-  final isLoading = viewModel is AsyncLoading;
   return showDialog(
     context: context,
     builder: (context) {
+      final isLoading = ref.watch(isLoadingStateProvider);
       return Dialog(
         child: Container(
           padding: const EdgeInsets.all(8),
@@ -62,6 +62,7 @@ Future<void> updateUser(
                 isLoading: isLoading,
                 onPressed: !isLoading
                     ? () async {
+                        ref.read(isLoadingStateProvider.notifier).state = true;
                         final updateUser = user?.copyWith(
                           fName: fNameController.text,
                           lName: lNameController.text,
@@ -69,6 +70,7 @@ Future<void> updateUser(
                         await ref
                             .read(authViewModelProvider.notifier)
                             .updateUser(updateUser!);
+                        ref.read(isLoadingStateProvider.notifier).state = false;
                         if (context.mounted) context.pop();
                       }
                     : null,
