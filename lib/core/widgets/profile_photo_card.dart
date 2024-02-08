@@ -75,8 +75,8 @@ class _ProfilePhotoCardState extends ConsumerState<ProfilePhotoCard> {
                       shape: BoxShape.circle,
                       // borderRadius: BorderRadius.circular(1000),
                       image: DecorationImage(
-                        scale: .5,
                         fit: BoxFit.cover,
+                        onError: (exception, stackTrace) => const SizedBox(),
                         image: NetworkImage(imagePath ?? ''),
                       ),
                     ),
