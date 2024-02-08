@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:carbon_zero/core/error/failure.dart';
+import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/features/auth/data/models/user_model.dart';
 import 'package:carbon_zero/services/local_storage.dart';
@@ -33,11 +34,7 @@ class AuthDataSource {
       /// references the document Id in the users collection
       await _db
           .collection('users')
-          .withConverter<UserModel>(
-            fromFirestore: (snapshot, _) =>
-                UserModel.fromJson(snapshot.data()!),
-            toFirestore: (user, _) => user.toJson(),
-          )
+          .withUserModelConverter()
           .doc(credentials.user?.uid)
           .set(updatedUser);
       await LocalStorage().setUser(updatedUser);
