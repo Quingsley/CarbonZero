@@ -1,4 +1,5 @@
 import 'package:carbon_zero/features/auth/data/models/user_model.dart';
+import 'package:carbon_zero/features/chat/data/model/chat_model.dart';
 import 'package:carbon_zero/features/community/data/models/community_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ extension AppThemeExtension on BuildContext {
 /// [CollectionReference] extension will add a community model converter
 /// to the collection reference
 extension ModelConverter on CollectionReference {
-  /// adds a community model converter to the collection reference
+  /// adds a [CommunityModel] converter to the collection reference
   CollectionReference<CommunityModel> withCommunityModelConverter() {
     return withConverter<CommunityModel>(
       fromFirestore: (snapshot, _) => CommunityModel.fromJson(snapshot.data()!),
@@ -23,11 +24,19 @@ extension ModelConverter on CollectionReference {
     );
   }
 
-  /// [CollectionReference] extension will add a user model converter
+  /// [CollectionReference] extension will add a [UserModel] converter
   CollectionReference<UserModel> withUserModelConverter() {
     return withConverter<UserModel>(
       fromFirestore: (snapshot, _) => UserModel.fromJson(snapshot.data()!),
       toFirestore: (user, _) => user.toJson(),
+    );
+  }
+
+  /// [CollectionReference] extension will add a [ChatModel] converter
+  CollectionReference<ChatModel> withChatModelConverter() {
+    return withConverter(
+      fromFirestore: (snapshot, _) => ChatModel.fromJson(snapshot.data()!),
+      toFirestore: (chat, _) => chat.toJson(),
     );
   }
 }

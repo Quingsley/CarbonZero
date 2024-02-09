@@ -1,11 +1,12 @@
 import 'package:carbon_zero/features/auth/data/models/user_model.dart';
 import 'package:carbon_zero/features/community/data/data_source/community_data_source.dart';
+import 'package:carbon_zero/features/community/data/data_source/icommunity.dart';
 import 'package:carbon_zero/features/community/data/models/community_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// will communicate with the data source to get the data
 /// and send it to the View Model
-class CommunityRepository {
+class CommunityRepository extends ICommunity {
   /// will communicate with the data source to get the data
   /// and send it to the View Model
   CommunityRepository({required CommunityDataSource communityDataSource})
@@ -14,51 +15,51 @@ class CommunityRepository {
   /// remote data source for the community feature
   final CommunityDataSource _communityDataSource;
 
-  /// create a community
+  @override
   Future<void> createCommunity(CommunityModel community) async {
     return _communityDataSource.createCommunity(community);
   }
 
-  /// updates the community
+  @override
   Future<void> updateCommunity(CommunityModel community) async {
     return _communityDataSource.updateCommunity(community);
   }
 
-  /// will get the communities in the db
+  @override
   Stream<List<CommunityModel>> getCommunities(String userId) {
     return _communityDataSource.getCommunities(userId);
   }
 
-  /// get the communities of the user
+  @override
   Stream<List<CommunityModel>> getUserCommunities(
     String userId,
   ) {
     return _communityDataSource.getUserCommunities(userId);
   }
 
-  /// fetch only the communities that the user is an admin of
+  @override
   Future<List<CommunityModel>> getAdminCommunities(String adminId) async {
     return _communityDataSource.getAdminCommunities(adminId);
   }
 
-  /// will delete the community
+  @override
   Future<void> deleteCommunity(String communityId) async {
     return _communityDataSource.deleteCommunity(communityId);
   }
 
-  /// method to let user join a community
-  Future<void> joinCommunity(String communityId, String userId) {
+  @override
+  Future<void> joinCommunity(String userId, String communityId) {
     return _communityDataSource.joinCommunity(userId, communityId);
   }
 
-  /// will only get users of a specific communities
+  @override
   Future<List<UserModel>> getUsers(List<String> userIds) async {
     return _communityDataSource.getUsers(userIds);
   }
 
-  /// search for communities in the for the given search term
-  Future<List<CommunityModel>> searchCommunities(String query) async {
-    return _communityDataSource.searchCommunities(query);
+  @override
+  Future<List<CommunityModel>> searchCommunities(String searchTerm) async {
+    return _communityDataSource.searchCommunities(searchTerm);
   }
 }
 

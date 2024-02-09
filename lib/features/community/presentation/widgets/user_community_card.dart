@@ -1,4 +1,5 @@
 import 'package:carbon_zero/core/extensions.dart';
+import 'package:carbon_zero/features/community/data/models/community_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -6,20 +7,12 @@ import 'package:go_router/go_router.dart';
 class UserCommunityCard extends StatelessWidget {
   /// constructor call
   const UserCommunityCard({
-    required this.title,
-    required this.image,
-    required this.members,
+    required this.community,
     super.key,
   });
 
-  /// name of the community
-  final String title;
-
-  /// profile picture of the community
-  final String image;
-
-  /// number of members in the community
-  final int members;
+  /// community model
+  final CommunityModel community;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -32,7 +25,7 @@ class UserCommunityCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             image: DecorationImage(
               onError: (exception, stackTrace) => const SizedBox(),
-              image: NetworkImage(image),
+              image: NetworkImage(community.posterId),
               fit: BoxFit.cover,
             ),
           ),
@@ -45,7 +38,7 @@ class UserCommunityCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                title,
+                community.name,
                 style: context.textTheme.titleMedium
                     ?.copyWith(fontWeight: FontWeight.bold),
               ),
@@ -54,13 +47,16 @@ class UserCommunityCard extends StatelessWidget {
               ),
               Chip(
                 avatar: const Icon(Icons.people_alt),
-                label: Text('$members ${members == 1 ? "member" : "members"}'),
+                label: Text(
+                  '${community.members} ${community.members == 1 ? "member" : "members"}',
+                ),
                 labelPadding: EdgeInsets.zero,
                 side: BorderSide.none,
               ),
               // const Spacer(),
               OutlinedButton(
-                onPressed: () => context.go('/community/inbox'),
+                onPressed: () =>
+                    context.push('/community/inbox', extra: community),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: context.colors.primary,
                   side: BorderSide(color: context.colors.primary),
