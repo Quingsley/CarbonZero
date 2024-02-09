@@ -83,15 +83,13 @@ class CommunityScreen extends ConsumerWidget {
             ),
             Expanded(
               child: getUserCommunityAsyncValue.when(
-                data: (community) {
-                  return community.isNotEmpty
+                data: (communities) {
+                  return communities.isNotEmpty
                       ? ListView.builder(
-                          itemCount: community.length,
+                          itemCount: communities.length,
                           itemBuilder: (context, index) {
                             return UserCommunityCard(
-                              title: community[index].name,
-                              image: community[index].posterId,
-                              members: community[index].members,
+                              community: communities[index],
                             );
                           },
                         )
