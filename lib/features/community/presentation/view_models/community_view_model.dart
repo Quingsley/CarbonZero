@@ -38,7 +38,7 @@ class CommunityViewModel extends AsyncNotifier<void> {
     final repo = ref.read(communityRepositoryProvider);
     state = const AsyncLoading();
     state =
-        await AsyncValue.guard(() => repo.joinCommunity(communityId, userId));
+        await AsyncValue.guard(() => repo.joinCommunity(userId, communityId));
     ref.invalidate(userCommunityStreamProvider);
   }
 }
