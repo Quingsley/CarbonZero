@@ -2,12 +2,13 @@ import 'package:carbon_zero/core/error/failure.dart';
 import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/features/auth/data/models/user_model.dart';
+import 'package:carbon_zero/features/community/data/data_source/icommunity.dart';
 import 'package:carbon_zero/features/community/data/models/community_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// remote data source for the community feature
-class CommunityDataSource {
+class CommunityDataSource extends ICommunity {
   /// remote data source for the community feature
   CommunityDataSource({required FirebaseFirestore? db})
       : assert(db != null, 'db must not be null'),
@@ -16,7 +17,7 @@ class CommunityDataSource {
   /// firestore instance
   final FirebaseFirestore _db;
 
-  /// adds a community to the database
+  @override
   Future<void> createCommunity(CommunityModel community) async {
     try {
       final doc = await _db
@@ -39,7 +40,7 @@ class CommunityDataSource {
     }
   }
 
-  /// updates the community
+  @override
   Future<void> updateCommunity(CommunityModel community) async {
     try {
       await _db
@@ -54,13 +55,13 @@ class CommunityDataSource {
     }
   }
 
-  /// will get all the communities in the db that the user
-  /// has not joined
+  @override
   Stream<List<CommunityModel>> getCommunities(String userId) {
     try {
       final data =
           _db.collection('communities').withCommunityModelConverter().where(
-        //FIX: Not working I only want to get the communities that the user has not joined(quick fix below)
+        //FIX: Not working I only want to get the communities that
+        //the user has not joined(quick fix below)
         'userIds',
         isNotEqualTo: [
           userId,
@@ -79,7 +80,7 @@ class CommunityDataSource {
     }
   }
 
-  /// will get specific communities for the user
+  @override
   Stream<List<CommunityModel>> getUserCommunities(
     String userId,
   ) {
@@ -97,7 +98,7 @@ class CommunityDataSource {
     }
   }
 
-  /// will only return admin communities
+  @override
   Future<List<CommunityModel>> getAdminCommunities(String adminId) async {
     try {
       final data = await _db
@@ -113,7 +114,7 @@ class CommunityDataSource {
     }
   }
 
-  /// will delete the community
+  @override
   Future<void> deleteCommunity(String communityId) async {
     try {
       await _db.collection('communities').doc(communityId).delete();
@@ -136,7 +137,7 @@ class CommunityDataSource {
     }
   }
 
-  /// will let the user join the community
+  @override
   Future<void> joinCommunity(String userId, String communityId) async {
     try {
       await _db.collection('communities').doc(communityId).update({
@@ -153,7 +154,7 @@ class CommunityDataSource {
     }
   }
 
-  /// will get the users of a given community
+  @override
   Future<List<UserModel>> getUsers(List<String> userIds) async {
     try {
       final data = await _db
@@ -170,7 +171,7 @@ class CommunityDataSource {
   }
 
   //TODO: find a better way to optimize the search
-  /// searches a given community for the given search term
+  @override
   Future<List<CommunityModel>> searchCommunities(String searchTerm) async {
     try {
       final data = await _db
