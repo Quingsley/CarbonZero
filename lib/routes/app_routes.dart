@@ -6,12 +6,12 @@ import 'package:carbon_zero/features/auth/presentation/pages/login_screen.dart';
 import 'package:carbon_zero/features/auth/presentation/pages/profile_completion.dart';
 import 'package:carbon_zero/features/auth/presentation/pages/profile_photo.dart';
 import 'package:carbon_zero/features/auth/presentation/pages/signup_screen.dart';
+import 'package:carbon_zero/features/chat/presentation/pages/chat.dart';
 import 'package:carbon_zero/features/community/data/models/community_model.dart';
 import 'package:carbon_zero/features/community/presentation/pages/add_community.dart';
 import 'package:carbon_zero/features/community/presentation/pages/admin_communities.dart';
 import 'package:carbon_zero/features/community/presentation/pages/community.dart';
 import 'package:carbon_zero/features/community/presentation/pages/community_details.dart';
-import 'package:carbon_zero/features/community/presentation/pages/community_inbox.dart';
 import 'package:carbon_zero/features/home/presentation/pages/home_screen.dart';
 import 'package:carbon_zero/features/notification/presentation/pages/notification.dart';
 import 'package:carbon_zero/features/onboarding/presentation/pages/onboarding_screen.dart';
@@ -129,11 +129,15 @@ class AppRoutes {
                       ),
                     ),
                     GoRoute(
-                      path: 'inbox', // will make it dynamic /inbox/{name}
-                      builder: (context, state) => const CommunityInbox(),
+                      path: 'inbox',
+                      parentNavigatorKey: AppRoutes._rootNavigator,
+                      builder: (context, state) => CommunityInbox(
+                        communityModel: state.extra! as CommunityModel,
+                      ),
                     ),
                     GoRoute(
                       path: 'add-community',
+                      parentNavigatorKey: AppRoutes._rootNavigator,
                       builder: (context, state) {
                         return AddCommunity(
                           community: state.extra != null
