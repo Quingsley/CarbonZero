@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   cloud_firestore: ^4.15.2
+  country_picker: ^2.0.24
   equatable: ^2.0.5
   firebase_auth: ^4.17.2
   firebase_core: ^2.25.0
@@ -31,6 +32,7 @@ dependencies:
   path_provider: ^2.1.2
   shared_preferences: ^2.2.2
   sleek_circular_slider: ^2.0.1
+  timeline_tile: ^2.0.0
 
 dev_dependencies:
   build_runner: ^2.4.8
