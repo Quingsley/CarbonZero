@@ -17,7 +17,7 @@ class LocalStorage {
   static bool didUserOnboard = false;
 
   /// key for the [didUserOnboard] variable
-  final String didUserOnboardKey = 'didUserOnboard';
+  final String _didUserOnboardKey = 'didUserOnboard';
 
   // needs to be a singleton pattern
   static final LocalStorage _localStorage = LocalStorage._internal();
@@ -25,17 +25,16 @@ class LocalStorage {
   /// initializes the app
   Future<void> init() async {
     final preference = await SharedPreferences.getInstance();
-    final storedValue = preference.getString(didUserOnboardKey);
-
+    final storedValue = preference.getString(_didUserOnboardKey);
     if (storedValue == null) {
-      await preference.setString(didUserOnboardKey, didUserOnboardKey);
+      await preference.setString(_didUserOnboardKey, _didUserOnboardKey);
     }
   }
 
   /// reads the value of the [didUserOnboard] variable
   Future<void> readOnboarding() async {
     final preference = await SharedPreferences.getInstance();
-    final value = preference.getString('didUserOnboard');
+    final value = preference.getString(_didUserOnboardKey);
     if (value != null) didUserOnboard = true;
   }
 
