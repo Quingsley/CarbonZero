@@ -53,6 +53,15 @@ List<String> hashtags = [
   '#EarthGuardians',
 ];
 
+/// personality enum
+enum Personality {
+  /// indoors user
+  sedentary,
+
+  /// active user
+  active
+}
+
 /// [DietType] enum
 enum DietType {
   /// Vegan
@@ -81,20 +90,133 @@ String imageUrl(DietType type) {
   String label;
   switch (type) {
     case DietType.vegan:
-      label =
-          'https://firebasestorage.googleapis.com/v0/b/carbonzero-53d68.appspot.com/o/vegan.png?alt=media&token=88f40034-3eca-451c-a987-d6cb2f4d2bdc';
+      label = 'assets/images/vegan.png';
     case DietType.vegetarian:
-      label =
-          'https://firebasestorage.googleapis.com/v0/b/carbonzero-53d68.appspot.com/o/broccoli.png?alt=media&token=32983f1f-dd97-4d4f-a5f2-a44282cb6d51';
+      label = 'assets/images/broccoli.png';
     case DietType.pescatarian:
-      label =
-          'https://firebasestorage.googleapis.com/v0/b/carbonzero-53d68.appspot.com/o/fish-and-chips.png?alt=media&token=3eaf7dad-5785-4ea8-8ede-e78dc987e0cd';
+      label = 'assets/images/fish-and-chips.png';
     case DietType.highMeat:
-      label =
-          'https://firebasestorage.googleapis.com/v0/b/carbonzero-53d68.appspot.com/o/beef.png?alt=media&token=4b17798a-0966-42b9-854f-32179e911eec';
+      label = 'assets/images/beef.png';
     case DietType.lowMeat:
-      label =
-          'https://firebasestorage.googleapis.com/v0/b/carbonzero-53d68.appspot.com/o/food.png?alt=media&token=34c725d8-8f8a-4ce5-9f06-98aab9611cb2';
+      label = 'assets/images/low-meat.png';
   }
   return label;
+}
+
+/// mode of transport enum
+enum ModeOfTransport {
+  /// medium flight
+  mediumFlight('Medium Flight'),
+
+  /// short flight
+  shortFlight('Short Flight'),
+
+  /// bus
+  bus('Bus'),
+
+  /// medium car (Gasoline)
+  mediumCarGasoline('Medium Car (Gasoline)'),
+
+  /// medium car (Diesel)
+  mediumCarDiesel('Medium Car (Diesel)'),
+
+  /// Gasoline car
+  gasolineCar('Gasoline Car'),
+
+  /// medium EV
+  mediumEV('Medium EV'),
+
+  /// National rail
+  nationalRail('National Rail'),
+
+  /// International rail
+  internationalRail('International Rail'),
+
+  /// ferry
+  ferry('Ferry'),
+
+  /// hybrid EV
+  hybridEV('Hybrid EV'),
+
+  /// PHEV
+  phev('PHEV'),
+
+  ///BEV
+  bev('BEV');
+
+  const ModeOfTransport(this.label);
+
+  /// label
+  final String label;
+}
+
+/// return s the string of the asset name
+String getTransportAssetName(ModeOfTransport mode) {
+  switch (mode) {
+    case ModeOfTransport.bev:
+      return 'assets/images/electric-car.png';
+    case ModeOfTransport.bus:
+      return 'assets/images/bus-lane.png';
+    case ModeOfTransport.ferry:
+      return 'assets/images/ship.png';
+    case ModeOfTransport.nationalRail:
+      return 'assets/images/train.png';
+    case ModeOfTransport.phev:
+      return 'assets/images/phev.jpg';
+    case ModeOfTransport.mediumFlight:
+      return 'assets/images/flight.png';
+    case ModeOfTransport.shortFlight:
+      return 'assets/images/direct-flight.png';
+    case ModeOfTransport.mediumCarGasoline:
+      return 'assets/images/car-oil.png';
+    case ModeOfTransport.mediumCarDiesel:
+      return 'assets/images/car.png';
+    case ModeOfTransport.gasolineCar:
+      return 'assets/images/gasoline.png';
+    case ModeOfTransport.mediumEV:
+      return 'assets/images/hybrid-car.png';
+    case ModeOfTransport.internationalRail:
+      return 'assets/images/rail.png';
+    case ModeOfTransport.hybridEV:
+      return 'assets/images/battery-level.png';
+  }
+}
+
+/// Energy consumption type
+enum EnergyConsumptionType {
+  ///electricity,
+  electricity('Electricity'),
+
+  ///natural Gas,
+  gas('Natural Gas'),
+
+  ///heating Oil,
+  heatingOil('Heating Oil'),
+
+  ///lpg,
+  lpg('LPG'),
+
+  ///wood,
+  wood('Wood');
+
+  const EnergyConsumptionType(this.label);
+
+  /// label
+  final String label;
+}
+
+/// returns the asset name for the energy consumption type
+String getEnergyAsset(EnergyConsumptionType type) {
+  switch (type) {
+    case EnergyConsumptionType.electricity:
+      return 'assets/images/eco-house.png';
+    case EnergyConsumptionType.gas:
+      return 'assets/images/natural-gas.png';
+    case EnergyConsumptionType.heatingOil:
+      return 'assets/images/candle.png';
+    case EnergyConsumptionType.lpg:
+      return 'assets/images/lpg.png';
+    case EnergyConsumptionType.wood:
+      return 'assets/images/fire.png';
+  }
 }
