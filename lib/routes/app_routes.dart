@@ -19,9 +19,9 @@ import 'package:carbon_zero/features/rewards/presentation/pages/rewards_screen.d
 import 'package:carbon_zero/features/settings/presentation/pages/settings_screen.dart';
 import 'package:carbon_zero/features/splash/presentation/pages/splash_screen.dart';
 import 'package:carbon_zero/features/statistics/presentation/pages/statistics_screen.dart';
+import 'package:carbon_zero/features/user_onboarding/presentation/pages/carbon_footprint_results.dart';
 import 'package:carbon_zero/features/user_onboarding/presentation/pages/user_onboarding.dart';
 import 'package:carbon_zero/routes/go_router_refresh_stream.dart';
-import 'package:carbon_zero/services/local_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -40,6 +40,7 @@ class AppRoutes {
   static final router = Provider<GoRouter>((ref) {
     final auth = ref.read(authInstanceProvider);
     final authState = ref.read(authStateChangesProvider);
+    final didUserOnboard = ref.read(didUserOnBoardProvider);
     return GoRouter(
       navigatorKey: AppRoutes._rootNavigator,
       initialLocation: '/',
@@ -48,7 +49,7 @@ class AppRoutes {
         if (state.fullPath == '/') {
           return authState.value?.uid != null
               ? '/home'
-              : LocalStorage.didUserOnboard
+              : didUserOnboard
                   ? '/auth'
                   : '/onboarding'; // look into this
         }
@@ -76,6 +77,11 @@ class AppRoutes {
           path: '/user-onboarding',
           parentNavigatorKey: AppRoutes._rootNavigator,
           builder: (context, state) => const UserOnboarding(),
+        ),
+        GoRoute(
+          path: '/carbon-footprint-results',
+          parentNavigatorKey: AppRoutes._rootNavigator,
+          builder: (context, state) => const CarbonFootPrintResults(),
         ),
         GoRoute(
           path: '/auth',
