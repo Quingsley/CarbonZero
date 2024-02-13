@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// A reusable [KTextField] widget
-class KTextField extends StatefulWidget {
+class KTextField extends ConsumerWidget {
   /// constructor call
   const KTextField({
     required this.label,
@@ -21,17 +22,15 @@ class KTextField extends StatefulWidget {
   /// used for toggling password visibility
   final bool isObscured;
 
+  /// controller for the text field
   final TextEditingController controller;
+
+  /// validates the input
   final String? Function(String?)? validator;
 
   @override
-  State<KTextField> createState() => _KTextFieldState();
-}
-
-class _KTextFieldState extends State<KTextField> {
-  bool showPassword = false;
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final showPassword = ref.watch(showPasswordProvider);
     final outlineInputBorder = OutlineInputBorder(
       borderSide: BorderSide(
         color: Theme.of(context).colorScheme.tertiary,
@@ -43,7 +42,7 @@ class _KTextFieldState extends State<KTextField> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            widget.label,
+            label,
             style: Theme.of(context)
                 .textTheme
                 .bodySmall
@@ -53,18 +52,22 @@ class _KTextFieldState extends State<KTextField> {
             height: 8,
           ),
           TextFormField(
-            controller: widget.controller,
-            obscureText: !showPassword && widget.isObscured,
-            validator: widget.validator,
+            controller: controller,
+            obscureText: !showPassword && isObscured,
+            validator: validator,
             decoration: InputDecoration(
-              hintText: widget.hintText,
+              hintText: hintText,
               hintStyle: Theme.of(context).textTheme.labelMedium?.copyWith(
                     color: Colors.grey[600],
                   ),
               filled: false,
               enabledBorder: outlineInputBorder,
               border: outlineInputBorder,
-              focusedBorder: outlineInputBorder,
+              focusedBorder: outlineInputBorder.copyWith(
+                borderSide: BorderSide(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
               focusedErrorBorder: outlineInputBorder.copyWith(
                 borderSide: BorderSide(
                   color: Theme.of(context).colorScheme.error,
@@ -77,12 +80,11 @@ class _KTextFieldState extends State<KTextField> {
               ),
               contentPadding:
                   const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-              suffixIcon: widget.isObscured
+              suffixIcon: isObscured
                   ? IconButton(
                       onPressed: () {
-                        setState(() {
-                          showPassword = !showPassword;
-                        });
+                        ref.read(showPasswordProvider.notifier).state =
+                            !showPassword;
                       },
                       icon: Icon(
                         showPassword
@@ -98,3 +100,6 @@ class _KTextFieldState extends State<KTextField> {
     );
   }
 }
+
+/// A provider to toggle password visibility
+final showPasswordProvider = StateProvider<bool>((ref) => false);
