@@ -20,3 +20,42 @@ final personalityProvider = StateProvider<Personality?>((ref) {
 final dietTypeProvider = StateProvider<DietType?>((ref) {
   return null;
 });
+
+/// will hold the value of the distance traveled for each mode of transport
+final modeOfTransportProvider = StateProvider<Map<ModeOfTransport, int>>((ref) {
+  return {
+    ModeOfTransport.bev: 0,
+    ModeOfTransport.bus: 0,
+    ModeOfTransport.ferry: 0,
+    ModeOfTransport.shortFlight: 0,
+    ModeOfTransport.mediumFlight: 0,
+    ModeOfTransport.gasolineCar: 0,
+    ModeOfTransport.hybridEV: 0,
+    ModeOfTransport.internationalRail: 0,
+    ModeOfTransport.nationalRail: 0,
+    ModeOfTransport.phev: 0,
+    ModeOfTransport.mediumEV: 0,
+    ModeOfTransport.mediumCarDiesel: 0,
+    ModeOfTransport.mediumCarGasoline: 0,
+  };
+});
+
+/// flight hours state provider
+final flightHoursProvider = StateProvider<Map<ModeOfTransport, int>>((ref) {
+  return {
+    ModeOfTransport.mediumFlight: 0,
+    ModeOfTransport.shortFlight: 0,
+  };
+});
+
+/// hold the values of the different energy consumption types
+final energyConsumptionProvider =
+    StateProvider<Map<EnergyConsumptionType, int>>((ref) {
+  return {
+    EnergyConsumptionType.electricity: 0,
+    EnergyConsumptionType.lpg: 0,
+    EnergyConsumptionType.wood: 0,
+    EnergyConsumptionType.gas: 0,
+    EnergyConsumptionType.heatingOil: 0,
+  };
+});
