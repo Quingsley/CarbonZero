@@ -10,8 +10,11 @@ dependencies:
   cloud_firestore: ^4.15.2
   country_picker: ^2.0.24
   equatable: ^2.0.5
+  firebase_analytics: ^10.8.5
+  firebase_app_check: ^0.2.1+13
   firebase_auth: ^4.17.2
   firebase_core: ^2.25.0
+  firebase_crashlytics: ^3.4.14
   firebase_storage: ^11.6.3
   fl_chart: ^0.66.1
   flex_color_scheme: ^7.3.1
@@ -25,6 +28,7 @@ dependencies:
 
   go_router: ^13.0.1
   google_fonts: ^6.1.0
+  google_sign_in: ^6.2.1
   image_picker: ^1.0.7
 
   intl: ^0.19.0
