@@ -7,6 +7,7 @@ import 'package:carbon_zero/features/auth/data/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 /// [AuthDataSource] class is a remote data source for authentication
 class AuthDataSource {
@@ -164,6 +165,55 @@ class AuthDataSource {
         .snapshots()
         .map((snapshot) => snapshot.data());
     return userStream;
+  }
+
+  /// sign up with google
+  Future<void> signUpWithGoogle({required bool isLogIn}) async {
+    try {
+      // Trigger the authentication flow
+      final googleUser = await GoogleSignIn().signIn();
+
+      // Obtain the auth details from the request
+      final googleAuth = await googleUser?.authentication;
+
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+
+      // Once signed in, return the UserCredential
+      final credentials = await _authInstance.signInWithCredential(credential);
+      final names = credentials.user?.displayName?.split(' ');
+      final user = UserModel(
+        fName: names!.first,
+        lName: names.last,
+        email: credentials.user!.email!,
+        activityIds: const [],
+        communityIds: const [],
+        userId: credentials.user?.uid,
+        photoId: credentials.user?.photoURL,
+      );
+      if (isLogIn) {
+        await _db.collection('users').doc(credentials.user?.uid).update({
+          'fName': user.fName,
+          'lName': user.lName,
+          'email': user.email,
+          'userId': credentials.user?.uid,
+          'photoId': user.photoId,
+        });
+      } else {
+        await _db
+            .collection('users')
+            .withUserModelConverter()
+            .doc(credentials.user?.uid)
+            .set(user);
+      }
+    } on FirebaseAuthException catch (e) {
+      throw Failure(message: e.message ?? 'Something went wrong');
+    } catch (e) {
+      rethrow;
+    }
   }
 }
 
