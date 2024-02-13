@@ -4,7 +4,6 @@ import 'package:carbon_zero/core/error/failure.dart';
 import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/features/auth/data/models/user_model.dart';
-import 'package:carbon_zero/services/local_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -37,7 +36,7 @@ class AuthDataSource {
           .withUserModelConverter()
           .doc(credentials.user?.uid)
           .set(updatedUser);
-      await LocalStorage().setUser(updatedUser);
+      // await LocalStorage().setUser(updatedUser);
       return updatedUser;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -61,7 +60,7 @@ class AuthDataSource {
       final doc =
           await _db.collection('users').doc(credentials.user!.uid).get();
       final user = UserModel.fromJson(doc.data()!);
-      await LocalStorage().setUser(user);
+      // await LocalStorage().setUser(user);
       return user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -82,7 +81,7 @@ class AuthDataSource {
       final doc = await _db.collection('users').doc(userId).get();
       final user = UserModel.fromJson(doc.data()!);
       await _authInstance.currentUser?.updatePhotoURL(photoUrl);
-      await LocalStorage().setUser(user);
+      // await LocalStorage().setUser(user);
       return user;
     } on FirebaseException catch (e) {
       throw Failure(message: e.message ?? 'something went wrong');
@@ -119,7 +118,7 @@ class AuthDataSource {
   Future<UserModel?> signOut() async {
     try {
       await _authInstance.signOut();
-      await LocalStorage().removeUserData();
+      // await LocalStorage().removeUserData();
       return null;
     } on FirebaseAuthException catch (e) {
       throw Failure(message: e.message ?? 'something went wrong');
@@ -144,7 +143,7 @@ class AuthDataSource {
       final updatedUser = UserModel.fromJson(json.data()!);
       await _authInstance.currentUser
           ?.updateDisplayName('${updatedUser.fName} ${updatedUser.lName}');
-      await LocalStorage().setUser(updatedUser);
+      // await LocalStorage().setUser(updatedUser);
       return updatedUser;
     } on FirebaseException catch (e) {
       throw Failure(message: e.message ?? 'Something went wrong');
@@ -170,8 +169,10 @@ class AuthDataSource {
 
 /// will provide an instance of [AuthDataSource]
 final authDataSourceProvider = Provider<AuthDataSource>((ref) {
-  final db = ref.read(dbProvider);
+  // user is not logged in yet so access is to db
+  // allowed but other data sources will use the
+  // dbProvider
+  final db = FirebaseFirestore.instance;
   final authInstance = ref.read(authInstanceProvider);
-  if (db == null) throw AssertionError('User is not logged in');
   return AuthDataSource(db, authInstance);
 });
