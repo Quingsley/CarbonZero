@@ -3,6 +3,7 @@ import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/core/widgets/form_layout.dart';
 import 'package:carbon_zero/core/widgets/primary_button.dart';
 import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
+import 'package:carbon_zero/features/auth/presentation/widgets/google_button.dart';
 import 'package:carbon_zero/features/auth/presentation/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -142,8 +143,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               const Spacer(),
               PrimaryButton(
                 text: 'Log in',
-                onPressed: !isLoading ? submit : null,
+                onPressed: () => context.go(
+                  '/carbon-footprint-results',
+                ), //!isLoading ? submit : null,
                 isLoading: isLoading,
+              ),
+              const GButton(
+                text: 'Continue with Google',
+                isLogin: true,
               ),
               const SizedBox(
                 height: 20,
