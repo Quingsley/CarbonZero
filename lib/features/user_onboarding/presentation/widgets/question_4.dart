@@ -3,21 +3,18 @@ import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/core/widgets/bottom_sheet.dart';
 import 'package:carbon_zero/core/widgets/primary_button.dart';
 import 'package:carbon_zero/features/user_onboarding/presentation/widgets/footer_reference.dart';
+import 'package:carbon_zero/features/user_onboarding/providers/user_onboarding_providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Mode of transport question
-class ModeOfTransportQ extends StatefulWidget {
+class ModeOfTransportQ extends StatelessWidget {
   /// Mode of transport question
   const ModeOfTransportQ({required this.controller, super.key});
 
   /// controller
   final PageController controller;
 
-  @override
-  State<ModeOfTransportQ> createState() => _ModeOfTransportQState();
-}
-
-class _ModeOfTransportQState extends State<ModeOfTransportQ> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -38,8 +35,9 @@ class _ModeOfTransportQState extends State<ModeOfTransportQ> {
                 (mode) {
                   final isFlight = mode == ModeOfTransport.shortFlight ||
                       mode == ModeOfTransport.mediumFlight;
-                  final widgetToShow =
-                      isFlight ? const FlightInputQ() : const DistanceInput();
+                  final widgetToShow = isFlight
+                      ? FlightInputQ(mode: mode)
+                      : DistanceInput(mode: mode);
                   return ListTile(
                     leading: CircleAvatar(
                       backgroundImage: AssetImage(getTransportAssetName(mode)),
@@ -50,6 +48,9 @@ class _ModeOfTransportQState extends State<ModeOfTransportQ> {
                       await kShowBottomSheet(
                         context,
                         widgetToShow,
+                        isFlight
+                            ? MediaQuery.sizeOf(context).height * 0.55
+                            : null,
                       );
                     },
                     trailing: IconButton.filledTonal(
@@ -78,7 +79,7 @@ class _ModeOfTransportQState extends State<ModeOfTransportQ> {
         PrimaryButton(
           text: 'Continue',
           onPressed: () {
-            widget.controller.nextPage(
+            controller.nextPage(
               duration: const Duration(milliseconds: 500),
               curve: Curves.easeIn,
             );
@@ -91,17 +92,21 @@ class _ModeOfTransportQState extends State<ModeOfTransportQ> {
 }
 
 /// provides a slider for selecting distance
-class DistanceInput extends StatefulWidget {
+class DistanceInput extends ConsumerStatefulWidget {
   /// provides a slider for selecting distance
   const DistanceInput({
+    required this.mode,
     super.key,
   });
 
+  /// mode of transport
+  final ModeOfTransport mode;
+
   @override
-  State<DistanceInput> createState() => _DistanceInputState();
+  ConsumerState<DistanceInput> createState() => _DistanceInputState();
 }
 
-class _DistanceInputState extends State<DistanceInput> {
+class _DistanceInputState extends ConsumerState<DistanceInput> {
   int _distance = 50;
   @override
   Widget build(BuildContext context) {
@@ -122,12 +127,14 @@ class _DistanceInputState extends State<DistanceInput> {
             setState(() {
               _distance = value.toInt();
             });
+            ref.read(modeOfTransportProvider.notifier).state[widget.mode] =
+                value.toInt();
           },
         ),
         PrimaryButton(
           text: 'Save',
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.of(context).pop();
           },
         ),
         const SizedBox(height: 20),
@@ -159,15 +166,18 @@ class InfoMessage extends StatelessWidget {
 }
 
 /// Flight input question
-class FlightInputQ extends StatefulWidget {
+class FlightInputQ extends ConsumerStatefulWidget {
   /// Flight input question
-  const FlightInputQ({super.key});
+  const FlightInputQ({required this.mode, super.key});
+
+  /// mode of transport
+  final ModeOfTransport mode;
 
   @override
-  State<FlightInputQ> createState() => _FlightInputQState();
+  ConsumerState<FlightInputQ> createState() => _FlightInputQState();
 }
 
-class _FlightInputQState extends State<FlightInputQ> {
+class _FlightInputQState extends ConsumerState<FlightInputQ> {
   int _distance = 100;
   int _timeTaken = 4;
   @override
@@ -194,6 +204,8 @@ class _FlightInputQState extends State<FlightInputQ> {
               setState(() {
                 _distance = val.toInt();
               });
+              ref.read(modeOfTransportProvider.notifier).state[widget.mode] =
+                  val.toInt();
             },
           ),
         ),
@@ -207,6 +219,8 @@ class _FlightInputQState extends State<FlightInputQ> {
               setState(() {
                 _timeTaken = val.toInt();
               });
+              ref.read(flightHoursProvider.notifier).state[widget.mode] =
+                  val.toInt();
             },
           ),
         ),
