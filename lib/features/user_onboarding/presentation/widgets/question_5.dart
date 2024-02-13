@@ -2,10 +2,13 @@ import 'package:carbon_zero/core/constants/constants.dart';
 import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/core/widgets/primary_button.dart';
 import 'package:carbon_zero/features/user_onboarding/presentation/widgets/footer_reference.dart';
+import 'package:carbon_zero/features/user_onboarding/providers/user_onboarding_providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 /// Energy consumption question
-class EnergyConsumptionQ extends StatefulWidget {
+class EnergyConsumptionQ extends ConsumerWidget {
   /// Energy consumption question
   const EnergyConsumptionQ({required this.controller, super.key});
 
@@ -13,12 +16,7 @@ class EnergyConsumptionQ extends StatefulWidget {
   final PageController controller;
 
   @override
-  State<EnergyConsumptionQ> createState() => _EnergyConsumptionQState();
-}
-
-class _EnergyConsumptionQState extends State<EnergyConsumptionQ> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
         Text(
@@ -68,6 +66,15 @@ class _EnergyConsumptionQState extends State<EnergyConsumptionQ> {
                                     ),
                                   ),
                                 ),
+                                onFieldSubmitted: (value) {
+                                  if (value.trim().isNotEmpty) {
+                                    ref
+                                        .read(
+                                          energyConsumptionProvider.notifier,
+                                        )
+                                        .state[e] = int.parse(value);
+                                  }
+                                },
                               ),
                             ),
                             const SizedBox(width: 5),
@@ -92,7 +99,12 @@ class _EnergyConsumptionQState extends State<EnergyConsumptionQ> {
         ),
         const Spacer(),
         FooterReference(onTap: () {}),
-        PrimaryButton(text: 'Finish', onPressed: () {}),
+        PrimaryButton(
+          text: 'Finish',
+          onPressed: () {
+            context.go('/carbon-footprint-results');
+          },
+        ),
         const SizedBox(height: 20),
       ],
     );
