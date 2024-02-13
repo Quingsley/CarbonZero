@@ -23,7 +23,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     pageController.addListener(listener);
   }
 
-//TODO: REMOVE SETSTATE ONCE I START USING A STATE MANAGEMENT LIB (BLOC / RIVEPORD)
   void listener() {
     setState(() {
       currentPage = pageController.page!.toInt();
@@ -96,7 +95,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               child: Row(
                 children: [
                   TextButton(
-                    onPressed: () => context.go('/auth'),
+                    onPressed: () => context.go('/user-onboarding'),
                     child: Text(
                       'Skip',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -140,7 +139,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               child: PrimaryButton(
                 text: 'Get Started',
-                onPressed: () => context.go('/auth'),
+                onPressed: () => context.go('/user-onboarding'),
               ),
             )
           : null,
