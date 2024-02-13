@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/features/auth/data/models/user_model.dart';
 import 'package:carbon_zero/features/auth/data/repositories/auth_repo_impl.dart';
-// import 'package:carbon_zero/services/local_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// [AuthViewModel] class is a view model for authentication
@@ -43,6 +42,14 @@ class AuthViewModel extends AsyncNotifier<void> {
     final repo = ref.read(authRepositoryProvider);
     state = const AsyncLoading();
     state = await AsyncValue.guard(() => repo.forgotPassword(email));
+  }
+
+  /// google sign in method
+  Future<void> signInWithGoogle({required bool isLogin}) async {
+    final repo = ref.read(authRepositoryProvider);
+    state = const AsyncLoading();
+    state =
+        await AsyncValue.guard(() => repo.sigInInWithGoogle(isLogin: isLogin));
   }
 
   /// sign out method called by the view

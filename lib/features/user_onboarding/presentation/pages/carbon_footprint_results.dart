@@ -1,6 +1,8 @@
 import 'package:carbon_zero/core/widgets/form_layout.dart';
 import 'package:carbon_zero/core/widgets/primary_button.dart';
+import 'package:carbon_zero/features/auth/presentation/widgets/google_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 /// [CarbonFootPrintResults] widget shows the results of the carbon footprint
@@ -8,15 +10,17 @@ import 'package:go_router/go_router.dart';
 /// will also have recommendations on daily  tips/ topics on how to reduce the
 /// carbon footprint of the user and goals the user can
 /// take to reduce the carbon footprint
-class CarbonFootPrintResults extends StatefulWidget {
+class CarbonFootPrintResults extends ConsumerStatefulWidget {
   /// [CarbonFootPrintResults] widget shows the results of the carbon footprint
   const CarbonFootPrintResults({super.key});
 
   @override
-  State<CarbonFootPrintResults> createState() => _CarbonFootPrintResultsState();
+  ConsumerState<CarbonFootPrintResults> createState() =>
+      _CarbonFootPrintResultsState();
 }
 
-class _CarbonFootPrintResultsState extends State<CarbonFootPrintResults> {
+class _CarbonFootPrintResultsState
+    extends ConsumerState<CarbonFootPrintResults> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +32,10 @@ class _CarbonFootPrintResultsState extends State<CarbonFootPrintResults> {
               text: 'Continue with Email',
               onPressed: () => context.go('/auth'),
             ),
-            PrimaryButton(text: 'Continue with Google', onPressed: () {}),
+            const GButton(
+              text: 'Continue with Google',
+              isLogin: false,
+            ),
             const SizedBox(
               height: 20,
             ),
