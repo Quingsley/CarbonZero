@@ -142,7 +142,13 @@ enum ModeOfTransport {
   phev('PHEV'),
 
   ///BEV
-  bev('BEV');
+  bev('BEV'),
+
+  ///cycle
+  cycle('Cycling'),
+
+  /// walk
+  walk('Walking');
 
   const ModeOfTransport(this.label);
 
@@ -179,6 +185,10 @@ String getTransportAssetName(ModeOfTransport mode) {
       return 'assets/images/rail.png';
     case ModeOfTransport.hybridEV:
       return 'assets/images/battery-level.png';
+    case ModeOfTransport.cycle:
+      return 'assets/images/cycling.png';
+    case ModeOfTransport.walk:
+      return 'assets/images/walk.png';
   }
 }
 
