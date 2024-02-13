@@ -32,6 +32,11 @@ class AuthRepository {
     return dataSource.uploadProfileImage(path, userId);
   }
 
+  /// sign in with google method
+  Future<void> sigInInWithGoogle({required bool isLogin}) async {
+    return dataSource.signUpWithGoogle(isLogIn: isLogin);
+  }
+
   /// sign out method
   Future<UserModel?> signOut() {
     return dataSource.signOut();
