@@ -1,0 +1,211 @@
+CODE,Country Name,kgCO2e per KWH
+AF,Afghanistan,0.12410
+AL,Albania,0.00000
+DZ,Algeria,0.44513
+AS,American Samoa,0.79231
+AO,Angola,0.18537
+AG,Antigua and Barbuda,0.74704
+AR,Argentina,0.28810
+AM,Armenia,0.18481
+AW,Aruba,0.66452
+AU,Australia,0.77000
+AT,Austria,0.14723
+AZ,Azerbaijan,0.52120
+BS,Bahamas,0.79231
+BH,Bahrain,0.42529
+BD,Bangladesh,0.56719
+BB,Barbados,0.73307
+BY,Belarus,0.35708
+BE,Belgium,0.13882
+BZ,Belize,0.50149
+BJ,Benin,0.75930
+BT,Bhutan,0.00000
+BO,Bolivia,0.26967
+BA,Bosnia & Herzegovina,0.97080
+BW,Botswana,0.85966
+BR,Brazil,0.12950
+VG,British Virgin Islands,0.79231
+BN,Brunei,0.66003
+BG,Bulgaria,0.55371
+BF,Burkina Faso,0.68818
+BI,Burundi,0.24284
+KH,Cambodia,0.41038
+CM,Cameroon,0.29822
+CA,Canada,0.11000
+CV,Cape Verde,0.66906
+KY,Cayman Islands,0.77060
+CF,Central African Republic,0.00000
+TD,Chad,0.76675
+CL,Chile,0.32345
+CN,China,0.55720
+CO,Colombia,0.14640
+KM,Comoros,0.79231
+CG,Congo,0.35343
+CK,Cook Islands,0.47539
+CR,Costa Rica,0.01573
+CI,Cote d'Ivoire,0.40343
+HR,Croatia,0.25469
+CU,Cuba,0.63716
+CY,Cyprus,0.65493
+CZ,Czech Republic,0.76413
+CD,Democratic Republic of Congo,0.00215
+DK,Denmark,0.18731
+DJ,Djibouti,0.79231
+DM,Dominica,0.60588
+DO,Dominican Republic,0.57048
+EC,Ecuador,0.19018
+EG,Egypt,0.46029
+SV,El Salvador,0.16363
+GQ,Equatorial Guinea,0.54681
+ER,Eritrea,0.77470
+EE,Estonia,0.75353
+SZ,Eswatini,0.05916
+ET,Ethiopia,0.00059
+FK,Falkland Islands,0.39616
+FO,Faroe Islands,0.49048
+FJ,Fiji,0.28849
+FI,Finland,0.09530
+FR,France,0.06207
+GF,French Guiana,0.26934
+PF,French Polynesia,0.53198
+GA,Gabon,0.43964
+GM,Gambia,0.79231
+GE,Georgia,0.10128
+DE,Germany,0.44912
+GH,Ghana,0.33563
+GR,Greece,0.37840
+GL,Greenland,0.13205
+GD,Grenada,0.79231
+GP,Guadeloupe,0.61058
+GU,Guam,0.75748
+GT,Guatemala,0.29645
+GN,Guinea,0.21660
+GW,Guinea-Bissau,0.79231
+GY,Guyana,0.70497
+HT,Haiti,0.68827
+HN,Honduras,0.38705
+HK,Hong Kong,0.68000
+HK,Hong Kong,0.39000
+HU,Hungary,0.27037
+IS,Iceland,0.00017
+IN,India,0.71320
+ID,Indonesia,0.78480
+IR,Iran,0.45473
+IQ,Iraq,0.46178
+IE,Ireland,0.35216
+IL,Israel,0.51764
+IT,Italy,0.36425
+JM,Jamaica,0.53139
+JP,Japan,0.46150
+JO,Jordan,0.35336
+KZ,Kazakhstan,0.64995
+KE,Kenya,0.08078
+KI,Kiribati,0.79231
+KW,Kuwait,0.42512
+KG,Kyrgyzstan,0.08876
+LA,Laos,0.23817
+LV,Latvia,0.14807
+LB,Lebanon,0.62887
+LS,Lesotho,0.00000
+LR,Liberia,0.33587
+LY,Libya,0.53136
+LT,Lithuania,0.27110
+LU,Luxembourg,0.08493
+MO,Macao,0.42542
+MG,Madagascar,0.53016
+MW,Malawi,0.12332
+MY,Malaysia,0.53834
+MV,Maldives,0.73229
+ML,Mali,0.50868
+MT,Malta,0.42689
+MQ,Martinique,0.79231
+MR,Mauritania,0.58159
+MU,Mauritius,0.65073
+MX,Mexico,0.30000
+MD,Moldova,0.69981
+MN,Mongolia,0.80174
+ME,Montenegro,0.64377
+MS,Montserrat,0.79231
+MA,Morocco,0.64226
+MZ,Mozambique,0.10527
+MM,Myanmar,0.32444
+NA,Namibia,0.03809
+NR,Nauru,0.79231
+NP,Nepal,0.00000
+NL,Netherlands,0.34089
+NC,New Caledonia,0.68384
+NZ,New Zealand,0.13111
+NI,Nicaragua,0.36238
+NE,Niger,0.70428
+NG,Nigeria,0.31727
+KP,North Korea,0.14784
+MK,North Macedonia,0.53802
+NO,Norway,0.00832
+OM,Oman,0.42358
+PK,Pakistan,0.32737
+PS,Palestine,0.47580
+PA,Panama,0.18387
+PG,Papua New Guinea,0.58250
+PY,Paraguay,0.00143
+PE,Peru,0.22693
+PH,Philippines,0.60756
+PL,Poland,0.87761
+PT,Portugal,0.15641
+PR,Puerto Rico,0.77062
+QA,Qatar,0.42515
+RE,Reunion,0.55147
+RO,Romania,0.31148
+RU,Russia,0.34362
+RW,Rwanda,0.31692
+KN,Saint Kitts and Nevis,0.75630
+LC,Saint Lucia,0.79231
+PM,Saint Pierre and Miquelon,0.79231
+VC,Saint Vincent and the Grenadines,0.59423
+WS,Samoa,0.51267
+ST,Sao Tome and Principe,0.71308
+SA,Saudi Arabia,0.61420
+SN,Senegal,0.54280
+RS,Serbia,0.96323
+SC,Seychelles,0.69480
+SL,Sierra Leone,0.07546
+SG,Singapore,0.40800
+SK,Slovakia,0.17622
+SI,Slovenia,0.27329
+SB,Solomon Islands,0.79231
+SO,Somalia,0.71501
+ZA,South Africa,0.86650
+KR,South Korea,0.41130
+SS,South Sudan,0.77841
+ES,Spain,0.17709
+LK,Sri Lanka,0.48882
+SD,Sudan,0.26763
+SR,Suriname,0.39223
+SE,Sweden,0.00731
+CH,Switzerland,0.00278
+SY,Syria,0.53139
+TW,Taiwan,0.55746
+TJ,Tajikistan,0.06352
+TZ,Tanzania,0.36013
+TH,Thailand,0.44600
+TG,Togo,0.49698
+TO,Tonga,0.69327
+TT,Trinidad and Tobago,0.42871
+TN,Tunisia,0.40675
+TR,Turkey,0.42610
+TM,Turkmenistan,0.42542
+TC,Turks and Caicos Islands,0.79231
+UG,Uganda,0.02414
+UA,Ukraine,0.20375
+AE,United Arab Emirates,0.41789
+GB,United Kingdom,0.22499
+US,United States,0.40706
+VI,United States Virgin Islands,0.76967
+UY,Uruguay,0.07148
+UZ,Uzbekistan,0.46613
+VU,Vanuatu,0.56977
+VE,Venezuela,0.19141
+VN,Vietnam,0.37789
+EH,Western Sahara,0.79231
+YE,Yemen,0.58073
+ZM,Zambia,0.06617
+ZW,Zimbabwe,0.39607
