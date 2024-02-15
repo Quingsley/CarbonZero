@@ -76,6 +76,9 @@ enum DietType {
   /// High Meat
   highMeat('High Meat'),
 
+  /// medium meat
+  mediumMeat('Medium Meat'),
+
   /// Low Meat
   lowMeat('Low Meat');
 
@@ -99,12 +102,17 @@ String imageUrl(DietType type) {
       label = 'assets/images/beef.png';
     case DietType.lowMeat:
       label = 'assets/images/low-meat.png';
+    case DietType.mediumMeat:
+      label = 'assets/images/low-carb-diet.png';
   }
   return label;
 }
 
 /// mode of transport enum
 enum ModeOfTransport {
+  /// long flight
+  longFlight('Long Flight'),
+
   /// medium flight
   mediumFlight('Medium Flight'),
 
@@ -159,6 +167,8 @@ enum ModeOfTransport {
 /// return s the string of the asset name
 String getTransportAssetName(ModeOfTransport mode) {
   switch (mode) {
+    case ModeOfTransport.longFlight:
+      return 'assets/images/airplane.png';
     case ModeOfTransport.bev:
       return 'assets/images/electric-car.png';
     case ModeOfTransport.bus:
