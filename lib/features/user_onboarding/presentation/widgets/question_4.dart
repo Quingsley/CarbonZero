@@ -2,6 +2,7 @@ import 'package:carbon_zero/core/constants/constants.dart';
 import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/core/widgets/bottom_sheet.dart';
 import 'package:carbon_zero/core/widgets/primary_button.dart';
+import 'package:carbon_zero/features/user_onboarding/presentation/widgets/box_image.dart';
 import 'package:carbon_zero/features/user_onboarding/presentation/widgets/footer_reference.dart';
 import 'package:carbon_zero/features/user_onboarding/providers/user_onboarding_providers.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ class ModeOfTransportQ extends StatelessWidget {
     return Column(
       children: [
         Text(
-          "Let's talk about your mode of transport. How do you usually get around?",
+          "Let's talk about your mode of transport for the past year. How did you travel?(Can pick more than one option)",
           style: context.textTheme.titleLarge,
           textAlign: TextAlign.center,
         ),
@@ -34,13 +35,14 @@ class ModeOfTransportQ extends StatelessWidget {
               children: ModeOfTransport.values.map(
                 (mode) {
                   final isFlight = mode == ModeOfTransport.shortFlight ||
-                      mode == ModeOfTransport.mediumFlight;
+                      mode == ModeOfTransport.mediumFlight ||
+                      mode == ModeOfTransport.longFlight;
                   final widgetToShow = isFlight
                       ? FlightInputQ(mode: mode)
                       : DistanceInput(mode: mode);
                   return ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: AssetImage(getTransportAssetName(mode)),
+                    leading: BoxImage(
+                      path: getTransportAssetName(mode),
                     ),
                     title: Text(mode.label),
                     subtitle: Text('Select if you use ${mode.label}'),
