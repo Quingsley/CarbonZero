@@ -3,6 +3,7 @@ import 'package:carbon_zero/features/user_onboarding/presentation/widgets/questi
 import 'package:carbon_zero/features/user_onboarding/presentation/widgets/question_3.dart';
 import 'package:carbon_zero/features/user_onboarding/presentation/widgets/question_4.dart';
 import 'package:carbon_zero/features/user_onboarding/presentation/widgets/question_5.dart';
+import 'package:carbon_zero/features/user_onboarding/presentation/widgets/question_6.dart';
 import 'package:flutter/material.dart';
 
 /// will have a the list of questions on a page view
@@ -42,6 +43,7 @@ class _PageViewFormState extends State<PageViewForm> {
           EnergyConsumptionQ(
             controller: widget.controller,
           ),
+          const RecyclingQ(),
         ],
       ),
     );
