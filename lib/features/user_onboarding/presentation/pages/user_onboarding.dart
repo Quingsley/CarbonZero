@@ -53,16 +53,24 @@ class _UserOnboardingState extends ConsumerState<UserOnboarding> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (controller.hasClients && currentPage != 0)
-                  IconButton(
-                    onPressed: () {
-                      controller.previousPage(
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.easeInOut,
-                      );
-                    },
-                    icon: const Icon(
-                      Icons.arrow_back_ios_outlined,
-                      color: Colors.black,
+                  Material(
+                    borderRadius: BorderRadius.circular(50),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(50),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(50),
+                        splashFactory: NoSplash.splashFactory,
+                        onTap: () {
+                          controller.previousPage(
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.easeInOut,
+                          );
+                        },
+                        child: const Icon(
+                          Icons.arrow_back_ios_outlined,
+                          color: Colors.black,
+                        ),
+                      ),
                     ),
                   ),
                 KTimelineTile(
@@ -87,8 +95,13 @@ class _UserOnboardingState extends ConsumerState<UserOnboarding> {
                 ),
                 KTimelineTile(
                   isFirst: false,
-                  isPast: currentPage == 4,
+                  isPast: currentPage > 4,
+                  isLast: false,
+                ),
+                KTimelineTile(
                   isLast: true,
+                  isFirst: false,
+                  isPast: currentPage == 5,
                 ),
               ],
             ),
