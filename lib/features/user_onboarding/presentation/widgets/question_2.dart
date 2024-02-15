@@ -34,7 +34,8 @@ class PersonalityQ extends ConsumerWidget {
             elevation: 3,
             child: ListView(
               children: [
-                ColoredBox(
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 500),
                   color: personality == Personality.active
                       ? context.colors.primaryContainer
                       : context.colors.secondaryContainer,
@@ -60,7 +61,8 @@ class PersonalityQ extends ConsumerWidget {
                   ),
                 ),
                 const Divider(),
-                ColoredBox(
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 500),
                   color: personality == Personality.sedentary
                       ? context.colors.primaryContainer
                       : context.colors.secondaryContainer,
