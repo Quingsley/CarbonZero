@@ -16,6 +16,11 @@ final personalityProvider = StateProvider<Personality?>((ref) {
   return null;
 });
 
+/// hold the value of the number of people in the household
+final numOfPeopleProvider = StateProvider<int>((ref) {
+  return 1;
+});
+
 /// hold the state of the selected diet type
 final dietTypeProvider = StateProvider<DietType?>((ref) {
   return null;
@@ -50,7 +55,7 @@ final flightHoursProvider = StateProvider<Map<ModeOfTransport, int>>((ref) {
 
 /// hold the values of the different energy consumption types
 final energyConsumptionProvider =
-    StateProvider<Map<EnergyConsumptionType, int>>((ref) {
+    StateProvider<Map<EnergyConsumptionType, double>>((ref) {
   return {
     EnergyConsumptionType.electricity: 0,
     EnergyConsumptionType.lpg: 0,
@@ -58,4 +63,14 @@ final energyConsumptionProvider =
     EnergyConsumptionType.gas: 0,
     EnergyConsumptionType.heatingOil: 0,
   };
+});
+
+/// hold the value of the flag if the user recycles newspapers
+final newsPaperProvider = StateProvider<bool>((ref) {
+  return false;
+});
+
+/// hold the value of the flag if the user recycles aluminum
+final aluminumProvider = StateProvider<bool>((ref) {
+  return false;
 });
