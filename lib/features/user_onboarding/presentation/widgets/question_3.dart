@@ -1,6 +1,7 @@
 import 'package:carbon_zero/core/constants/constants.dart';
 import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/core/widgets/primary_button.dart';
+import 'package:carbon_zero/features/user_onboarding/presentation/widgets/box_image.dart';
 import 'package:carbon_zero/features/user_onboarding/presentation/widgets/footer_reference.dart';
 import 'package:carbon_zero/features/user_onboarding/providers/user_onboarding_providers.dart';
 import 'package:flutter/material.dart';
@@ -37,8 +38,11 @@ class DietaryQ extends ConsumerWidget {
               children: DietType.values
                   .map(
                     (type) => Padding(
-                      padding: const EdgeInsets.only(bottom: 4),
-                      child: ColoredBox(
+                      padding: const EdgeInsets.only(
+                        bottom: 4,
+                      ),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 500),
                         color: type == dietType
                             ? context.colors.primaryContainer
                             : context.colors.secondaryContainer,
@@ -46,9 +50,10 @@ class DietaryQ extends ConsumerWidget {
                           onTap: () {
                             ref.read(dietTypeProvider.notifier).state = type;
                           },
-                          leading: CircleAvatar(
-                            backgroundImage: AssetImage(
-                              imageUrl(type),
+                          leading: Padding(
+                            padding: const EdgeInsets.all(4),
+                            child: BoxImage(
+                              path: imageUrl(type),
                             ),
                           ),
                           title: Text(type.label),
