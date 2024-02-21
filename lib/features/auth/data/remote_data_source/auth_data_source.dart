@@ -168,7 +168,10 @@ class AuthDataSource {
   }
 
   /// sign up with google
-  Future<void> signUpWithGoogle({required bool isLogIn}) async {
+  Future<void> signUpWithGoogle({
+    required bool isLogIn,
+    required (double, double) footPrint,
+  }) async {
     try {
       // Trigger the authentication flow
       final googleUser = await GoogleSignIn().signIn();
@@ -185,6 +188,7 @@ class AuthDataSource {
       // Once signed in, return the UserCredential
       final credentials = await _authInstance.signInWithCredential(credential);
       final names = credentials.user?.displayName?.split(' ');
+
       final user = UserModel(
         fName: names!.first,
         lName: names.last,
@@ -193,6 +197,8 @@ class AuthDataSource {
         communityIds: const [],
         userId: credentials.user?.uid,
         photoId: credentials.user?.photoURL,
+        initialCarbonFootPrint: footPrint.$1,
+        carbonFootPrintNow: footPrint.$2,
       );
       if (isLogIn) {
         await _db.collection('users').doc(credentials.user?.uid).update({
