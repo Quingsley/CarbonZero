@@ -143,9 +143,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               const Spacer(),
               PrimaryButton(
                 text: 'Log in',
-                onPressed: () => context.go(
-                  '/carbon-footprint-results',
-                ), //!isLoading ? submit : null,
+                onPressed: !isLoading ? submit : null,
                 isLoading: isLoading,
               ),
               const GButton(
