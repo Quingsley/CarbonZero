@@ -1,23 +1,25 @@
 import 'dart:async';
 
+import 'package:carbon_zero/core/constants/utils.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/features/auth/data/models/user_model.dart';
 import 'package:carbon_zero/features/auth/data/repositories/auth_repo_impl.dart';
+import 'package:carbon_zero/features/user_onboarding/presentation/view_models/carbon_foot_print_results_view_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// [AuthViewModel] class is a view model for authentication
 class AuthViewModel extends AsyncNotifier<void> {
-  // /// initializes the user
-  // Future<void> init() async {
-  //   state = await AsyncValue.guard(() => LocalStorage().getUser());
-  // }
-
   /// sign up method called by the view
   /// to sign up a user
   Future<void> signUp(String password, UserModel user) async {
     final repo = ref.read(authRepositoryProvider);
+    final (footPrint, currentFootPrint) = _getFootPrintData();
+    final updatedUser = user.copyWith(
+      initialCarbonFootPrint: footPrint,
+      carbonFootPrintNow: currentFootPrint,
+    );
     state = const AsyncLoading();
-    state = await AsyncValue.guard(() => repo.signUp(user, password));
+    state = await AsyncValue.guard(() => repo.signUp(updatedUser, password));
   }
 
   /// sign in method called by the view
@@ -47,9 +49,11 @@ class AuthViewModel extends AsyncNotifier<void> {
   /// google sign in method
   Future<void> signInWithGoogle({required bool isLogin}) async {
     final repo = ref.read(authRepositoryProvider);
+    final footPrints = _getFootPrintData();
     state = const AsyncLoading();
-    state =
-        await AsyncValue.guard(() => repo.sigInInWithGoogle(isLogin: isLogin));
+    state = await AsyncValue.guard(
+      () => repo.sigInInWithGoogle(isLogin: isLogin, footPrint: footPrints),
+    );
   }
 
   /// sign out method called by the view
@@ -64,6 +68,17 @@ class AuthViewModel extends AsyncNotifier<void> {
     final repo = ref.read(authRepositoryProvider);
     state = const AsyncLoading();
     state = await AsyncValue.guard(() => repo.updateUser(user));
+  }
+
+  /// returns the current foot print of a user and the footprint
+  /// for the last 12 months
+  (double, double) _getFootPrintData() {
+    final carbonVm = ref.read(carbonFootPrintViewModelProvider);
+    final footPrint = carbonVm.value;
+    final daysElapsed = getNumberOfDaysElapsed(DateTime.now().year);
+    final totalDays = getNumberOfDaysInYear(DateTime.now().year);
+    final currentFootPrint = (daysElapsed / totalDays) * (footPrint ?? 0);
+    return (footPrint ?? 0, currentFootPrint);
   }
 
   @override
