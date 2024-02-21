@@ -1,8 +1,8 @@
-import 'package:carbon_zero/algorithm.dart';
 import 'package:carbon_zero/core/widgets/form_layout.dart';
 import 'package:carbon_zero/core/widgets/primary_button.dart';
 import 'package:carbon_zero/features/auth/presentation/widgets/google_button.dart';
-import 'package:carbon_zero/features/user_onboarding/providers/user_onboarding_providers.dart';
+import 'package:carbon_zero/features/home/presentation/widgets/carbon_foot_print.dart';
+import 'package:carbon_zero/features/user_onboarding/presentation/view_models/carbon_foot_print_results_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -26,51 +26,52 @@ class _CarbonFootPrintResultsState
   @override
   void initState() {
     super.initState();
-    results();
-  }
-
-  double? footPrint;
-  Future<void> results() async {
-    final personality = ref.read(personalityProvider);
-    final numOfPeople = ref.read(numOfPeopleProvider);
-    final dietType = ref.read(dietTypeProvider);
-    final modeOfTransport = ref.read(modeOfTransportProvider);
-    final flightHours = ref.read(flightHoursProvider);
-    final country = ref.read(selectedCountryProvider);
-    final energyConsumption = ref.read(energyConsumptionProvider);
-    final isRecyclingAluminum = ref.read(aluminumProvider);
-    final isRecyclingNewsPaper = ref.read(newsPaperProvider);
-
-    final result = await getUserFootPrint(
-      isRecyclingAluminum: isRecyclingAluminum,
-      isRecyclingNewsPaper: isRecyclingNewsPaper,
-      diet: dietType!,
-      personality: personality!,
-      country: country!,
-      numOfPeople: numOfPeople,
-      modeOfTransport: modeOfTransport,
-      flightHours: flightHours,
-      energyConsumption: energyConsumption,
-    );
-    setState(() {
-      footPrint = result;
+    Future.delayed(Duration.zero, () async {
+      await ref
+          .read(carbonFootPrintViewModelProvider.notifier)
+          .getCarbonFootPrint();
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final carbonVm = ref.watch(carbonFootPrintViewModelProvider);
+    final footPrint = carbonVm.value;
     return Scaffold(
       appBar: AppBar(),
       body: FormLayout(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Your Carbon Footprint is: $footPrint kgCO2e/year'),
-            TextButton(onPressed: results, child: const Text('Press')),
+            CarbonFootPrintData(
+              value: footPrint ?? 0,
+              per: 'year',
+            ),
+            const SizedBox(height: 10),
+            Material(
+              elevation: 5,
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                color: Theme.of(context).colorScheme.primary,
+                child: Column(
+                  children: [
+                    Text(
+                      'Your carbon footprint is ${footPrint ?? 0} kg CO2e per year',
+                    ),
+                    const Text(
+                      'This is higher than the average carbon footprint of 10.5 per year',
+                    ),
+                    const Text(
+                      'You can reduce your carbon footprint by 5% by using public transport instead of driving',
+                    ),
+                  ],
+                ),
+              ),
+            ),
             const Spacer(),
             PrimaryButton(
               text: 'Continue with Email',
-              onPressed: () => context.go('/auth'),
+              onPressed: () => context.go('/auth/sign-up'),
             ),
             const GButton(
               text: 'Continue with Google',
