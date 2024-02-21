@@ -25,18 +25,31 @@ class GButton extends ConsumerWidget {
           await showDialog<void>(
             context: context,
             builder: (context) => Dialog(
-              insetPadding: EdgeInsets.zero,
-              backgroundColor: context.colors.primaryContainer,
-              child: SizedBox(
-                width: 25,
-                height: 50,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: context.colors.primaryContainer,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Center(child: CircularProgressIndicator()),
-                ),
+              // insetPadding: EdgeInsets.zero,
+
+              // backgroundColor: context.colors.primaryContainer,
+              child: Builder(
+                builder: (context) {
+                  final height = MediaQuery.sizeOf(context).height;
+                  final width = MediaQuery.sizeOf(context).width;
+                  return SizedBox(
+                    width: width * .01,
+                    height: height * .1,
+                    child: ClipPath(
+                      clipper: ShapeBorderClipper(
+                        shape: ContinuousRectangleBorder(
+                          borderRadius: BorderRadius.circular(80),
+                        ),
+                      ),
+                      child: ColoredBox(
+                        color: context.colors.primaryContainer,
+                        child: const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           );
