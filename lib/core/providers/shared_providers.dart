@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// will provide an instance of [FirebaseFirestore]
 final dbProvider = Provider<FirebaseFirestore?>((ref) {
@@ -29,3 +30,30 @@ final authStateChangesProvider = StreamProvider<User?>(
 
 /// toggles the theme of the app
 final isDarkModeStateProvider = StateProvider<bool>((ref) => false);
+
+/// checks if the user has onboard
+final didUserOnBoardProvider = StateProvider<bool>((ref) {
+  return false;
+});
+
+/// shared preferences provider
+final sharedPreferencesProvider =
+    FutureProvider<SharedPreferences>((ref) async {
+  return SharedPreferences.getInstance();
+});
+
+/// app startup provider
+final appStartupProvider = FutureProvider<void>((ref) async {
+  ref.onDispose(() {
+    // ensure we invalidate all the providers we depend on
+    ref.invalidate(sharedPreferencesProvider);
+  });
+  // all asynchronous app initialization code should belong here:
+  final preference = await ref.watch(sharedPreferencesProvider.future);
+  final storedValue = preference.getString('didUserOnboard');
+  if (storedValue == null) {
+    await preference.setString('didUserOnboard', 'didUserOnboard');
+  } else {
+    ref.read(didUserOnBoardProvider.notifier).state = true;
+  }
+});

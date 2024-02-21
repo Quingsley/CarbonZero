@@ -52,3 +52,191 @@ List<String> hashtags = [
   '#ClimateChangeAwareness',
   '#EarthGuardians',
 ];
+
+/// personality enum
+enum Personality {
+  /// indoors user
+  sedentary,
+
+  /// active user
+  active
+}
+
+/// [DietType] enum
+enum DietType {
+  /// Vegan
+  vegan('Vegan'),
+
+  /// Vegetarian
+  vegetarian('Vegetarian'),
+
+  /// Pescatarian
+  pescatarian('Pescatarian'),
+
+  /// High Meat
+  highMeat('High Meat'),
+
+  /// medium meat
+  mediumMeat('Medium Meat'),
+
+  /// Low Meat
+  lowMeat('Low Meat');
+
+  const DietType(this.label);
+
+  /// label
+  final String label;
+}
+
+/// [imageUrl] function
+String imageUrl(DietType type) {
+  String label;
+  switch (type) {
+    case DietType.vegan:
+      label = 'assets/images/vegan.png';
+    case DietType.vegetarian:
+      label = 'assets/images/broccoli.png';
+    case DietType.pescatarian:
+      label = 'assets/images/fish-and-chips.png';
+    case DietType.highMeat:
+      label = 'assets/images/beef.png';
+    case DietType.lowMeat:
+      label = 'assets/images/low-meat.png';
+    case DietType.mediumMeat:
+      label = 'assets/images/low-carb-diet.png';
+  }
+  return label;
+}
+
+/// mode of transport enum
+enum ModeOfTransport {
+  /// long flight
+  longFlight('Long Flight'),
+
+  /// medium flight
+  mediumFlight('Medium Flight'),
+
+  /// short flight
+  shortFlight('Short Flight'),
+
+  /// bus
+  bus('Bus'),
+
+  /// medium car (Gasoline)
+  mediumCarGasoline('Medium Car (Gasoline)'),
+
+  /// medium car (Diesel)
+  mediumCarDiesel('Medium Car (Diesel)'),
+
+  /// Gasoline car
+  gasolineCar('Gasoline Car'),
+
+  /// medium EV
+  mediumEV('Medium EV'),
+
+  /// National rail
+  nationalRail('National Rail'),
+
+  /// International rail
+  internationalRail('International Rail'),
+
+  /// ferry
+  ferry('Ferry'),
+
+  /// hybrid EV
+  hybridEV('Hybrid EV'),
+
+  /// PHEV
+  phev('PHEV'),
+
+  ///BEV
+  bev('BEV'),
+
+  ///cycle
+  cycle('Cycling'),
+
+  /// walk
+  walk('Walking');
+
+  const ModeOfTransport(this.label);
+
+  /// label
+  final String label;
+}
+
+/// return s the string of the asset name
+String getTransportAssetName(ModeOfTransport mode) {
+  switch (mode) {
+    case ModeOfTransport.longFlight:
+      return 'assets/images/airplane.png';
+    case ModeOfTransport.bev:
+      return 'assets/images/electric-car.png';
+    case ModeOfTransport.bus:
+      return 'assets/images/bus-lane.png';
+    case ModeOfTransport.ferry:
+      return 'assets/images/ship.png';
+    case ModeOfTransport.nationalRail:
+      return 'assets/images/train.png';
+    case ModeOfTransport.phev:
+      return 'assets/images/phev.jpg';
+    case ModeOfTransport.mediumFlight:
+      return 'assets/images/flight.png';
+    case ModeOfTransport.shortFlight:
+      return 'assets/images/direct-flight.png';
+    case ModeOfTransport.mediumCarGasoline:
+      return 'assets/images/car-oil.png';
+    case ModeOfTransport.mediumCarDiesel:
+      return 'assets/images/car.png';
+    case ModeOfTransport.gasolineCar:
+      return 'assets/images/gasoline.png';
+    case ModeOfTransport.mediumEV:
+      return 'assets/images/hybrid-car.png';
+    case ModeOfTransport.internationalRail:
+      return 'assets/images/rail.png';
+    case ModeOfTransport.hybridEV:
+      return 'assets/images/battery-level.png';
+    case ModeOfTransport.cycle:
+      return 'assets/images/cycling.png';
+    case ModeOfTransport.walk:
+      return 'assets/images/walk.png';
+  }
+}
+
+/// Energy consumption type
+enum EnergyConsumptionType {
+  ///electricity,
+  electricity('Electricity'),
+
+  ///natural Gas,
+  gas('Natural Gas'),
+
+  ///heating Oil,
+  heatingOil('Heating Oil'),
+
+  ///lpg,
+  lpg('LPG'),
+
+  ///wood,
+  wood('Wood');
+
+  const EnergyConsumptionType(this.label);
+
+  /// label
+  final String label;
+}
+
+/// returns the asset name for the energy consumption type
+String getEnergyAsset(EnergyConsumptionType type) {
+  switch (type) {
+    case EnergyConsumptionType.electricity:
+      return 'assets/images/eco-house.png';
+    case EnergyConsumptionType.gas:
+      return 'assets/images/natural-gas.png';
+    case EnergyConsumptionType.heatingOil:
+      return 'assets/images/candle.png';
+    case EnergyConsumptionType.lpg:
+      return 'assets/images/lpg.png';
+    case EnergyConsumptionType.wood:
+      return 'assets/images/fire.png';
+  }
+}

@@ -7,8 +7,16 @@ import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 class CarbonFootPrintData extends StatelessWidget {
   ///constructor call
   const CarbonFootPrintData({
+    required this.value,
+    required this.per,
     super.key,
   });
+
+  /// carbon footprint of the user
+  final double value;
+
+  /// per unit of the carbon footprint
+  final String per;
 
   @override
   Widget build(BuildContext context) {
@@ -28,28 +36,39 @@ class CarbonFootPrintData extends StatelessWidget {
           progressBarColor: context.colors.primary,
         ),
         infoProperties: InfoProperties(
-          topLabelText: 'CO2/ Daily',
+          topLabelText: 'CO2e/$per',
           topLabelStyle: context.textTheme.bodyMedium?.copyWith(
             color: Colors.grey[500],
             fontSize: 20,
           ),
-          mainLabelStyle: context.textTheme.displayMedium?.copyWith(
-            fontSize: 30,
+          mainLabelStyle: context.textTheme.displaySmall?.copyWith(
+            fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
-          bottomLabelText: '7200 n2c',
+          bottomLabelText: conclusion(value),
           bottomLabelStyle: context.textTheme.bodySmall?.copyWith(
             fontSize: 16,
           ),
-          modifier: (percentage) {
-            // print(percentage);
-            return '5.202 Kg';
+          modifier: (val) {
+            return '${val.ceilToDouble()} Kg';
           },
         ),
       ),
-      min: 10,
-      max: 200,
-      initialValue: 89,
+      max: 10000, // global average
+      initialValue: value,
     );
+  }
+}
+
+/// [conclusion] returns a string based on the value of the carbon footprint
+String conclusion(double value) {
+  if (value < 2700) {
+    return '👌 Low';
+  } else if (value >= 2700 && value <= 7250) {
+    return '👍 Ideal';
+  } else if (value >= 7250 && value <= 10000) {
+    return '🫠 Average';
+  } else {
+    return '📛 Bad';
   }
 }

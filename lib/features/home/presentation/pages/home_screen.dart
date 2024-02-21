@@ -104,8 +104,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             const SizedBox(
               height: 20,
             ),
-            const Align(
-              child: CarbonFootPrintData(),
+            Align(
+              child: CarbonFootPrintData(
+                value: user.value?.carbonFootPrintNow ?? 0,
+                per: 'month',
+              ),
             ),
             const SizedBox(
               height: 8,
@@ -131,8 +134,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
             const HomeCard(
               title: null,
-              description:
-                  'Using reusable bags instead of plastic bags when shopping can help reduce carbon emmisions by reducing the amount of plastic waste produced',
+              description: '''
+Using reusable bags instead of plastic bags when shopping can help reduce
+                   carbon emissions by reducing the amount of plastic waste produced''',
               icon: Icons.lightbulb,
             ),
             Expanded(
