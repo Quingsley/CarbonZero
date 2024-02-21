@@ -33,8 +33,14 @@ class AuthRepository {
   }
 
   /// sign in with google method
-  Future<void> sigInInWithGoogle({required bool isLogin}) async {
-    return dataSource.signUpWithGoogle(isLogIn: isLogin);
+  Future<void> sigInInWithGoogle({
+    required bool isLogin,
+    required (double, double) footPrint,
+  }) async {
+    return dataSource.signUpWithGoogle(
+      isLogIn: isLogin,
+      footPrint: footPrint,
+    );
   }
 
   /// sign out method
