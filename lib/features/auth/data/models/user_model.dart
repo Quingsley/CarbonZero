@@ -12,6 +12,8 @@ class UserModel extends Equatable {
     this.rewardId,
     this.userId,
     this.photoId,
+    this.carbonFootPrintNow = 0,
+    this.initialCarbonFootPrint = 0,
   });
 
   /// factory method to create a new instance of [UserModel] from json
@@ -26,6 +28,8 @@ class UserModel extends Equatable {
           'rewardId': final String? rewardId,
           'activityIds': final List<dynamic> activityIds,
           'communityIds': final List<dynamic> communityIds,
+          'carbonFootPrintNow': final double carbonFootPrintNow,
+          'initialCarbonFootPrint': final double initialCarbonFootPrint,
         }) {
       return UserModel(
         userId: userId,
@@ -36,6 +40,8 @@ class UserModel extends Equatable {
         photoId: photoId,
         activityIds: List.from(activityIds),
         communityIds: List.from(communityIds),
+        carbonFootPrintNow: carbonFootPrintNow,
+        initialCarbonFootPrint: initialCarbonFootPrint,
       );
     } else {
       throw const FormatException('Invalid user model');
@@ -66,6 +72,13 @@ class UserModel extends Equatable {
   /// photo id
   final String? photoId;
 
+  /// current carbon footprint of the user
+  final double carbonFootPrintNow;
+
+  /// initial carbon footprint of the user for the
+  /// first time the user signed up for the past 12 months
+  final double initialCarbonFootPrint;
+
   /// copy with method to create a new instance of [UserModel]
   /// with updated values
   UserModel copyWith({
@@ -77,6 +90,8 @@ class UserModel extends Equatable {
     List<String>? activityIds,
     List<String>? communityIds,
     String? photoId,
+    double? carbonFootPrintNow,
+    double? initialCarbonFootPrint,
   }) {
     return UserModel(
       userId: userId ?? this.userId,
@@ -87,6 +102,9 @@ class UserModel extends Equatable {
       activityIds: activityIds ?? this.activityIds,
       communityIds: communityIds ?? this.communityIds,
       photoId: photoId ?? this.photoId,
+      carbonFootPrintNow: carbonFootPrintNow ?? this.carbonFootPrintNow,
+      initialCarbonFootPrint:
+          initialCarbonFootPrint ?? this.initialCarbonFootPrint,
     );
   }
 
@@ -101,6 +119,8 @@ class UserModel extends Equatable {
       'activityIds': activityIds,
       'communityIds': communityIds,
       'photoId': photoId,
+      'carbonFootPrintNow': carbonFootPrintNow,
+      'initialCarbonFootPrint': initialCarbonFootPrint,
     };
   }
 
