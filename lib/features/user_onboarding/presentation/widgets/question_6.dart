@@ -67,11 +67,9 @@ class RecyclingQ extends ConsumerWidget {
         const Spacer(),
         PrimaryButton(
           text: 'Finish',
-          onPressed: isRecyclingAluminum || isRecyclingNewspaper
-              ? () {
-                  context.go('/carbon-footprint-results');
-                }
-              : null,
+          onPressed: () {
+            context.go('/carbon-footprint-results');
+          },
         ),
         const SizedBox(height: 20),
       ],
