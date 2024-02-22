@@ -15,13 +15,13 @@ class ActivityProgressCard extends StatelessWidget {
   final String activityName;
 
   /// icon of the activity
-  final IconData icon;
+  final String icon;
 
   /// progress of the activity in %
   final String progress;
 
   /// color of the progress bar
-  final Color color;
+  final int color;
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +30,11 @@ class ActivityProgressCard extends StatelessWidget {
       leading: IconButton.filled(
         style: ButtonStyle(
           backgroundColor:
-              MaterialStateProperty.all<Color>(color.withOpacity(.52)),
+              MaterialStateProperty.all<Color>(Color(color).withOpacity(.52)),
           minimumSize: MaterialStateProperty.all<Size>(const Size(20, 20)),
         ),
-        color: color,
-        icon: Icon(icon),
+        color: Color(color),
+        icon: Text(icon),
         onPressed: () {},
       ),
       title: Text(activityName),
@@ -43,7 +43,7 @@ class ActivityProgressCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         value: double.parse(progress) / 100,
         backgroundColor: Colors.grey[300],
-        valueColor: AlwaysStoppedAnimation<Color>(color),
+        valueColor: AlwaysStoppedAnimation<Color>(Color(color)),
       ),
       trailing: Text('$progress%'),
     );
