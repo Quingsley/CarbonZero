@@ -240,3 +240,12 @@ String getEnergyAsset(EnergyConsumptionType type) {
       return 'assets/images/fire.png';
   }
 }
+
+/// ActivityType enum
+enum ActivityType {
+  /// a single user activity
+  individual,
+
+  /// an activity that involves a group of users
+  community,
+}
