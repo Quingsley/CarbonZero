@@ -1,4 +1,9 @@
+import 'package:carbon_zero/core/constants/constants.dart';
+import 'package:carbon_zero/core/error/failure.dart';
 import 'package:carbon_zero/core/extensions.dart';
+import 'package:carbon_zero/core/widgets/bottom_sheet.dart';
+import 'package:carbon_zero/features/activities/presentation/pages/new_activity.dart';
+import 'package:carbon_zero/features/activities/presentation/view_models/activity_view_model.dart';
 import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
 import 'package:carbon_zero/features/home/presentation/widgets/activity_tile.dart';
 import 'package:carbon_zero/features/home/presentation/widgets/carbon_foot_print.dart';
@@ -29,6 +34,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userStreamProvider);
+    final activitiesAsyncValue =
+        ref.watch(getActivitiesStreamProvider(user.value!.userId!));
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(top: 50, left: 8, right: 8),
@@ -139,33 +146,57 @@ Using reusable bags instead of plastic bags when shopping can help reduce
                    carbon emissions by reducing the amount of plastic waste produced''',
               icon: Icons.lightbulb,
             ),
+            const SizedBox(
+              height: 4,
+            ),
+            const Text('Latest activities'),
             Expanded(
-              child: ListView(
-                children: const [
-                  Text(
-                    'Latest activities',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  ActivityTile(
-                    icon: Icons.ev_station,
-                    title: '19 km electric car',
-                    subtitle: '500 n2c points',
-                  ),
-                  ActivityTile(
-                    icon: Icons.recycling,
-                    title: 'Recycling',
-                    subtitle: '500 n2c points',
-                  ),
-                  ActivityTile(
-                    icon: Icons.pedal_bike,
-                    title: '20km biking',
-                    subtitle: '500 n2c points',
-                  ),
-                ],
+              child: activitiesAsyncValue.when(
+                data: (activities) {
+                  if (activities.isEmpty) {
+                    return const Center(child: Text('Please create a goal'));
+                  } else {
+                    return ListView.builder(
+                      itemCount: activities.length,
+                      itemBuilder: (context, index) {
+                        return ActivityTile(
+                          color: activities[index].color,
+                          icon: activities[index].icon,
+                          title: activities[index].name,
+                          points: activities[index].carbonPoints,
+                          co2Emitted: activities[index].cO2Emitted.toString(),
+                        );
+                      },
+                    );
+                  }
+                },
+                error: (error, stackTrace) {
+                  return Center(
+                    child: Text(
+                      error is Failure ? error.message : error.toString(),
+                    ),
+                  );
+                },
+                loading: () {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
               ),
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton.small(
+        onPressed: () async {
+          await kShowBottomSheet(
+            context,
+            const NewActivity(type: ActivityType.individual),
+            MediaQuery.sizeOf(context).height * .9,
+          );
+        },
+        heroTag: null,
+        child: const Icon(Icons.add_circle_outline),
       ),
     );
   }
