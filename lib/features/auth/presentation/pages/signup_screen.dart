@@ -4,7 +4,7 @@ import 'package:carbon_zero/core/widgets/form_layout.dart';
 import 'package:carbon_zero/core/widgets/primary_button.dart';
 import 'package:carbon_zero/features/auth/data/models/user_model.dart';
 import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
-import 'package:carbon_zero/features/auth/presentation/widgets/text_field.dart';
+import 'package:carbon_zero/core/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
