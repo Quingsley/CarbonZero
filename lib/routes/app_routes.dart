@@ -1,6 +1,7 @@
 import 'package:carbon_zero/core/error/error_screen.dart';
 import 'package:carbon_zero/core/pages/shell_route.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
+import 'package:carbon_zero/features/activities/presentation/pages/icons_screen.dart';
 import 'package:carbon_zero/features/auth/presentation/pages/forgot_password_screen.dart';
 import 'package:carbon_zero/features/auth/presentation/pages/login_screen.dart';
 import 'package:carbon_zero/features/auth/presentation/pages/profile_completion.dart';
@@ -120,6 +121,13 @@ class AppRoutes {
                 GoRoute(
                   path: '/home',
                   builder: (context, state) => const HomeScreen(),
+                  routes: [
+                    GoRoute(
+                      parentNavigatorKey: AppRoutes._rootNavigator,
+                      path: 'icons',
+                      builder: (context, state) => const IconSelectionScreen(),
+                    ),
+                  ],
                 ),
               ],
             ),
