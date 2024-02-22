@@ -3,8 +3,8 @@ import 'package:carbon_zero/core/error/failure.dart';
 import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/core/widgets/form_layout.dart';
 import 'package:carbon_zero/core/widgets/primary_button.dart';
-import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
 import 'package:carbon_zero/core/widgets/text_field.dart';
+import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
 import 'package:carbon_zero/features/community/data/models/community_model.dart';
 import 'package:carbon_zero/features/community/presentation/view_models/community_view_model.dart';
 import 'package:carbon_zero/services/image_upload.dart';
@@ -213,7 +213,7 @@ class _AddCommunityState extends ConsumerState<AddCommunity> {
                                       .uploadPhoto(ImageType.community);
                                 }
                               : null,
-                          icon: const Icon(Icons.camera_alt_outlined),
+                          icon: const Icon(Icons.add_a_photo),
                         ),
                       Text(
                         'Add a poster for your community',
