@@ -2,6 +2,7 @@ import 'package:carbon_zero/core/constants/constants.dart';
 import 'package:carbon_zero/core/constants/icon_pack.dart';
 import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/core/widgets/form_layout.dart';
+import 'package:carbon_zero/core/widgets/notification_tile.dart';
 import 'package:carbon_zero/core/widgets/text_field.dart';
 import 'package:carbon_zero/features/activities/data/models/activity_model.dart';
 import 'package:carbon_zero/features/activities/presentation/providers/activities_providers.dart';
@@ -37,6 +38,12 @@ class _NewActivityState extends ConsumerState<NewActivity> {
     text: DateTime.now().add(const Duration(days: 30)).toIso8601String(),
   );
   final reminderTimeController = TextEditingController();
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    ecoFriendlyColors.shuffle();
+  }
 
   @override
   void dispose() {
@@ -246,23 +253,34 @@ class _NewActivityState extends ConsumerState<NewActivity> {
             const SizedBox(
               height: 8,
             ),
-            KIconButton(
-              onPressed: () async {
-                final pickedTime = await showTimePicker(
-                  context: context,
-                  initialTime: TimeOfDay.now(),
-                );
-                if (pickedTime != null) {
-                  setState(() {
-                    reminderTimeController.text = pickedTime.format(context);
-                  });
-                }
-              },
-              icon: Icons.add_alarm_rounded,
-              label: 'Reminder ${reminderTimeController.text}',
-            ),
-            const SizedBox(
-              height: 8,
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: KIconButton(
+                      onPressed: () async {
+                        final pickedTime = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.now(),
+                        );
+                        if (pickedTime != null) {
+                          setState(() {
+                            reminderTimeController.text =
+                                pickedTime.format(context);
+                          });
+                        }
+                      },
+                      icon: Icons.add_alarm_rounded,
+                      label: 'Reminder ${reminderTimeController.text}',
+                    ),
+                  ),
+                  const SizedBox(width: 2),
+                  const Expanded(
+                    child: NtfTile(),
+                  ),
+                ],
+              ),
             ),
             Text(
               'Pick an icon',
