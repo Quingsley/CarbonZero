@@ -1,3 +1,5 @@
+import 'package:carbon_zero/core/extensions.dart';
+import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/features/activities/presentation/providers/activities_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,6 +14,7 @@ class ColorPicker extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final color = ref.watch(selectedColorProvider);
+    final isDark = ref.watch(isDarkModeStateProvider);
     return SizedBox(
       height: 200,
       child: GridView.builder(
@@ -35,7 +38,10 @@ class ColorPicker extends ConsumerWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50),
                   side: (color != null && color == ecoFriendlyColors[index])
-                      ? const BorderSide()
+                      ? BorderSide(
+                          color:
+                              isDark ? context.colors.secondary : Colors.black,
+                        )
                       : BorderSide.none,
                 ),
                 child: ColoredBox(
