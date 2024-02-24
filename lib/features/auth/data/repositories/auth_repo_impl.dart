@@ -57,6 +57,11 @@ class AuthRepository {
   Stream<UserModel?> getCurrentUserSnapshot() {
     return dataSource.getCurrentUserSnapshot();
   }
+
+  /// update push token
+  Future<void> updatePushToken(String token, String userId) async {
+    return dataSource.updatePushToken(token, userId);
+  }
 }
 
 /// will provide an instance of [AuthRepository]
