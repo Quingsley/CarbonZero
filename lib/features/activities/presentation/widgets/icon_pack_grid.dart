@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:carbon_zero/core/extensions.dart';
+import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/features/activities/presentation/providers/activities_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,16 +23,17 @@ class IconPack extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    icons.shuffle();
     // number of featuredIcons
     // const numberOfFeaturedIcons =14;
     // final start = random.nextInt(icons.length - numberOfFeaturedIcons);
     // final end = start + numberOfFeaturedIcons;
     // final featuredIcons = isMain ? icons.getRange(0, 14).toList();
     final selectedIcon = ref.watch(selectedIconProvider);
+    final isDark = ref.watch(isDarkModeStateProvider);
     if (selectedIcon != null && isMain && icons[0] != selectedIcon) {
       icons
         ..removeAt(0)
+        ..removeAt(icons.indexOf(selectedIcon))
         ..insert(0, selectedIcon);
     }
     return GridView.builder(
@@ -50,8 +52,9 @@ class IconPack extends ConsumerWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
             side: (selectedIcon != null && selectedIcon == icons[index])
-                ? const BorderSide(
+                ? BorderSide(
                     width: 2,
+                    color: isDark ? context.colors.secondary : Colors.black,
                   )
                 : BorderSide.none,
           ),
