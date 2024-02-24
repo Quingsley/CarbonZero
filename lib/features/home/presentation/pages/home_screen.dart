@@ -1,14 +1,17 @@
 import 'package:carbon_zero/core/constants/constants.dart';
 import 'package:carbon_zero/core/error/failure.dart';
 import 'package:carbon_zero/core/extensions.dart';
+import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/core/widgets/bottom_sheet.dart';
 import 'package:carbon_zero/features/activities/presentation/pages/new_activity.dart';
 import 'package:carbon_zero/features/activities/presentation/view_models/activity_view_model.dart';
+import 'package:carbon_zero/features/auth/data/repositories/auth_repo_impl.dart';
 import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
 import 'package:carbon_zero/features/home/presentation/widgets/activity_tile.dart';
 import 'package:carbon_zero/features/home/presentation/widgets/carbon_foot_print.dart';
 import 'package:carbon_zero/features/home/presentation/widgets/home_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -25,6 +28,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   bool isDay = true;
+  final _fabKey = GlobalKey<ExpandableFabState>();
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -32,10 +36,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    final messagingInstance = ref.read(firebaseMessagingProvider);
+    messagingInstance.onTokenRefresh.listen((token) async {
+      final user = ref.read(userStreamProvider);
+      if (user.value != null) {
+        final isPresent = user.value!.pushTokens.contains(token);
+        if (!isPresent) {
+          await ref
+              .read(authRepositoryProvider)
+              .updatePushToken(token, user.value!.userId!);
+        }
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final user = ref.watch(userStreamProvider);
     final activitiesAsyncValue =
-        ref.watch(getActivitiesStreamProvider(user.value!.userId!));
+        ref.watch(getActivitiesStreamProvider(user.value?.userId));
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(top: 50, left: 8, right: 8),
@@ -187,16 +209,48 @@ Using reusable bags instead of plastic bags when shopping can help reduce
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton.small(
-        onPressed: () async {
-          await kShowBottomSheet(
-            context,
-            const NewActivity(type: ActivityType.individual),
-            MediaQuery.sizeOf(context).height * .9,
-          );
-        },
-        heroTag: null,
-        child: const Icon(Icons.add_circle_outline),
+      floatingActionButtonLocation: ExpandableFab.location,
+      floatingActionButton: ExpandableFab(
+        key: _fabKey,
+        type: ExpandableFabType.up,
+        overlayStyle: ExpandableFabOverlayStyle(
+          color: context.colors.primary.withOpacity(.62),
+        ),
+        openButtonBuilder: FloatingActionButtonBuilder(
+          size: 16,
+          builder: (context, onPressed, progress) {
+            return FloatingActionButton(
+              heroTag: null,
+              onPressed: onPressed,
+              child: const Icon(Icons.add),
+            );
+          },
+        ),
+        children: [
+          FloatingActionButton.extended(
+            onPressed: () async {
+              final state = _fabKey.currentState;
+              if (state != null) state.toggle();
+              await kShowBottomSheet(
+                context,
+                const NewActivity(type: ActivityType.individual),
+                MediaQuery.sizeOf(context).height * .9,
+              );
+            },
+            heroTag: null,
+            label: const Text('New Activity'),
+          ),
+          FloatingActionButton.extended(
+            heroTag: null,
+            label: const Text('Record emission'),
+            onPressed: () {},
+          ),
+          FloatingActionButton.extended(
+            heroTag: null,
+            label: const Text('Community challenge'),
+            onPressed: () {},
+          ),
+        ],
       ),
     );
   }
