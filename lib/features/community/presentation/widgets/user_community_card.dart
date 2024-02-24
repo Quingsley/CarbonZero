@@ -1,5 +1,6 @@
 import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/features/community/data/models/community_model.dart';
+import 'package:firebase_cached_image/firebase_cached_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -25,7 +26,7 @@ class UserCommunityCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             image: DecorationImage(
               onError: (exception, stackTrace) => const SizedBox(),
-              image: NetworkImage(community.posterId),
+              image: FirebaseImageProvider(FirebaseUrl(community.posterId)),
               fit: BoxFit.cover,
             ),
           ),
