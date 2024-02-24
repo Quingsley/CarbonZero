@@ -16,7 +16,7 @@ class StatisticsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userStreamProvider);
     final activitiesAsyncValue =
-        ref.watch(getActivitiesStreamProvider(user.value!.userId!));
+        ref.watch(getActivitiesStreamProvider(user.value?.userId));
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -49,28 +49,28 @@ class StatisticsScreen extends ConsumerWidget {
                 Expanded(
                   child: StatisticsCard(
                     type: 'Land',
-                    averageFootPrint: '150',
+                    averageFootPrint: '150 M sqm saved',
                     icon: Icons.landscape,
                   ),
                 ),
                 Expanded(
                   child: StatisticsCard(
                     type: 'Water',
-                    averageFootPrint: '100',
+                    averageFootPrint: '3.08B saved',
                     icon: Icons.waves,
                   ),
                 ),
                 Expanded(
                   child: StatisticsCard(
                     type: 'Energy',
-                    averageFootPrint: '15',
+                    averageFootPrint: '15.3M KWh saved',
                     icon: Icons.flash_on_outlined,
                   ),
                 ),
                 Expanded(
                   child: StatisticsCard(
                     type: 'Co2',
-                    averageFootPrint: '209',
+                    averageFootPrint: '91.9M Kg saved',
                     icon: Icons.cloud_outlined,
                   ),
                 ),
