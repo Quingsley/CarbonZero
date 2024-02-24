@@ -221,6 +221,19 @@ class AuthDataSource {
       rethrow;
     }
   }
+
+  /// updates the push token for given user id
+  Future<void> updatePushToken(String token, String userId) async {
+    try {
+      await _db.collection('users').doc(userId).update({
+        'pushTokens': FieldValue.arrayUnion([token]),
+      });
+    } on FirebaseException catch (e) {
+      throw Failure(message: e.message ?? 'Something went wrong');
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
 
 /// will provide an instance of [AuthDataSource]
