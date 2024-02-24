@@ -5,6 +5,7 @@ import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_mod
 import 'package:carbon_zero/features/community/data/models/community_model.dart';
 import 'package:carbon_zero/features/community/data/repository/community_repository.dart';
 import 'package:carbon_zero/features/community/presentation/view_models/community_view_model.dart';
+import 'package:firebase_cached_image/firebase_cached_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_face_pile/flutter_face_pile.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -57,7 +58,9 @@ class CommunityDetails extends ConsumerWidget {
                       onError: (exception, stackTrace) => const SizedBox(),
                       filterQuality: FilterQuality.high,
                       fit: BoxFit.cover,
-                      image: NetworkImage(community.posterId),
+                      image: FirebaseImageProvider(
+                        FirebaseUrl(community.posterId),
+                      ),
                     ),
                   ),
                 ),
