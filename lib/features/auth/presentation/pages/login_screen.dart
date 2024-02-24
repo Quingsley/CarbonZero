@@ -2,9 +2,9 @@ import 'package:carbon_zero/core/error/failure.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/core/widgets/form_layout.dart';
 import 'package:carbon_zero/core/widgets/primary_button.dart';
+import 'package:carbon_zero/core/widgets/text_field.dart';
 import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
 import 'package:carbon_zero/features/auth/presentation/widgets/google_button.dart';
-import 'package:carbon_zero/core/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -45,7 +45,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget build(BuildContext context) {
     final authViewModel = ref.watch(authViewModelProvider);
     final isLoading = authViewModel is AsyncLoading;
-
+    final isGButton = ref.watch(isGoogleButtonProvider);
     ref.listen(authViewModelProvider, (previous, next) {
       next.whenOrNull(
         error: (error, stackTrace) {
@@ -144,7 +144,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               PrimaryButton(
                 text: 'Log in',
                 onPressed: !isLoading ? submit : null,
-                isLoading: isLoading,
+                isLoading: isLoading && !isGButton,
               ),
               const GButton(
                 text: 'Continue with Google',
