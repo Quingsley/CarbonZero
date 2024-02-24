@@ -13,7 +13,7 @@ abstract class IActivityDataSource {
 
   /// This method will get all the activities from the database
   /// of a given user / community.
-  Stream<List<ActivityModel>> getActivities(String parentId);
+  Stream<List<ActivityModel>> getActivities(String? parentId);
 
   /// This method will creating a recording in the db and update the progress
   /// of the user / community
@@ -47,7 +47,7 @@ class ActivityDataSource implements IActivityDataSource {
   }
 
   @override
-  Stream<List<ActivityModel>> getActivities(String parentId) {
+  Stream<List<ActivityModel>> getActivities(String? parentId) {
     try {
       final snapshot = _db
           .collection('activities')

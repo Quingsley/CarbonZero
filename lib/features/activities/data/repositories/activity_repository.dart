@@ -16,7 +16,7 @@ class ActivityRepository implements IActivityDataSource {
   }
 
   @override
-  Stream<List<ActivityModel>> getActivities(String parentId) {
+  Stream<List<ActivityModel>> getActivities(String? parentId) {
     return _dataSource.getActivities(parentId);
   }
 

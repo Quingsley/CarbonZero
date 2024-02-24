@@ -38,7 +38,7 @@ final activityViewModelProvider =
 
 /// will get the live snapshot of the user/ community activities
 final getActivitiesStreamProvider =
-    StreamProvider.family<List<ActivityModel>, String>((ref, parentId) {
+    StreamProvider.family<List<ActivityModel>, String?>((ref, parentId) {
   final repo = ref.read(activityRepositoryProvider);
   return repo.getActivities(parentId);
 });
