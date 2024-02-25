@@ -26,7 +26,10 @@ enum ImageType {
   profile,
 
   /// community image
-  community
+  community,
+
+  /// activity image
+  activity
 }
 
 /// tags
