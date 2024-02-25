@@ -22,11 +22,18 @@ class _CarbonZeroState extends ConsumerState<CarbonZero> {
       // Only after at least the action method is set,
       //the notification events are delivered
       final isSet = await AwesomeNotifications().setListeners(
-        onActionReceivedMethod: NotificationController.onActionReceivedMethod,
+        onActionReceivedMethod: (receivedAction) async {
+          await NotificationController.onActionReceivedMethod(
+            receivedAction,
+            context,
+          );
+        },
         onNotificationCreatedMethod:
             NotificationController.onNotificationCreatedMethod,
         onNotificationDisplayedMethod:
             NotificationController.onNotificationDisplayedMethod,
+        onDismissActionReceivedMethod:
+            NotificationController.onDismissActionReceivedMethod,
       );
       debugPrint(
         'isSET-----$isSet',
