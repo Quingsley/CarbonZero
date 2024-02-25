@@ -42,3 +42,12 @@ final getActivitiesStreamProvider =
   final repo = ref.read(activityRepositoryProvider);
   return repo.getActivities(parentId);
 });
+
+/// will get the activities recorded by the user
+final getActivityRecodingFutureProvider =
+    FutureProvider.family<List<ActivityRecordingModel>, (String, DateTime)>(
+  (ref, data) {
+    final repo = ref.read(activityRepositoryProvider);
+    return repo.getActivityRecordings(data.$1, data.$2);
+  },
+);
