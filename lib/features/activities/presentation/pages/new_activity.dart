@@ -11,6 +11,7 @@ import 'package:carbon_zero/features/activities/presentation/widgets/color_picke
 import 'package:carbon_zero/features/activities/presentation/widgets/icon_button.dart';
 import 'package:carbon_zero/features/activities/presentation/widgets/icon_pack_grid.dart';
 import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
+import 'package:carbon_zero/services/local_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -86,6 +87,10 @@ class _NewActivityState extends ConsumerState<NewActivity> {
       await ref
           .read(activityViewModelProvider.notifier)
           .createActivity(activity);
+
+      if (mounted) {
+        await NotificationController.scheduleNotification(activity, context);
+      }
     }
   }
 
