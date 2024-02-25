@@ -24,6 +24,14 @@ class ActivityRepository implements IActivityDataSource {
   Future<void> recordActivity(ActivityRecordingModel activity) async {
     await _dataSource.recordActivity(activity);
   }
+
+  @override
+  Future<List<ActivityRecordingModel>> getActivityRecordings(
+    String activityId,
+    DateTime date,
+  ) {
+    return _dataSource.getActivityRecordings(activityId, date);
+  }
 }
 
 /// activity repo provider
