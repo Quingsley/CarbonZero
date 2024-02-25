@@ -43,7 +43,7 @@ class _ProfilePhotoCardState extends ConsumerState<ProfilePhotoCard> {
             );
           },
           data: (url) {
-            // imagePath = url; // check if this is needed
+            imagePath = url; // check if this is needed
             final auth = ref.read(authStateChangesProvider);
             if (auth.value != null) {
               ScaffoldMessenger.of(context).showSnackBar(
