@@ -109,7 +109,7 @@ class SettingsScreen extends ConsumerWidget {
                             await ref
                                 .read(authViewModelProvider.notifier)
                                 .signOut();
-                            if (context.mounted) context.go('/');
+                            if (context.mounted) context.go('/auth');
                           }
                         : () {},
                     icon: isLoading
