@@ -1,6 +1,7 @@
 import 'package:carbon_zero/core/constants/constants.dart';
 import 'package:carbon_zero/core/error/failure.dart';
 import 'package:carbon_zero/core/extensions.dart';
+import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/core/widgets/form_layout.dart';
 import 'package:carbon_zero/core/widgets/primary_button.dart';
 import 'package:carbon_zero/core/widgets/text_field.dart';
@@ -8,6 +9,7 @@ import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_mod
 import 'package:carbon_zero/features/community/data/models/community_model.dart';
 import 'package:carbon_zero/features/community/presentation/view_models/community_view_model.dart';
 import 'package:carbon_zero/services/image_upload.dart';
+import 'package:firebase_cached_image/firebase_cached_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -95,6 +97,7 @@ class _AddCommunityState extends ConsumerState<AddCommunity> {
     final imageService = ref.watch(imageServiceProvider);
     final isLoading = imageService is AsyncLoading;
     final communityViewModel = ref.watch(communityViewModelProvider);
+    final isDarkMode = ref.watch(isDarkModeStateProvider);
     final isAdding = communityViewModel is AsyncLoading;
     ref
       ..listen(communityViewModelProvider, (prev, next) {
@@ -189,7 +192,9 @@ class _AddCommunityState extends ConsumerState<AddCommunity> {
                     ),
                     image: imageController.text.isNotEmpty
                         ? DecorationImage(
-                            image: NetworkImage(imageController.text),
+                            image: FirebaseImageProvider(
+                              FirebaseUrl(imageController.text),
+                            ),
                             fit: BoxFit.cover,
                             opacity: .5,
                           )
@@ -229,6 +234,9 @@ class _AddCommunityState extends ConsumerState<AddCommunity> {
                 ),
                 MultiSelectChipField<String?>(
                   title: const Text('Tags'),
+                  chipColor: isDarkMode
+                      ? context.colors.secondary.withOpacity(.4)
+                      : null,
                   items:
                       hashtags.map((tag) => MultiSelectItem(tag, tag)).toList(),
                   icon: const Icon(Icons.check),
@@ -244,14 +252,15 @@ class _AddCommunityState extends ConsumerState<AddCommunity> {
                     return null;
                   },
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
+                const Spacer(),
                 PrimaryButton(
                   text:
                       '${widget.community != null ? "Edit" : "Add"}  Community',
                   isLoading: isAdding,
                   onPressed: !isAdding ? submit : null,
+                ),
+                const SizedBox(
+                  height: 20,
                 ),
               ],
             ),
