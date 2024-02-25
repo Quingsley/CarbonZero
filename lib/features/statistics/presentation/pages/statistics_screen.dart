@@ -32,7 +32,8 @@ class StatisticsScreen extends ConsumerWidget {
                 text: 'Average Footprint: ',
                 children: [
                   TextSpan(
-                    text: '${user.value?.initialCarbonFootPrint} kg',
+                    text:
+                        '${user.value?.initialCarbonFootPrint.toStringAsFixed(2)} kg',
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
