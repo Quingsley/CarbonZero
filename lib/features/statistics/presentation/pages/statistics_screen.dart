@@ -103,10 +103,7 @@ class StatisticsScreen extends ConsumerWidget {
                       itemCount: activities.length,
                       itemBuilder: (context, index) {
                         return ActivityProgressCard(
-                          activityName: activities[index].name,
-                          icon: activities[index].icon,
-                          progress: '${(activities[index].progress / 1) * 100}',
-                          color: activities[index].color,
+                          activityModel: activities[index],
                         );
                       },
                     );
