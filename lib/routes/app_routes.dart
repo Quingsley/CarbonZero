@@ -1,6 +1,8 @@
 import 'package:carbon_zero/core/error/error_screen.dart';
 import 'package:carbon_zero/core/pages/shell_route.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
+import 'package:carbon_zero/features/activities/data/models/activity_model.dart';
+import 'package:carbon_zero/features/activities/presentation/pages/activity_details.dart';
 import 'package:carbon_zero/features/activities/presentation/pages/icons_screen.dart';
 import 'package:carbon_zero/features/auth/presentation/pages/forgot_password_screen.dart';
 import 'package:carbon_zero/features/auth/presentation/pages/login_screen.dart';
@@ -110,6 +112,12 @@ class AppRoutes {
               builder: (context, state) => const ForgotPasswordScreen(),
             ),
           ],
+        ),
+        GoRoute(
+          path: '/activity-details',
+          parentNavigatorKey: AppRoutes._rootNavigator,
+          builder: (context, state) =>
+              ActivityDetails(activityModel: state.extra! as ActivityModel),
         ),
         StatefulShellRoute.indexedStack(
           builder: (context, state, navigationShell) =>
