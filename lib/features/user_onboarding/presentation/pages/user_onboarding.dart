@@ -1,3 +1,4 @@
+import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/features/user_onboarding/presentation/widgets/k_timeline_tile.dart';
 import 'package:carbon_zero/features/user_onboarding/presentation/widgets/page_view_form.dart';
 import 'package:carbon_zero/features/user_onboarding/providers/user_onboarding_providers.dart';
@@ -54,6 +55,7 @@ class _UserOnboardingState extends ConsumerState<UserOnboarding> {
               children: [
                 if (controller.hasClients && currentPage != 0)
                   Material(
+                    color: context.colors.primary,
                     borderRadius: BorderRadius.circular(50),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(50),
@@ -66,9 +68,9 @@ class _UserOnboardingState extends ConsumerState<UserOnboarding> {
                             curve: Curves.easeInOut,
                           );
                         },
-                        child: const Icon(
+                        child: Icon(
                           Icons.arrow_back_ios_outlined,
-                          color: Colors.black,
+                          color: context.colors.onPrimary,
                         ),
                       ),
                     ),
@@ -99,9 +101,14 @@ class _UserOnboardingState extends ConsumerState<UserOnboarding> {
                   isLast: false,
                 ),
                 KTimelineTile(
+                  isLast: false,
+                  isFirst: false,
+                  isPast: currentPage > 5,
+                ),
+                KTimelineTile(
                   isLast: true,
                   isFirst: false,
-                  isPast: currentPage == 5,
+                  isPast: currentPage == 6,
                 ),
               ],
             ),
