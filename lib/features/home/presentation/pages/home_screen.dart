@@ -182,11 +182,7 @@ Using reusable bags instead of plastic bags when shopping can help reduce
                       itemCount: activities.length,
                       itemBuilder: (context, index) {
                         return ActivityTile(
-                          color: activities[index].color,
-                          icon: activities[index].icon,
-                          title: activities[index].name,
-                          points: activities[index].carbonPoints,
-                          co2Emitted: activities[index].cO2Emitted.toString(),
+                          activity: activities[index],
                         );
                       },
                     );
@@ -232,9 +228,10 @@ Using reusable bags instead of plastic bags when shopping can help reduce
               final state = _fabKey.currentState;
               if (state != null) state.toggle();
               await kShowBottomSheet(
-                context,
-                const NewActivity(type: ActivityType.individual),
-                MediaQuery.sizeOf(context).height * .9,
+                context: context,
+                child: const NewActivity(type: ActivityType.individual),
+                height: MediaQuery.sizeOf(context).height * .9,
+                isDismissible: false,
               );
             },
             heroTag: null,
