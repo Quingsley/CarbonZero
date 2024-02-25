@@ -5,6 +5,8 @@ import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/features/auth/data/models/user_model.dart';
 import 'package:carbon_zero/features/auth/data/repositories/auth_repo_impl.dart';
 import 'package:carbon_zero/features/user_onboarding/presentation/view_models/carbon_foot_print_results_view_model.dart';
+import 'package:carbon_zero/routes/app_routes.dart';
+import 'package:carbon_zero/services/notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// [AuthViewModel] class is a view model for authentication
@@ -13,13 +15,18 @@ class AuthViewModel extends AsyncNotifier<void> {
   /// to sign up a user
   Future<void> signUp(String password, UserModel user) async {
     final repo = ref.read(authRepositoryProvider);
+
+    final token = ref.read(pushTokenProvider);
     final (footPrint, currentFootPrint) = _getFootPrintData();
     final updatedUser = user.copyWith(
       initialCarbonFootPrint: footPrint,
       carbonFootPrintNow: currentFootPrint,
+      pushTokens: [token!],
     );
     state = const AsyncLoading();
-    state = await AsyncValue.guard(() => repo.signUp(updatedUser, password));
+    state = await AsyncValue.guard(
+      () => repo.signUp(updatedUser, password),
+    );
   }
 
   /// sign in method called by the view
@@ -49,10 +56,19 @@ class AuthViewModel extends AsyncNotifier<void> {
   /// google sign in method
   Future<void> signInWithGoogle({required bool isLogin}) async {
     final repo = ref.read(authRepositoryProvider);
+    final token = ref.read(pushTokenProvider);
     final footPrints = _getFootPrintData();
+    final router = ref.read(AppRoutes.router);
     state = const AsyncLoading();
     state = await AsyncValue.guard(
-      () => repo.sigInInWithGoogle(isLogin: isLogin, footPrint: footPrints),
+      () async {
+        await repo.sigInInWithGoogle(
+          isLogin: isLogin,
+          footPrint: footPrints,
+          token: token,
+        );
+        router.go('/home');
+      },
     );
   }
 
@@ -95,4 +111,9 @@ final authViewModelProvider =
 final userStreamProvider = StreamProvider.autoDispose((ref) {
   final repo = ref.read(authRepositoryProvider);
   return repo.getCurrentUserSnapshot();
+});
+
+/// [isGoogleButtonProvider] provider
+final isGoogleButtonProvider = StateProvider<bool>((ref) {
+  return false;
 });

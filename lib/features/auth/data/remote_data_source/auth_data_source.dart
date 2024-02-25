@@ -171,6 +171,7 @@ class AuthDataSource {
   Future<void> signUpWithGoogle({
     required bool isLogIn,
     required (double, double) footPrint,
+    String? token,
   }) async {
     try {
       // Trigger the authentication flow
@@ -199,6 +200,7 @@ class AuthDataSource {
         photoId: credentials.user?.photoURL,
         initialCarbonFootPrint: footPrint.$1,
         carbonFootPrintNow: footPrint.$2,
+        pushTokens: token != null ? [token] : [],
       );
       if (isLogIn) {
         await _db.collection('users').doc(credentials.user?.uid).update({
