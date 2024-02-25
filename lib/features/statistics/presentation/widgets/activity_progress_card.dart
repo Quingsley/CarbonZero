@@ -1,51 +1,43 @@
+import 'package:carbon_zero/features/activities/data/models/activity_model.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 /// will show the progress of the activity performed
 class ActivityProgressCard extends StatelessWidget {
   /// constructor call
   const ActivityProgressCard({
-    required this.activityName,
-    required this.icon,
-    required this.progress,
-    required this.color,
+    required this.activityModel,
     super.key,
   });
 
-  /// will show the progress of the activity performed
-  final String activityName;
-
-  /// icon of the activity
-  final String icon;
-
-  /// progress of the activity in %
-  final String progress;
-
-  /// color of the progress bar
-  final int color;
+  /// activity model
+  final ActivityModel activityModel;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: () => context.push('/activity-details', extra: activityModel),
       contentPadding: EdgeInsets.zero,
       leading: IconButton.filled(
         style: ButtonStyle(
-          backgroundColor:
-              MaterialStateProperty.all<Color>(Color(color).withOpacity(.52)),
+          backgroundColor: MaterialStateProperty.all<Color>(
+            Color(activityModel.color).withOpacity(.52),
+          ),
           minimumSize: MaterialStateProperty.all<Size>(const Size(20, 20)),
         ),
-        color: Color(color),
-        icon: Text(icon),
+        color: Color(activityModel.color),
+        icon: Text(activityModel.icon),
         onPressed: () {},
       ),
-      title: Text(activityName),
+      title: Text(activityModel.name),
       subtitle: LinearProgressIndicator(
         minHeight: 10,
         borderRadius: BorderRadius.circular(12),
-        value: double.parse(progress) / 100,
+        value: activityModel.progress,
         backgroundColor: Colors.grey[300],
-        valueColor: AlwaysStoppedAnimation<Color>(Color(color)),
+        valueColor: AlwaysStoppedAnimation<Color>(Color(activityModel.color)),
       ),
-      trailing: Text('$progress%'),
+      trailing: Text('${((activityModel.progress) * 100).toStringAsFixed(2)}%'),
     );
   }
 }
