@@ -42,24 +42,20 @@ class _CommunityInboxState extends ConsumerState<CommunityInbox> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () => context.pop(),
-          icon: const Icon(Icons.arrow_back_ios),
-        ),
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        leadingWidth: 100,
+        leading: Row(
           children: [
+            IconButton(
+              onPressed: () => context.pop(),
+              icon: const Icon(Icons.arrow_back_ios),
+            ),
             CircleAvatar(
               radius: 20,
               backgroundImage: NetworkImage(widget.communityModel.posterId),
             ),
-            const SizedBox(
-              width: 3,
-            ),
-            Text(widget.communityModel.name),
           ],
         ),
+        title: Text(widget.communityModel.name),
         centerTitle: true,
       ),
       body: Chat(
