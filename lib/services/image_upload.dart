@@ -37,11 +37,15 @@ class ImageUpload extends AsyncNotifier<String?> {
 
           final name = imageType == ImageType.profile
               ? '${user?.uid}.$extension'
-              : 'community-${user?.uid}-${DateTime.timestamp()}.$extension';
+              : imageType == ImageType.community
+                  ? 'community-${user?.uid}-${DateTime.timestamp()}.$extension'
+                  : 'activity-${user?.uid}-${DateTime.timestamp()}.$extension';
 
           final folder = imageType == ImageType.profile
               ? 'profile_images'
-              : 'community_images';
+              : imageType == ImageType.community
+                  ? 'community_images'
+                  : 'activity_images';
 
           final profileRef = storageRef.child('$folder/$name');
 
