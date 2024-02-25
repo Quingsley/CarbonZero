@@ -2,6 +2,7 @@ import 'package:carbon_zero/core/constants/constants.dart';
 import 'package:carbon_zero/core/error/failure.dart';
 import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
+import 'package:carbon_zero/core/widgets/add_image_container.dart';
 import 'package:carbon_zero/core/widgets/form_layout.dart';
 import 'package:carbon_zero/core/widgets/primary_button.dart';
 import 'package:carbon_zero/core/widgets/text_field.dart';
@@ -9,7 +10,6 @@ import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_mod
 import 'package:carbon_zero/features/community/data/models/community_model.dart';
 import 'package:carbon_zero/features/community/presentation/view_models/community_view_model.dart';
 import 'package:carbon_zero/services/image_upload.dart';
-import 'package:firebase_cached_image/firebase_cached_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -94,8 +94,6 @@ class _AddCommunityState extends ConsumerState<AddCommunity> {
 
   @override
   Widget build(BuildContext context) {
-    final imageService = ref.watch(imageServiceProvider);
-    final isLoading = imageService is AsyncLoading;
     final communityViewModel = ref.watch(communityViewModelProvider);
     final isDarkMode = ref.watch(isDarkModeStateProvider);
     final isAdding = communityViewModel is AsyncLoading;
@@ -179,55 +177,10 @@ class _AddCommunityState extends ConsumerState<AddCommunity> {
                 const SizedBox(
                   height: 20,
                 ),
-                Container(
-                  height: 200,
-                  width: MediaQuery.sizeOf(context).width,
-                  decoration: BoxDecoration(
-                    // color: context.colors.primary,
-                    gradient: LinearGradient(
-                      colors: [
-                        context.colors.primary.withOpacity(0.62),
-                        context.colors.primary.withOpacity(0.31),
-                      ],
-                    ),
-                    image: imageController.text.isNotEmpty
-                        ? DecorationImage(
-                            image: FirebaseImageProvider(
-                              FirebaseUrl(imageController.text),
-                            ),
-                            fit: BoxFit.cover,
-                            opacity: .5,
-                          )
-                        : null,
-                    border: Border.all(color: context.colors.primary),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      if (isLoading)
-                        const Center(
-                          child: CircularProgressIndicator(),
-                        )
-                      else
-                        IconButton(
-                          color: context.colors.onPrimary,
-                          onPressed: !isLoading
-                              ? () async {
-                                  await ref
-                                      .read(imageServiceProvider.notifier)
-                                      .uploadPhoto(ImageType.community);
-                                }
-                              : null,
-                          icon: const Icon(Icons.add_a_photo),
-                        ),
-                      Text(
-                        'Add a poster for your community',
-                        style: TextStyle(
-                          color: context.colors.onPrimary,
-                        ),
-                      ),
-                    ],
-                  ),
+                AddImageContainer(
+                  imageController: imageController,
+                  containerLabel: 'Add a poster for your community',
+                  imageType: ImageType.community,
                 ),
                 const SizedBox(
                   height: 20,
