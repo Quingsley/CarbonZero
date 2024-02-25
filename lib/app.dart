@@ -19,41 +19,6 @@ class _CarbonZeroState extends ConsumerState<CarbonZero> {
   @override
   void initState() {
     Future.delayed(Duration.zero, () async {
-      await AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
-        if (!isAllowed) {
-          // This is just a basic example. For real apps, you must show some
-          // friendly dialog box before call the request method.
-          // This is very important to not harm the user experience
-          // TODO: test this on android 13 and above
-          showDialog<bool>(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: const Text('Allow Notifications'),
-                content: const Text(
-                  'We need your permission to send you local notifications',
-                ),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop(false);
-                    },
-                    child: const Text('No'),
-                  ),
-                  TextButton(
-                    onPressed: () async {
-                      final isPermitted = await AwesomeNotifications()
-                          .requestPermissionToSendNotifications();
-                      if (mounted) Navigator.of(context).pop(isPermitted);
-                    },
-                    child: const Text('Yes'),
-                  ),
-                ],
-              );
-            },
-          );
-        }
-      });
       // Only after at least the action method is set,
       //the notification events are delivered
       final isSet = await AwesomeNotifications().setListeners(
