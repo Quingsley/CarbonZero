@@ -1,32 +1,34 @@
 import 'package:carbon_zero/core/extensions.dart';
+import 'package:carbon_zero/features/activities/data/models/activity_model.dart';
+import 'package:carbon_zero/services/local_notifications.dart';
 import 'package:flutter/material.dart';
 
 /// [ActivityTile] widget of the app.
-class ActivityTile extends StatelessWidget {
+class ActivityTile extends StatefulWidget {
   /// Create const instance of [ActivityTile] widget.
   const ActivityTile({
-    required this.title,
-    required this.co2Emitted,
-    required this.icon,
-    required this.color,
-    required this.points,
+    required this.activity,
     super.key,
   });
 
-  /// Activity title.
-  final String title;
+  /// The activity model.
+  final ActivityModel activity;
 
-  /// Activity co2Emitted.
-  final String co2Emitted;
+  @override
+  State<ActivityTile> createState() => _ActivityTileState();
+}
 
-  /// Activity icon.
-  final String icon;
-
-  /// color of activity
-  final int color;
-
-  /// carbon points earned
-  final int points;
+class _ActivityTileState extends State<ActivityTile> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () async {
+      await NotificationController.scheduleNotification(
+        widget.activity,
+        context,
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +39,10 @@ class ActivityTile extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(8),
           child: ColoredBox(
-            color: Color(color),
+            color: Color(widget.activity.color),
             child: Center(
               child: Text(
-                icon,
+                widget.activity.icon,
                 style: context.textTheme.headlineSmall,
                 textAlign: TextAlign.center,
               ),
@@ -48,14 +50,14 @@ class ActivityTile extends StatelessWidget {
           ),
         ),
       ),
-      title: Text(title),
+      title: Text(widget.activity.name),
       subtitle: Text(
-        '$points carbon points',
+        '${widget.activity.carbonPoints} carbon points',
         style: TextStyle(color: Colors.grey[400]),
       ),
       trailing: Text.rich(
         TextSpan(
-          text: co2Emitted,
+          text: widget.activity.cO2Emitted.toRadixString(2),
           children: [
             TextSpan(
               text: 'g CO2e',
