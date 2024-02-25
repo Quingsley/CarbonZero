@@ -2,6 +2,7 @@ import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/features/activities/data/models/activity_model.dart';
 import 'package:carbon_zero/services/local_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 /// [ActivityTile] widget of the app.
 class ActivityTile extends StatefulWidget {
@@ -33,6 +34,7 @@ class _ActivityTileState extends State<ActivityTile> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: () => context.push('/activity-details', extra: widget.activity),
       leading: SizedBox(
         height: 30,
         width: 30,
@@ -57,7 +59,7 @@ class _ActivityTileState extends State<ActivityTile> {
       ),
       trailing: Text.rich(
         TextSpan(
-          text: widget.activity.cO2Emitted.toRadixString(2),
+          text: widget.activity.cO2Emitted.toString(),
           children: [
             TextSpan(
               text: 'g CO2e',
