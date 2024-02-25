@@ -48,9 +48,9 @@ class ModeOfTransportQ extends StatelessWidget {
                     subtitle: Text('Select if you use ${mode.label}'),
                     onTap: () async {
                       await kShowBottomSheet(
-                        context,
-                        widgetToShow,
-                        isFlight
+                        context: context,
+                        child: widgetToShow,
+                        height: isFlight
                             ? MediaQuery.sizeOf(context).height * 0.55
                             : null,
                       );
@@ -61,9 +61,9 @@ class ModeOfTransportQ extends StatelessWidget {
                       ),
                       onPressed: () async {
                         await kShowBottomSheet(
-                          context,
-                          widgetToShow,
-                          isFlight
+                          context: context,
+                          child: widgetToShow,
+                          height: isFlight
                               ? MediaQuery.sizeOf(context).height * 0.55
                               : null,
                         );
