@@ -18,6 +18,12 @@ abstract class IActivityDataSource {
   /// This method will creating a recording in the db and update the progress
   /// of the user / community
   Future<void> recordActivity(ActivityRecordingModel activity);
+
+  /// will return recordings of a given activity for a given day
+  Future<List<ActivityRecordingModel>> getActivityRecordings(
+    String activityId,
+    DateTime date,
+  );
 }
 
 /// This is the remote data source for the activity feature.
@@ -74,7 +80,57 @@ class ActivityDataSource implements IActivityDataSource {
 
       await doc.update({'id': doc.id});
 
-      /// should I use cloud functions or do it manually ??
+      /// update the progress of the user / community
+      final activityDoc = await _db
+          .collection('activities')
+          .withActivityModelConverter()
+          .doc(activity.activityId)
+          .get();
+
+      final totalDocuments = await _db
+          .collection('activity_recordings')
+          .where('activityId', isEqualTo: activity.activityId)
+          .get();
+      final userActivity = activityDoc.data()!;
+      final startDate = DateTime.parse(userActivity.startDate);
+      final endDate = DateTime.parse(userActivity.endDate);
+      final expectedTotalActivities = endDate.difference(startDate).inDays;
+      final actualTotalActivities = totalDocuments.docs.length;
+      final progress = actualTotalActivities / expectedTotalActivities;
+
+      /// TODO: use cloud function here
+      await activityDoc.reference.update({
+        'carbonPoints': FieldValue.increment(1), // 1 point
+        'cO2Emitted': FieldValue.increment(25), // 25 g (estimate)
+        'progress': progress,
+      });
+    } on FirebaseException catch (e) {
+      throw Failure(message: e.message ?? e.toString());
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<ActivityRecordingModel>> getActivityRecordings(
+    String activityId,
+    DateTime date,
+  ) async {
+    try {
+      final startDate = DateTime(date.year, date.month, date.day);
+      final endDate = DateTime(date.year, date.month, date.day, 23, 59, 59);
+      final snapshot = await _db
+          .collection('activity_recordings')
+          .withActivityRecordingModelConverter()
+          .where('activityId', isEqualTo: activityId)
+          .where(
+            'date',
+            isGreaterThanOrEqualTo: startDate.toIso8601String(),
+          )
+          .where('date', isLessThanOrEqualTo: endDate.toIso8601String())
+          .get();
+
+      return snapshot.docs.map((doc) => doc.data()).toList();
     } on FirebaseException catch (e) {
       throw Failure(message: e.message ?? e.toString());
     } catch (e) {
