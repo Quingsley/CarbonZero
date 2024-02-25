@@ -10,6 +10,7 @@ class KTextField extends ConsumerWidget {
     required this.controller,
     this.validator,
     this.isObscured = false,
+    this.maxLines = 1,
     super.key,
   });
 
@@ -27,6 +28,9 @@ class KTextField extends ConsumerWidget {
 
   /// validates the input
   final String? Function(String?)? validator;
+
+  /// max lines for the text field
+  final int? maxLines;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -55,6 +59,7 @@ class KTextField extends ConsumerWidget {
             controller: controller,
             obscureText: !showPassword && isObscured,
             validator: validator,
+            maxLines: maxLines,
             decoration: InputDecoration(
               hintText: hintText,
               hintStyle: Theme.of(context).textTheme.labelMedium?.copyWith(
