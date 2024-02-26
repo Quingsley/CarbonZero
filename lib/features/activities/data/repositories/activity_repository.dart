@@ -1,3 +1,4 @@
+import 'package:carbon_zero/core/constants/constants.dart';
 import 'package:carbon_zero/features/activities/data/models/activity_model.dart';
 import 'package:carbon_zero/features/activities/data/models/activity_recording_model.dart';
 import 'package:carbon_zero/features/activities/data/remote_data_source/activity_data_source.dart';
@@ -16,13 +17,19 @@ class ActivityRepository implements IActivityDataSource {
   }
 
   @override
-  Stream<List<ActivityModel>> getActivities(String? parentId) {
-    return _dataSource.getActivities(parentId);
+  Stream<List<ActivityModel>> getActivities(
+    String? parentId,
+    ActivityType type,
+  ) {
+    return _dataSource.getActivities(parentId, type);
   }
 
   @override
-  Future<void> recordActivity(ActivityRecordingModel activity) async {
-    await _dataSource.recordActivity(activity);
+  Future<void> recordActivity(
+    ActivityRecordingModel activity,
+    ActivityType type,
+  ) async {
+    await _dataSource.recordActivity(activity, type);
   }
 
   @override
@@ -31,6 +38,11 @@ class ActivityRepository implements IActivityDataSource {
     DateTime date,
   ) {
     return _dataSource.getActivityRecordings(activityId, date);
+  }
+
+  @override
+  Stream<ActivityModel> getSingleActivity(String activityId) {
+    return _dataSource.getSingleActivity(activityId);
   }
 }
 
