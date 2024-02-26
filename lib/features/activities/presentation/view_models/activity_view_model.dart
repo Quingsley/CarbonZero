@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:carbon_zero/core/constants/constants.dart';
 import 'package:carbon_zero/features/activities/data/models/activity_model.dart';
 import 'package:carbon_zero/features/activities/data/models/activity_recording_model.dart';
 import 'package:carbon_zero/features/activities/data/repositories/activity_repository.dart';
@@ -23,11 +24,12 @@ class ActivityViewModel extends AsyncNotifier<void> {
   /// records the activity done for a given activity
   Future<void> recordActivity(
     ActivityRecordingModel activityRecordingModel,
+    ActivityType type,
   ) async {
     final repo = ref.read(activityRepositoryProvider);
     state = const AsyncLoading();
     state = await AsyncValue.guard(
-      () => repo.recordActivity(activityRecordingModel),
+      () => repo.recordActivity(activityRecordingModel, type),
     );
   }
 }
@@ -38,9 +40,10 @@ final activityViewModelProvider =
 
 /// will get the live snapshot of the user/ community activities
 final getActivitiesStreamProvider =
-    StreamProvider.family<List<ActivityModel>, String?>((ref, parentId) {
+    StreamProvider.family<List<ActivityModel>, (String?, ActivityType)>(
+        (ref, args) {
   final repo = ref.read(activityRepositoryProvider);
-  return repo.getActivities(parentId);
+  return repo.getActivities(args.$1, args.$2);
 });
 
 /// will get the activities recorded by the user
@@ -51,3 +54,10 @@ final getActivityRecodingFutureProvider =
     return repo.getActivityRecordings(data.$1, data.$2);
   },
 );
+
+/// will stream for changes for a single activity
+final getSingleActivityProvider =
+    StreamProvider.family<ActivityModel, String>((ref, activityId) {
+  final repo = ref.read(activityRepositoryProvider);
+  return repo.getSingleActivity(activityId);
+});
