@@ -14,6 +14,7 @@ class ActivityModel extends Equatable {
     required this.icon,
     required this.color,
     required this.reminderTime,
+    this.participants = const [],
     this.id,
     this.progress = 0,
     this.members = 1,
@@ -39,6 +40,7 @@ class ActivityModel extends Equatable {
           'color': final int color,
           'reminderTime': final String reminderTime,
           'carbonPoints': final int carbonPoints,
+          'participants': final List<dynamic> participants,
         }) {
       return ActivityModel(
         id: id,
@@ -54,6 +56,7 @@ class ActivityModel extends Equatable {
         members: members,
         cO2Emitted: cO2Emitted,
         color: color,
+        participants: List.from(participants),
         type: type == ActivityType.individual.name
             ? ActivityType.individual
             : ActivityType.community,
@@ -80,6 +83,7 @@ class ActivityModel extends Equatable {
       'color': color,
       'reminderTime': reminderTime,
       'carbonPoints': carbonPoints,
+      'participants': participants,
     };
   }
 
@@ -99,6 +103,7 @@ class ActivityModel extends Equatable {
     int? color,
     String? reminderTime,
     int? carbonPoints,
+    List<String>? participants,
   }) {
     return ActivityModel(
       id: id ?? this.id,
@@ -115,6 +120,7 @@ class ActivityModel extends Equatable {
       members: members ?? this.members,
       cO2Emitted: cO2Emitted ?? this.cO2Emitted,
       carbonPoints: carbonPoints ?? this.carbonPoints,
+      participants: participants ?? this.participants,
     );
   }
 
@@ -160,6 +166,10 @@ class ActivityModel extends Equatable {
   /// carbon points earned
   final int carbonPoints;
 
+  /// will contain user Ids who are participating in the activity for
+  /// community activities
+  final List<String> participants;
+
   @override
   List<Object?> get props => [
         id,
@@ -174,6 +184,7 @@ class ActivityModel extends Equatable {
         progress,
         color,
         cO2Emitted,
+        participants,
       ];
 
   @override
