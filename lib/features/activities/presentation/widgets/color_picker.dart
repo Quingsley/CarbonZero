@@ -16,7 +16,7 @@ class ColorPicker extends ConsumerWidget {
     final color = ref.watch(selectedColorProvider);
     final isDark = ref.watch(isDarkModeStateProvider);
     return SizedBox(
-      height: 200,
+      height: 500,
       child: GridView.builder(
         itemCount: ecoFriendlyColors.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -91,4 +91,24 @@ List<int> ecoFriendlyColors = [
   0xffB0E0E6, // Powder Blue
   0xffADD8E6, // Light Blue
   0xff87CEEB, // Sky Blue
+  Colors.red.value, // Red
+  Colors.redAccent.value, // Red Accent
+  Colors.yellow.value, // Yellow
+  Colors.yellowAccent.value, // Yellow Accent
+  Colors.green.value, // Green
+  Colors.greenAccent.value, // Green Accent
+  Colors.blue.value, // Blue
+  Colors.blueAccent.value, // Blue Accent
+  Colors.purple.value, // Purple
+  Colors.purpleAccent.value, // Purple Accent
+  Colors.pink.value, // Pink
+  Colors.pinkAccent.value, // Pink Accent
+  Colors.orange.value, // Orange
+  Colors.orangeAccent.value, // Orange Accent
+  Colors.teal.value, // Teal
+  Colors.tealAccent.value, // Teal Accent
+  Colors.indigo.value, // Indigo
+  Colors.indigoAccent.value, // Indigo Accent
+  Colors.cyan.value, // Cyan
+  Colors.cyanAccent.value, // Cyan Accent
 ];
