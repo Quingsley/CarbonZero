@@ -45,14 +45,17 @@ class CommunityDetails extends ConsumerWidget {
           ..invalidate(getCommunitiesStreamProvider);
       },
       child: Scaffold(
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Stack(
-              children: [
-                Container(
-                  height: 350,
-                  width: MediaQuery.sizeOf(context).width,
+        body: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              expandedHeight: 350,
+              // pinned: true,
+              floating: true,
+              snap: true,
+              backgroundColor: context.colors.primary,
+              flexibleSpace: FlexibleSpaceBar(
+                title: Text(community.name),
+                background: DecoratedBox(
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       onError: (exception, stackTrace) => const SizedBox(),
@@ -64,161 +67,132 @@ class CommunityDetails extends ConsumerWidget {
                     ),
                   ),
                 ),
-                // Image.asset(
-                //   'assets/images/solar_energy.png',
-                //   height: 300,
-                //   width: MediaQuery.sizeOf(context).width,
-                // ),
-                Positioned(
-                  top: 40,
-                  left: 10,
-                  child: IconButton.filled(
-                    color: context.colors.secondary,
-                    iconSize: 12,
-                    style: ButtonStyle(
-                      padding: const MaterialStatePropertyAll(
-                        EdgeInsets.zero,
-                      ),
-                      backgroundColor: MaterialStatePropertyAll(
-                        context.colors.secondary.withOpacity(.62),
-                      ),
-                      shape: MaterialStatePropertyAll(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                    onPressed: () => context.pop(),
-                    icon: const Icon(
-                      Icons.arrow_back_ios_new,
+              ),
+            ),
+            SliverList(
+              delegate: SliverChildListDelegate(
+                [
+                  const SizedBox(height: 8),
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Text(
+                      'From the community',
+                      style: context.textTheme.titleLarge,
                     ),
                   ),
-                ),
-              ],
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        community.name,
-                        style: context.textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      // probable use read more text
-                      Text(
-                        community.description,
-                        style: context.textTheme.labelSmall,
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
 
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Expanded(
-                            child: communityUsers.when(
-                              data: (users) {
-                                if (users.isEmpty) return const SizedBox();
-                                users.shuffle();
-                                return FacePile(
-                                  faces: users
-                                      .map(
-                                        (user) => FaceHolder(
-                                          id: user.userId!,
-                                          name: user.fName,
-                                          avatar: NetworkImage(
-                                            user.photoId ?? '',
-                                          ),
-                                        ),
-                                      )
-                                      .toList(),
-                                  faceSize: 50,
-                                  facePercentOverlap: .4,
-                                  backgroundColor: context.colors.background,
-                                );
-                              },
-                              error: (error, _) => Text(
-                                error is Failure
-                                    ? error.message
-                                    : error.toString(),
-                              ),
-                              loading: () => const Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Chip(
-                            avatar: SvgPicture.asset(
-                              'assets/images/community-icon.svg',
-                              width: 24,
-                              colorFilter: ColorFilter.mode(
-                                context.colors.primary,
-                                BlendMode.srcIn,
-                              ),
-                            ),
-                            label: Text(
-                              '${community.members} ${community.members == 1 ? "member" : "members"}',
-                            ),
-                            side: BorderSide.none,
-                          ),
-                          const SizedBox(
-                            width: 4,
-                          ),
-                          Expanded(
-                            child: Text(
-                              community.tags.join(', '),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 50),
-                      PrimaryButton(
-                        text: 'Join Community',
-                        isLoading: isLoading,
-                        onPressed: !isLoading
-                            ? () async {
-                                if (user.value != null) {
-                                  final isMember = community.userIds
-                                      .contains(user.value!.userId);
-                                  if (isMember) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                          'You are already a member of this community',
+                  // probable use read more text
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Text(
+                      community.description,
+                      style: context.textTheme.titleMedium,
+                    ),
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Expanded(
+                          child: communityUsers.when(
+                            data: (users) {
+                              if (users.isEmpty) return const SizedBox();
+                              users.shuffle();
+                              return FacePile(
+                                faces: users
+                                    .map(
+                                      (user) => FaceHolder(
+                                        id: user.userId!,
+                                        name: user.fName,
+                                        avatar: NetworkImage(
+                                          user.photoId ?? '',
                                         ),
                                       ),
-                                    );
-                                    return;
-                                  }
-                                  await ref
-                                      .read(communityViewModelProvider.notifier)
-                                      .joinCommunity(
-                                        community.id!,
-                                        user.value!.userId!,
-                                      );
-                                  if (context.mounted) context.pop();
-                                }
-                              }
-                            : null,
+                                    )
+                                    .toList(),
+                                faceSize: 50,
+                                facePercentOverlap: .4,
+                                backgroundColor: context.colors.background,
+                              );
+                            },
+                            error: (error, _) => Text(
+                              error is Failure
+                                  ? error.message
+                                  : error.toString(),
+                            ),
+                            loading: () => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Chip(
+                        avatar: SvgPicture.asset(
+                          'assets/images/community-icon.svg',
+                          width: 24,
+                          colorFilter: ColorFilter.mode(
+                            context.colors.primary,
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                        label: Text(
+                          '${community.members} ${community.members == 1 ? "member" : "members"}',
+                        ),
+                        side: BorderSide.none,
+                      ),
+                      const SizedBox(
+                        width: 4,
+                      ),
+                      Expanded(
+                        child: Text(
+                          community.tags.join(', '),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ],
                   ),
-                ),
+                  const SizedBox(height: 50),
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: PrimaryButton(
+                      text: 'Join Community',
+                      isLoading: isLoading,
+                      onPressed: !isLoading
+                          ? () async {
+                              if (user.value != null) {
+                                final isMember = community.userIds
+                                    .contains(user.value!.userId);
+                                if (isMember) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'You are already a member of this community',
+                                      ),
+                                    ),
+                                  );
+                                  return;
+                                }
+                                await ref
+                                    .read(communityViewModelProvider.notifier)
+                                    .joinCommunity(
+                                      community.id!,
+                                      user.value!.userId!,
+                                    );
+                                if (context.mounted) context.pop();
+                              }
+                            }
+                          : null,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
