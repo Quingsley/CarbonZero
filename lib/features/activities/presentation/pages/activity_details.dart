@@ -185,9 +185,11 @@ class _ActivityDetailsState extends ConsumerState<ActivityDetails> {
                                       (exception, stackTrace) {
                                     debugPrint(exception.toString());
                                   },
-                                  backgroundImage: FirebaseImageProvider(
-                                    FirebaseUrl(e.imageUrl),
-                                  ),
+                                  backgroundImage: e.imageUrl.isNotEmpty
+                                      ? FirebaseImageProvider(
+                                          FirebaseUrl(e.imageUrl),
+                                        )
+                                      : null,
                                 ),
                                 title: Text(
                                   e.description,
