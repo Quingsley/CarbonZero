@@ -1,6 +1,7 @@
 import 'package:carbon_zero/core/constants/constants.dart';
 import 'package:carbon_zero/core/constants/icon_pack.dart';
 import 'package:carbon_zero/core/extensions.dart';
+import 'package:carbon_zero/core/widgets/add_image_container.dart';
 import 'package:carbon_zero/core/widgets/form_layout.dart';
 import 'package:carbon_zero/core/widgets/notification_tile.dart';
 import 'package:carbon_zero/core/widgets/text_field.dart';
@@ -11,6 +12,8 @@ import 'package:carbon_zero/features/activities/presentation/widgets/color_picke
 import 'package:carbon_zero/features/activities/presentation/widgets/icon_button.dart';
 import 'package:carbon_zero/features/activities/presentation/widgets/icon_pack_grid.dart';
 import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
+import 'package:carbon_zero/features/community/data/models/community_model.dart';
+import 'package:carbon_zero/features/community/presentation/view_models/community_view_model.dart';
 import 'package:carbon_zero/services/local_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,6 +36,7 @@ class _NewActivityState extends ConsumerState<NewActivity> {
   final _formKey = GlobalKey<FormState>();
   final goalNameController = TextEditingController();
   final descriptionController = TextEditingController();
+  final imageController = TextEditingController();
   final startDateController =
       TextEditingController(text: DateTime.now().toIso8601String());
   final endDateController = TextEditingController(
@@ -40,6 +44,24 @@ class _NewActivityState extends ConsumerState<NewActivity> {
   );
 
   final reminderTimeController = TextEditingController();
+  final communityController = TextEditingController();
+
+  List<CommunityModel> communities = [];
+  String? selectedCommunityId;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final user = ref.read(userStreamProvider);
+    final adminCommunitiesAsyncValue =
+        ref.read(adminCommunityFutureProvider(user.value!.userId!));
+    final adminCommunities = adminCommunitiesAsyncValue.value;
+    if (adminCommunities != null) {
+      communities = adminCommunities;
+      if (communities.isNotEmpty) selectedCommunityId = communities.first.id;
+    }
+  }
 
   @override
   void didChangeDependencies() {
@@ -56,6 +78,8 @@ class _NewActivityState extends ConsumerState<NewActivity> {
     startDateController.dispose();
     endDateController.dispose();
     reminderTimeController.dispose();
+    communityController.dispose();
+    imageController.dispose();
   }
 
   Future<void> submit() async {
@@ -63,7 +87,12 @@ class _NewActivityState extends ConsumerState<NewActivity> {
     final color = ref.read(selectedColorProvider);
     final icon = ref.read(selectedIconProvider);
     final user = ref.read(userStreamProvider);
-    if (color == null || icon == null) {
+    if (color == null ||
+        (icon == null && widget.type == ActivityType.individual)) {
+      ref.read(showErrorProvider.notifier).state = true;
+      return;
+    }
+    if (imageController.text.isEmpty && widget.type == ActivityType.community) {
       ref.read(showErrorProvider.notifier).state = true;
       return;
     }
@@ -75,15 +104,23 @@ class _NewActivityState extends ConsumerState<NewActivity> {
         name: goalNameController.text,
         description: descriptionController.text,
         type: widget.type,
-        parentId: user.value!.userId!,
-        icon: icon,
+        parentId: widget.type == ActivityType.individual
+            ? user.value!.userId!
+            : selectedCommunityId!,
+        icon: widget.type == ActivityType.individual
+            ? icon!
+            : imageController.text,
         color: color,
         reminderTime: reminderTimeController.text,
+        participants:
+            // add the challenge creator (admin) to the list of participants
+            widget.type == ActivityType.community ? [user.value!.userId!] : [],
       );
 
       goalNameController.clear();
       reminderTimeController.clear();
       descriptionController.clear();
+      imageController.clear();
       ref.read(selectedColorProvider.notifier).state = null;
       ref.read(selectedIconProvider.notifier).state = null;
 
@@ -109,26 +146,8 @@ class _NewActivityState extends ConsumerState<NewActivity> {
       next.whenOrNull(
         data: (_) {
           Navigator.of(context).pop();
-          Navigator.of(context).pop();
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Goal created successfully')),
-          );
-        },
-        loading: () async {
-          await showDialog<void>(
-            context: context,
-            barrierDismissible: false,
-            builder: (context) {
-              return const Dialog(
-                child: SizedBox(
-                  width: 30,
-                  height: 30,
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
-              );
-            },
           );
         },
         error: (error, stackTrace) {
@@ -143,6 +162,11 @@ class _NewActivityState extends ConsumerState<NewActivity> {
         },
       );
     });
+    final outlineInputBorder = OutlineInputBorder(
+      borderSide: BorderSide(
+        color: Theme.of(context).colorScheme.tertiary,
+      ),
+    );
     return FormLayout(
       child: Form(
         key: _formKey,
@@ -165,20 +189,69 @@ class _NewActivityState extends ConsumerState<NewActivity> {
                 const SizedBox(
                   width: 8,
                 ),
-                Text(
-                  'New Goal',
-                  style: context.textTheme.titleLarge,
+                Expanded(
+                  flex: 5,
+                  child: Text(
+                    'New ${widget.type == ActivityType.community ? "Community" : ''} Goal',
+                    style: context.textTheme.titleLarge,
+                  ),
                 ),
                 const Spacer(),
                 IconButton(
                   onPressed: isLoading ? null : submit,
-                  icon: const Icon(Icons.check_circle_outlined),
+                  icon: isLoading
+                      ? const CircularProgressIndicator()
+                      : const Icon(Icons.check_circle_outlined),
                 ),
               ],
             ),
             const SizedBox(
               height: 10,
             ),
+            if (widget.type == ActivityType.community)
+              DropdownMenu<CommunityModel>(
+                initialSelection: communities.first,
+                label: const Text('Community'),
+                inputDecorationTheme: InputDecorationTheme(
+                  enabledBorder: outlineInputBorder,
+                  border: outlineInputBorder,
+                  focusedBorder: outlineInputBorder.copyWith(
+                    borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                  focusedErrorBorder: outlineInputBorder.copyWith(
+                    borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+                  ),
+                  errorBorder: outlineInputBorder.copyWith(
+                    borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+                  ),
+                ),
+                width: MediaQuery.sizeOf(context).width * .89,
+                helperText: 'Please select a community',
+                onSelected: (community) {
+                  if (community != null) {
+                    setState(() {
+                      communityController.text = community.name;
+                      selectedCommunityId = community.id;
+                    });
+                  }
+                },
+                leadingIcon: const Icon(Icons.group),
+                controller: communityController,
+                dropdownMenuEntries: communities
+                    .map(
+                      (community) => DropdownMenuEntry(
+                        value: community,
+                        label: community.name,
+                      ),
+                    )
+                    .toList(),
+              ),
             KTextField(
               label: 'Name',
               hintText: 'Meatless Month',
@@ -291,29 +364,46 @@ class _NewActivityState extends ConsumerState<NewActivity> {
                 ],
               ),
             ),
-            Text(
-              'Pick an icon',
-              style: TextStyle(
-                color:
-                    icon == null && showErrColor ? context.colors.error : null,
-              ),
-            ),
-            SizedBox(
-              height: 130,
-              child: IconPack(
-                icons: ecoFriendlyIcons,
-                isMain: true,
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: TextButton(
-                onPressed: () {
-                  context.push('/home/icons');
-                },
-                child: const Text('More Icons'),
-              ),
-            ),
+            ...switch (widget.type) {
+              ActivityType.individual => [
+                  Text(
+                    'Pick an icon',
+                    style: TextStyle(
+                      color: icon == null && showErrColor
+                          ? context.colors.error
+                          : null,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 130,
+                    child: IconPack(
+                      icons: ecoFriendlyIcons,
+                      isMain: true,
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: TextButton(
+                      onPressed: () {
+                        context.push('/home/icons');
+                      },
+                      child: const Text('More Icons'),
+                    ),
+                  ),
+                ],
+              ActivityType.community => [
+                  const SizedBox(height: 4),
+                  AddImageContainer(
+                    imageType: ImageType.community,
+                    imageController: imageController,
+                    showError: showErrColor,
+                    containerLabel: 'Add a poster for your community goal',
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                ],
+            },
             Text(
               'Color',
               style: TextStyle(
