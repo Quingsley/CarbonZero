@@ -12,6 +12,7 @@ class AddImageContainer extends ConsumerWidget {
     required this.imageType,
     required this.imageController,
     required this.containerLabel,
+    this.showError = false,
     super.key,
   });
 
@@ -23,6 +24,9 @@ class AddImageContainer extends ConsumerWidget {
 
   /// image type
   final ImageType imageType;
+
+  /// will highlight the container if the image is not uploaded
+  final bool showError;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -55,7 +59,9 @@ class AddImageContainer extends ConsumerWidget {
                 opacity: .5,
               )
             : null,
-        border: Border.all(color: context.colors.primary),
+        border: Border.all(
+          color: showError ? context.colors.error : context.colors.primary,
+        ),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -66,7 +72,8 @@ class AddImageContainer extends ConsumerWidget {
             )
           else
             IconButton(
-              color: context.colors.onPrimary,
+              color:
+                  showError ? context.colors.error : context.colors.onPrimary,
               onPressed: !isLoading
                   ? () async {
                       await ref
@@ -79,7 +86,8 @@ class AddImageContainer extends ConsumerWidget {
           Text(
             containerLabel,
             style: TextStyle(
-              color: context.colors.onPrimary,
+              color:
+                  showError ? context.colors.error : context.colors.onPrimary,
             ),
           ),
         ],
