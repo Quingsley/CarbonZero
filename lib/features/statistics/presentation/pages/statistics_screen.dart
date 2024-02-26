@@ -1,3 +1,4 @@
+import 'package:carbon_zero/core/constants/constants.dart';
 import 'package:carbon_zero/core/error/failure.dart';
 import 'package:carbon_zero/features/activities/presentation/view_models/activity_view_model.dart';
 import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
@@ -15,8 +16,11 @@ class StatisticsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userStreamProvider);
-    final activitiesAsyncValue =
-        ref.watch(getActivitiesStreamProvider(user.value?.userId));
+    final activitiesAsyncValue = ref.watch(
+      getActivitiesStreamProvider(
+        (user.value?.userId, ActivityType.individual),
+      ),
+    );
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
