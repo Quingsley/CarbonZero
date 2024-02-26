@@ -156,6 +156,7 @@ class AppRoutes {
                   builder: (context, state) => const CommunityScreen(),
                   routes: [
                     GoRoute(
+                      parentNavigatorKey: AppRoutes._rootNavigator,
                       path: 'details',
                       builder: (context, state) => CommunityDetails(
                         community: state.extra! as CommunityModel,
