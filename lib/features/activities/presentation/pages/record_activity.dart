@@ -53,10 +53,12 @@ class _RecordActivityState extends ConsumerState<RecordActivity> {
 
       await ref
           .read(activityViewModelProvider.notifier)
-          .recordActivity(recordedActivity);
+          .recordActivity(recordedActivity, widget.activityModel.type);
       descriptionController.clear();
       imageController.clear();
-      ref.invalidate(getActivityRecodingFutureProvider);
+      ref
+        ..invalidate(getSingleActivityProvider)
+        ..invalidate(getActivityRecodingFutureProvider);
       if (mounted) Navigator.of(context).pop();
     }
   }
