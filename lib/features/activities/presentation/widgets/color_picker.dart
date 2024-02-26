@@ -111,4 +111,6 @@ List<int> ecoFriendlyColors = [
   Colors.indigoAccent.value, // Indigo Accent
   Colors.cyan.value, // Cyan
   Colors.cyanAccent.value, // Cyan Accent
+  Colors.amberAccent.value, // Amber Accent
+  Colors.amber.value, // Amber
 ];
