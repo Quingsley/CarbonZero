@@ -38,12 +38,14 @@ class _NewActivityState extends ConsumerState<NewActivity> {
   final endDateController = TextEditingController(
     text: DateTime.now().add(const Duration(days: 30)).toIso8601String(),
   );
+
   final reminderTimeController = TextEditingController();
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     ecoFriendlyColors.shuffle();
+    reminderTimeController.text = TimeOfDay.now().format(context);
   }
 
   @override
@@ -80,6 +82,7 @@ class _NewActivityState extends ConsumerState<NewActivity> {
       );
 
       goalNameController.clear();
+      reminderTimeController.clear();
       descriptionController.clear();
       ref.read(selectedColorProvider.notifier).state = null;
       ref.read(selectedIconProvider.notifier).state = null;
@@ -101,6 +104,7 @@ class _NewActivityState extends ConsumerState<NewActivity> {
     final showErrColor = ref.watch(showErrorProvider);
     final activityVm = ref.watch(activityViewModelProvider);
     final isLoading = activityVm is AsyncLoading;
+
     ref.listen(activityViewModelProvider, (previous, next) {
       next.whenOrNull(
         data: (_) {
