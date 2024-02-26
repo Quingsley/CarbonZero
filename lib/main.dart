@@ -40,6 +40,7 @@ Future<void> main() async {
         channelDescription: 'Notification channel for basic tests',
         defaultColor: lightTheme.primaryColor,
         ledColor: lightTheme.primaryColorDark,
+        onlyAlertOnce: true,
       ),
     ],
     // Channel groups are only visual and are not required
