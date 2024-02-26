@@ -101,14 +101,15 @@ class NotificationController {
 //the activity is not over
     if (currentTime.isAfter(startDate) && currentTime.isBefore(endDate)) {
 // if the activity is not over, schedule a notification
-// time to schedule the notification 4: 47 PM
+// time to schedule the notification format  (4: 47 PM)
       final [hour, minute] = activity.reminderTime.split(':');
+      print((hour, minute));
       final scheduleTime = DateTime(
         currentTime.year,
         currentTime.month,
         currentTime.day,
         int.parse(hour),
-        int.parse(minute),
+        int.parse(minute.split(' ')[0]), // remove the PM or AM
       );
       // final cronExpression = Schedule(
       //   hours: int.parse(hour),
