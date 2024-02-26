@@ -127,6 +127,7 @@ class CommunityDetails extends ConsumerWidget {
                             child: communityUsers.when(
                               data: (users) {
                                 if (users.isEmpty) return const SizedBox();
+                                users.shuffle();
                                 return FacePile(
                                   faces: users
                                       .map(
@@ -149,7 +150,9 @@ class CommunityDetails extends ConsumerWidget {
                                     ? error.message
                                     : error.toString(),
                               ),
-                              loading: CircularProgressIndicator.new,
+                              loading: () => const Center(
+                                child: CircularProgressIndicator(),
+                              ),
                             ),
                           ),
                         ],
