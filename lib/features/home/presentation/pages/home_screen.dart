@@ -7,6 +7,8 @@ import 'package:carbon_zero/features/activities/presentation/pages/new_activity.
 import 'package:carbon_zero/features/activities/presentation/view_models/activity_view_model.dart';
 import 'package:carbon_zero/features/auth/data/repositories/auth_repo_impl.dart';
 import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
+import 'package:carbon_zero/features/community/data/models/community_model.dart';
+import 'package:carbon_zero/features/community/presentation/view_models/community_view_model.dart';
 import 'package:carbon_zero/features/home/presentation/widgets/activity_tile.dart';
 import 'package:carbon_zero/features/home/presentation/widgets/carbon_foot_print.dart';
 import 'package:carbon_zero/features/home/presentation/widgets/home_card.dart';
@@ -29,6 +31,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   bool isDay = true;
   final _fabKey = GlobalKey<ExpandableFabState>();
+  List<CommunityModel> communities = [];
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -56,8 +59,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userStreamProvider);
-    final activitiesAsyncValue =
-        ref.watch(getActivitiesStreamProvider(user.value?.userId));
+    // ignore: cascade_invocations
+    user.whenOrNull(
+      data: (user) {
+        if (user != null) {
+          final communities =
+              ref.watch(adminCommunityFutureProvider(user.userId!));
+          setState(() {
+            this.communities = communities.value ?? [];
+          });
+        }
+      },
+    );
+    final activitiesAsyncValue = ref.watch(
+      getActivitiesStreamProvider(
+        (user.value?.userId, ActivityType.individual),
+      ),
+    );
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(top: 50, left: 8, right: 8),
@@ -164,8 +183,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             const HomeCard(
               title: null,
               description: '''
-Using reusable bags instead of plastic bags when shopping can help reduce
-                   carbon emissions by reducing the amount of plastic waste produced''',
+Using reusable bags instead of plastic bags when shopping can help reduce 
+carbon emissions by reducing the amount of plastic waste produced''',
               icon: Icons.lightbulb,
             ),
             const SizedBox(
@@ -245,7 +264,20 @@ Using reusable bags instead of plastic bags when shopping can help reduce
           FloatingActionButton.extended(
             heroTag: null,
             label: const Text('Community challenge'),
-            onPressed: () {},
+            onPressed: () async {
+              if (user.value != null) {
+                if (communities.isNotEmpty) {
+                  final state = _fabKey.currentState;
+                  if (state != null) state.toggle();
+                  await kShowBottomSheet(
+                    context: context,
+                    child: const NewActivity(type: ActivityType.community),
+                    height: MediaQuery.sizeOf(context).height * .9,
+                    isDismissible: false,
+                  );
+                }
+              }
+            },
           ),
         ],
       ),
