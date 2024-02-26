@@ -84,7 +84,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                   const Spacer(),
                   TextButton(
-                    onPressed: () => context.go('/auth/sign-up'),
+                    onPressed: () => context.push('/user-onboarding'),
                     child: Text(
                       'Sign Up',
                       style:
