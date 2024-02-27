@@ -13,7 +13,7 @@ abstract class IActivityDataSource {
   Future<void> createActivity(ActivityModel activity);
 
   /// This method will get all the activities from the database
-  /// of a given user / community.
+  /// of a given user / community (only if parent Id exists on the participants).
   Stream<List<ActivityModel>> getActivities(
     String? parentId,
     ActivityType activityType,
@@ -33,6 +33,17 @@ abstract class IActivityDataSource {
   Future<List<ActivityRecordingModel>> getActivityRecordings(
     String activityId,
     DateTime date,
+  );
+
+  /// will get activities of a given community
+  Stream<List<ActivityModel>> getCommunityActivities(
+    String communityId,
+  );
+
+  /// update the list of participants in an activity
+  Future<void> addParticipants(
+    String activityId,
+    String userId,
   );
 }
 
@@ -128,7 +139,7 @@ class ActivityDataSource implements IActivityDataSource {
         /// TODO: use cloud function here
         await activityDoc.reference.update({
           'carbonPoints':
-              FieldValue.increment(activity.imageUrl.isEmpty ? 0.5 : 1),
+              FieldValue.increment(activity.imageUrl.isEmpty ? 1 : 3),
           'cO2Emitted': FieldValue.increment(25), // 25 g (estimate)
           'progress': progress,
         });
@@ -211,6 +222,46 @@ class ActivityDataSource implements IActivityDataSource {
           .snapshots();
 
       return snapshot.map((event) => event.data()!);
+    } on FirebaseException catch (e) {
+      throw Failure(message: e.message ?? e.toString());
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Stream<List<ActivityModel>> getCommunityActivities(String communityId) {
+    try {
+      final snapshot = _db
+          .collection('activities')
+          .withActivityModelConverter()
+          .where('type', isEqualTo: ActivityType.community.name)
+          .where('parentId', isEqualTo: communityId)
+          .snapshots();
+      return snapshot
+          .map((event) => event.docs.map((doc) => doc.data()).toList());
+    } on FirebaseException catch (e) {
+      throw Failure(message: e.message ?? e.toString());
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> addParticipants(String activityId, String userId) async {
+    try {
+      final activityDoc = await _db
+          .collection('activities')
+          .withActivityModelConverter()
+          .doc(activityId)
+          .get();
+      final activity = activityDoc.data()!;
+      final participants = activity.participants;
+      if (!participants.contains(userId)) {
+        await activityDoc.reference.update({
+          'participants': FieldValue.arrayUnion([userId]),
+        });
+      }
     } on FirebaseException catch (e) {
       throw Failure(message: e.message ?? e.toString());
     } catch (e) {
