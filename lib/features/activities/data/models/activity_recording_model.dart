@@ -9,6 +9,8 @@ class ActivityRecordingModel extends Equatable {
     required this.date,
     required this.description,
     required this.imageUrl,
+    required this.userId,
+    required this.userName,
     this.id,
   });
 
@@ -22,6 +24,8 @@ class ActivityRecordingModel extends Equatable {
           'date': final String date,
           'description': final String description,
           'imageUrl': final String imageUrl,
+          'userId': final String userId,
+          'userName': final String userName,
         }) {
       return ActivityRecordingModel(
         id: id,
@@ -30,6 +34,8 @@ class ActivityRecordingModel extends Equatable {
         date: date,
         description: description,
         imageUrl: imageUrl,
+        userId: userId,
+        userName: userName,
       );
     } else {
       throw FormatException('Invalid JSON format $json');
@@ -45,6 +51,8 @@ class ActivityRecordingModel extends Equatable {
       'date': date,
       'description': description,
       'imageUrl': imageUrl,
+      'userId': userId,
+      'userName': userName,
     };
   }
 
@@ -67,9 +75,15 @@ class ActivityRecordingModel extends Equatable {
   /// image url of the activity recording
   final String imageUrl;
 
+  /// id of the user who recorded the activity (used for community activities)
+  final String userId;
+
+  /// name of the user who recorded the activity (used for community activities)
+  final String userName;
+
   @override
   List<Object?> get props =>
-      [id, activityId, parentId, date, description, imageUrl];
+      [id, activityId, parentId, date, description, imageUrl, userId, userName];
 
   /// copyWith method for ActivityRecordingModel
   ActivityRecordingModel copyWith({
@@ -79,6 +93,8 @@ class ActivityRecordingModel extends Equatable {
     String? date,
     String? description,
     String? imageUrl,
+    String? userId,
+    String? userName,
   }) {
     return ActivityRecordingModel(
       id: id ?? this.id,
@@ -87,6 +103,8 @@ class ActivityRecordingModel extends Equatable {
       parentId: parentId ?? this.parentId,
       date: date ?? this.date,
       description: description ?? this.description,
+      userId: userId ?? this.userId,
+      userName: userName ?? this.userName,
     );
   }
 }
