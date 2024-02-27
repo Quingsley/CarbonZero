@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/features/activities/data/models/activity_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 // import 'package:cron/cron.dart';
 
 /// contain static methods to handle local notifications
@@ -90,7 +90,6 @@ class NotificationController {
   /// schedule notification
   static Future<void> scheduleNotification(
     ActivityModel activity,
-    BuildContext ctx,
   ) async {
 // get current time
     final currentTime = DateTime.now();
@@ -102,14 +101,17 @@ class NotificationController {
     if (currentTime.isAfter(startDate) && currentTime.isBefore(endDate)) {
 // if the activity is not over, schedule a notification
 // time to schedule the notification format  (4: 47 PM)
-      final [hour, minute] = activity.reminderTime.split(':');
-      print((hour, minute));
+      // final [hour, minute] = activity.reminderTime.split(':');
+      final time = NotificationController.convertTo24HourFormat(
+        activity.reminderTime,
+      );
+      final [hour, minute] = time.split(':');
       final scheduleTime = DateTime(
         currentTime.year,
         currentTime.month,
         currentTime.day,
         int.parse(hour),
-        int.parse(minute.split(' ')[0]), // remove the PM or AM
+        int.parse(minute),
       );
       // final cronExpression = Schedule(
       //   hours: int.parse(hour),
@@ -117,6 +119,8 @@ class NotificationController {
       //   seconds: 0,
       // ).toCronString();
       // final preciseDates = generateDateRange(startDate, endDate);
+      final localTimeZone =
+          await AwesomeNotifications().getLocalTimeZoneIdentifier();
       await AwesomeNotifications().createNotification(
         content: NotificationContent(
           id: DateTime.now().millisecond,
@@ -128,8 +132,6 @@ class NotificationController {
           wakeUpScreen: true,
           category: NotificationCategory.Reminder,
           notificationLayout: NotificationLayout.BigText,
-          backgroundColor: ctx.colors.primary,
-          color: ctx.colors.onPrimary,
           payload: {'activity': jsonEncode(activity.toJson())},
           autoDismissible: false,
           bigPicture: activity.icon,
@@ -141,6 +143,7 @@ class NotificationController {
           month: scheduleTime.month,
           year: scheduleTime.year,
           weekday: scheduleTime.weekday,
+          timeZone: localTimeZone,
         ),
       );
     }
@@ -159,9 +162,16 @@ class NotificationController {
 
     return dates;
   }
+
+  /// converts time to 24 hour format
+  static String convertTo24HourFormat(String timeIn12HourFormat) {
+    final format12Hour = DateFormat('h:mm a');
+    final format24Hour = DateFormat('HH:mm');
+
+    final time = format12Hour.parse(timeIn12HourFormat);
+    return format24Hour.format(time);
+  }
 }
-
-
 
 // NotificationAndroidCrontab(
 //           initialDateTime: DateTime.parse(activity.startDate),
