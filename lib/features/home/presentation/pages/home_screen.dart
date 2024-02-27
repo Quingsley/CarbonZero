@@ -39,24 +39,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   @override
-  void initState() {
-    super.initState();
-
-    final messagingInstance = ref.read(firebaseMessagingProvider);
-    messagingInstance.onTokenRefresh.listen((token) async {
-      final user = ref.read(userStreamProvider);
-      if (user.value != null) {
-        final isPresent = user.value!.pushTokens.contains(token);
-        if (!isPresent) {
-          await ref
-              .read(authRepositoryProvider)
-              .updatePushToken(token, user.value!.userId!);
-        }
-      }
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     final user = ref.watch(userStreamProvider);
     // ignore: cascade_invocations
@@ -76,6 +58,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         (user.value?.userId, ActivityType.individual),
       ),
     );
+    final messagingInstance = ref.watch(firebaseMessagingProvider);
+    messagingInstance.onTokenRefresh.listen((token) async {
+      final user = ref.read(userStreamProvider);
+      print('updated token------------- $token---------');
+      if (user.value != null) {
+        final isPresent = user.value!.pushTokens.contains(token);
+        if (!isPresent) {
+          await ref
+              .read(authRepositoryProvider)
+              .updatePushToken(token, user.value!.userId!);
+        }
+      }
+    });
 
     return Scaffold(
       body: Padding(
@@ -259,7 +254,11 @@ carbon emissions by reducing the amount of plastic waste produced''',
           FloatingActionButton.extended(
             heroTag: null,
             label: const Text('Record emission'),
-            onPressed: () {},
+            onPressed: () async {
+              final firebaseMessaging = ref.read(firebaseMessagingProvider);
+              final token = await firebaseMessaging.getToken();
+              print(token);
+            },
           ),
           FloatingActionButton.extended(
             heroTag: null,
