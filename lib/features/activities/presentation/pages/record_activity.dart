@@ -4,6 +4,7 @@ import 'package:carbon_zero/core/widgets/text_field.dart';
 import 'package:carbon_zero/features/activities/data/models/activity_model.dart';
 import 'package:carbon_zero/features/activities/data/models/activity_recording_model.dart';
 import 'package:carbon_zero/features/activities/presentation/view_models/activity_view_model.dart';
+import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
 import 'package:carbon_zero/services/image_upload.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -41,6 +42,7 @@ class _RecordActivityState extends ConsumerState<RecordActivity> {
 
   Future<void> submit() async {
     final isValid = _formKey.currentState?.validate();
+    final user = ref.read(userStreamProvider);
     if (isValid != null && isValid) {
       _formKey.currentState?.save();
       final recordedActivity = ActivityRecordingModel(
@@ -49,6 +51,8 @@ class _RecordActivityState extends ConsumerState<RecordActivity> {
         date: widget.selectedDate.toIso8601String(),
         description: descriptionController.text,
         imageUrl: imageController.text,
+        userId: user.value!.userId!,
+        userName: user.value!.fName,
       );
 
       await ref
