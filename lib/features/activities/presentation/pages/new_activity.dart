@@ -129,7 +129,7 @@ class _NewActivityState extends ConsumerState<NewActivity> {
           .createActivity(activity);
 
       if (mounted) {
-        await NotificationController.scheduleNotification(activity, context);
+        await NotificationController.scheduleNotification(activity);
       }
     }
   }
