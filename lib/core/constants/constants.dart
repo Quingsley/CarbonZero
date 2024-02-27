@@ -1,3 +1,6 @@
+/// key used to store background notification messages
+const String notificationKey = 'NOTIFICATIONS';
+
 ///enum for app tabs
 enum AppTabs {
   /// home 0
