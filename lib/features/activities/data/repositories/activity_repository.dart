@@ -44,6 +44,16 @@ class ActivityRepository implements IActivityDataSource {
   Stream<ActivityModel> getSingleActivity(String activityId) {
     return _dataSource.getSingleActivity(activityId);
   }
+
+  @override
+  Stream<List<ActivityModel>> getCommunityActivities(String communityId) {
+    return _dataSource.getCommunityActivities(communityId);
+  }
+
+  @override
+  Future<void> addParticipants(String activityId, String userId) {
+    return _dataSource.addParticipants(activityId, userId);
+  }
 }
 
 /// activity repo provider
