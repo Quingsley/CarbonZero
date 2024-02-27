@@ -57,6 +57,28 @@ class _CommunityInboxState extends ConsumerState<CommunityInbox> {
         ),
         title: Text(widget.communityModel.name),
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              context.push(
+                '/community/inbox/members',
+                extra: widget.communityModel.userIds,
+              );
+            },
+            tooltip: 'Members',
+            icon: const Icon(Icons.people_alt_outlined),
+          ),
+          IconButton(
+            color: Colors.amber,
+            icon: const Icon(Icons.emoji_events),
+            onPressed: () {
+              context.push(
+                '/community/inbox/challenges',
+                extra: widget.communityModel.id,
+              );
+            },
+          ),
+        ],
       ),
       body: Chat(
         theme: DefaultChatTheme(
