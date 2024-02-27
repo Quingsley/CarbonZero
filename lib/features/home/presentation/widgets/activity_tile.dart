@@ -26,7 +26,6 @@ class _ActivityTileState extends State<ActivityTile> {
     Future.delayed(Duration.zero, () async {
       await NotificationController.scheduleNotification(
         widget.activity,
-        context,
       );
     });
   }
