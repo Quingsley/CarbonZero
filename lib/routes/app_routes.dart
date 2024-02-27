@@ -10,6 +10,8 @@ import 'package:carbon_zero/features/auth/presentation/pages/profile_completion.
 import 'package:carbon_zero/features/auth/presentation/pages/profile_photo.dart';
 import 'package:carbon_zero/features/auth/presentation/pages/signup_screen.dart';
 import 'package:carbon_zero/features/chat/presentation/pages/chat.dart';
+import 'package:carbon_zero/features/chat/presentation/pages/community_members.dart';
+import 'package:carbon_zero/features/chat/presentation/pages/ongoing_community_challenges.dart';
 import 'package:carbon_zero/features/community/data/models/community_model.dart';
 import 'package:carbon_zero/features/community/presentation/pages/add_community.dart';
 import 'package:carbon_zero/features/community/presentation/pages/admin_communities.dart';
@@ -168,6 +170,22 @@ class AppRoutes {
                       builder: (context, state) => CommunityInbox(
                         communityModel: state.extra! as CommunityModel,
                       ),
+                      routes: [
+                        GoRoute(
+                          path: 'members',
+                          parentNavigatorKey: AppRoutes._rootNavigator,
+                          builder: (context, state) => CommunityMembers(
+                            userIds: state.extra! as List<String>,
+                          ),
+                        ),
+                        GoRoute(
+                          path: 'challenges',
+                          parentNavigatorKey: AppRoutes._rootNavigator,
+                          builder: (context, state) => OngoingChallenges(
+                            communityId: state.extra! as String,
+                          ),
+                        ),
+                      ],
                     ),
                     GoRoute(
                       path: 'add-community',
