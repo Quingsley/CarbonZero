@@ -10,6 +10,8 @@ import 'package:carbon_zero/features/activities/data/models/activity_recording_m
 import 'package:carbon_zero/features/activities/data/repositories/activity_repository.dart';
 import 'package:carbon_zero/features/activities/presentation/pages/record_activity.dart';
 import 'package:carbon_zero/features/activities/presentation/view_models/activity_view_model.dart';
+import 'package:carbon_zero/features/activities/presentation/widgets/add_activity_btn.dart';
+import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
 import 'package:firebase_cached_image/firebase_cached_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -79,6 +81,7 @@ class _ActivityDetailsState extends ConsumerState<ActivityDetails> {
         (widget.activityModel.id!, _selectedDay),
       ),
     );
+    final user = ref.watch(userStreamProvider);
     return Scaffold(
       body: getSingleActivityAsyncValue.when(
         data: (activity) {
@@ -240,6 +243,9 @@ class _ActivityDetailsState extends ConsumerState<ActivityDetails> {
                     ),
                     getEventsForTheDay.when(
                       data: (data) {
+                        final hasUserRecordedActivity = data
+                            .map((recording) => recording.userId)
+                            .contains(user.value?.userId);
                         if (data.isEmpty) {
                           return Center(
                             child: Column(
@@ -249,63 +255,37 @@ class _ActivityDetailsState extends ConsumerState<ActivityDetails> {
                                   height: 20,
                                 ),
                                 const Text('No activity recorded for the day'),
-                                FilledButton.icon(
-                                  onPressed: () async {
-                                    if (isSameDay(
-                                      _selectedDay,
-                                      DateTime.now(),
-                                    )) {
-                                      await kShowBottomSheet(
-                                        context: context,
-                                        height:
-                                            MediaQuery.sizeOf(context).height *
-                                                .7,
-                                        child: RecordActivity(
-                                          activityModel: widget.activityModel,
-                                          selectedDate: _selectedDay,
-                                        ),
-                                      );
-                                    } else {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        const SnackBar(
-                                          content: Text(
-                                            'You can only record activity for today',
-                                          ),
-                                        ),
-                                      );
-                                    }
-                                  },
-                                  icon: const Icon(Icons.add),
-                                  label: const Text("Record today 's activity"),
+                                AddActivityBtn(
+                                  onPressed: _recordActivity,
+                                  label: "Record today 's activity",
                                 ),
                               ],
                             ),
                           );
                         } else {
                           return Column(
-                            children: data
-                                .map(
-                                  (e) => ListTile(
-                                    leading: CircleAvatar(
-                                      onBackgroundImageError: e
-                                              .imageUrl.isNotEmpty
-                                          ? (exception, stackTrace) {
-                                              debugPrint(exception.toString());
-                                            }
-                                          : null,
-                                      backgroundImage: e.imageUrl.isNotEmpty
-                                          ? FirebaseImageProvider(
-                                              FirebaseUrl(e.imageUrl),
-                                            )
-                                          : null,
-                                    ),
-                                    title: Text(
-                                      e.description,
+                            children: [
+                              if (activity.type == ActivityType.community &&
+                                  !hasUserRecordedActivity)
+                                AddActivityBtn(
+                                  onPressed: _recordActivity,
+                                  label: 'Record Activity',
+                                ),
+                              for (final recording in data)
+                                ListTile(
+                                  leading: CircleAvatar(
+                                    backgroundImage: FirebaseImageProvider(
+                                      FirebaseUrl(recording.imageUrl),
                                     ),
                                   ),
-                                )
-                                .toList(),
+                                  title: Text(
+                                    'Recorded by: ${recording.userName}',
+                                  ),
+                                  subtitle: Text(
+                                    recording.description,
+                                  ),
+                                ),
+                            ],
                           );
                         }
                       },
@@ -334,5 +314,29 @@ class _ActivityDetailsState extends ConsumerState<ActivityDetails> {
         ),
       ),
     );
+  }
+
+  Future<void> _recordActivity() async {
+    if (isSameDay(
+      _selectedDay,
+      DateTime.now(),
+    )) {
+      await kShowBottomSheet(
+        context: context,
+        height: MediaQuery.sizeOf(context).height * .7,
+        child: RecordActivity(
+          activityModel: widget.activityModel,
+          selectedDate: _selectedDay,
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'You can only record activity for today',
+          ),
+        ),
+      );
+    }
   }
 }
