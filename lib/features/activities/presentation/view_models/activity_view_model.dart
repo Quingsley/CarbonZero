@@ -32,6 +32,15 @@ class ActivityViewModel extends AsyncNotifier<void> {
       () => repo.recordActivity(activityRecordingModel, type),
     );
   }
+
+  /// will add a new participant to the activity
+  Future<void> addParticipant(String activityId, String userId) async {
+    final repo = ref.read(activityRepositoryProvider);
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(
+      () => repo.addParticipants(activityId, userId),
+    );
+  }
 }
 
 /// provides the activity VM to the UI
@@ -60,4 +69,11 @@ final getSingleActivityProvider =
     StreamProvider.family<ActivityModel, String>((ref, activityId) {
   final repo = ref.read(activityRepositoryProvider);
   return repo.getSingleActivity(activityId);
+});
+
+/// will get the activities of a given community
+final communityActivityStreamProvider =
+    StreamProvider.family<List<ActivityModel>, String>((ref, communityId) {
+  final repo = ref.read(activityRepositoryProvider);
+  return repo.getCommunityActivities(communityId);
 });
