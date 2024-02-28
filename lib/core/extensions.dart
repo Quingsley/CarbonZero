@@ -1,3 +1,5 @@
+import 'package:carbon_zero/features/activities/data/models/activity_model.dart';
+import 'package:carbon_zero/features/activities/data/models/activity_recording_model.dart';
 import 'package:carbon_zero/features/auth/data/models/user_model.dart';
 import 'package:carbon_zero/features/chat/data/model/chat_model.dart';
 import 'package:carbon_zero/features/community/data/models/community_model.dart';
@@ -37,6 +39,24 @@ extension ModelConverter on CollectionReference {
     return withConverter(
       fromFirestore: (snapshot, _) => ChatModel.fromJson(snapshot.data()!),
       toFirestore: (chat, _) => chat.toJson(),
+    );
+  }
+
+  /// adds the [ActivityModel] converter to the collection reference
+  CollectionReference<ActivityModel> withActivityModelConverter() {
+    return withConverter(
+      fromFirestore: (snapshot, _) => ActivityModel.fromJson(snapshot.data()!),
+      toFirestore: (activity, _) => activity.toJson(),
+    );
+  }
+
+  /// adds the [ActivityRecordingModel] converter to the collection reference
+  CollectionReference<ActivityRecordingModel>
+      withActivityRecordingModelConverter() {
+    return withConverter(
+      fromFirestore: (snapshot, _) =>
+          ActivityRecordingModel.fromJson(snapshot.data()!),
+      toFirestore: (activityRecording, _) => activityRecording.toJson(),
     );
   }
 }

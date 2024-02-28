@@ -1,10 +1,10 @@
-import 'package:carbon_zero/core/error/failure.dart';
+// import 'package:carbon_zero/core/error/failure.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/core/widgets/form_layout.dart';
 import 'package:carbon_zero/core/widgets/primary_button.dart';
+import 'package:carbon_zero/core/widgets/text_field.dart';
 import 'package:carbon_zero/features/auth/data/models/user_model.dart';
 import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
-import 'package:carbon_zero/features/auth/presentation/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -63,12 +63,12 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     final isLoading = authViewModel is AsyncLoading;
     ref.listen(authViewModelProvider, (previous, next) {
       next.whenOrNull(
-        error: (error, stackTrace) =>
-            ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(error is Failure ? error.message : error.toString()),
-          ),
-        ),
+        // error: (error, stackTrace) =>
+        //     ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //   content: Text(error is Failure ? error.message : error.toString()),
+        //   ),
+        // ),
         data: (_) {
           final auth = ref.watch(authInstanceProvider);
           if (auth.currentUser?.uid != null) {

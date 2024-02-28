@@ -1,12 +1,17 @@
 import 'package:carbon_zero/core/error/error_screen.dart';
 import 'package:carbon_zero/core/pages/shell_route.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
+import 'package:carbon_zero/features/activities/data/models/activity_model.dart';
+import 'package:carbon_zero/features/activities/presentation/pages/activity_details.dart';
+import 'package:carbon_zero/features/activities/presentation/pages/icons_screen.dart';
 import 'package:carbon_zero/features/auth/presentation/pages/forgot_password_screen.dart';
 import 'package:carbon_zero/features/auth/presentation/pages/login_screen.dart';
 import 'package:carbon_zero/features/auth/presentation/pages/profile_completion.dart';
 import 'package:carbon_zero/features/auth/presentation/pages/profile_photo.dart';
 import 'package:carbon_zero/features/auth/presentation/pages/signup_screen.dart';
 import 'package:carbon_zero/features/chat/presentation/pages/chat.dart';
+import 'package:carbon_zero/features/chat/presentation/pages/community_members.dart';
+import 'package:carbon_zero/features/chat/presentation/pages/ongoing_community_challenges.dart';
 import 'package:carbon_zero/features/community/data/models/community_model.dart';
 import 'package:carbon_zero/features/community/presentation/pages/add_community.dart';
 import 'package:carbon_zero/features/community/presentation/pages/admin_communities.dart';
@@ -110,6 +115,12 @@ class AppRoutes {
             ),
           ],
         ),
+        GoRoute(
+          path: '/activity-details',
+          parentNavigatorKey: AppRoutes._rootNavigator,
+          builder: (context, state) =>
+              ActivityDetails(activityModel: state.extra! as ActivityModel),
+        ),
         StatefulShellRoute.indexedStack(
           builder: (context, state, navigationShell) =>
               TabShellRoute(navigationShell: navigationShell),
@@ -120,6 +131,13 @@ class AppRoutes {
                 GoRoute(
                   path: '/home',
                   builder: (context, state) => const HomeScreen(),
+                  routes: [
+                    GoRoute(
+                      parentNavigatorKey: AppRoutes._rootNavigator,
+                      path: 'icons',
+                      builder: (context, state) => const IconSelectionScreen(),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -140,6 +158,7 @@ class AppRoutes {
                   builder: (context, state) => const CommunityScreen(),
                   routes: [
                     GoRoute(
+                      parentNavigatorKey: AppRoutes._rootNavigator,
                       path: 'details',
                       builder: (context, state) => CommunityDetails(
                         community: state.extra! as CommunityModel,
@@ -151,6 +170,22 @@ class AppRoutes {
                       builder: (context, state) => CommunityInbox(
                         communityModel: state.extra! as CommunityModel,
                       ),
+                      routes: [
+                        GoRoute(
+                          path: 'members',
+                          parentNavigatorKey: AppRoutes._rootNavigator,
+                          builder: (context, state) => CommunityMembers(
+                            userIds: state.extra! as List<String>,
+                          ),
+                        ),
+                        GoRoute(
+                          path: 'challenges',
+                          parentNavigatorKey: AppRoutes._rootNavigator,
+                          builder: (context, state) => OngoingChallenges(
+                            communityId: state.extra! as String,
+                          ),
+                        ),
+                      ],
                     ),
                     GoRoute(
                       path: 'add-community',

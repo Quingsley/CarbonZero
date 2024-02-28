@@ -1,15 +1,26 @@
+import 'package:carbon_zero/core/constants/constants.dart';
+import 'package:carbon_zero/core/error/failure.dart';
+import 'package:carbon_zero/features/activities/presentation/view_models/activity_view_model.dart';
+import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
 import 'package:carbon_zero/features/statistics/presentation/widgets/activity_progress_card.dart';
 import 'package:carbon_zero/features/statistics/presentation/widgets/bar_chart.dart';
 import 'package:carbon_zero/features/statistics/presentation/widgets/statistics_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// will show the users statistics of their carbon footprint
-class StatisticsScreen extends StatelessWidget {
+class StatisticsScreen extends ConsumerWidget {
   /// constructor call
   const StatisticsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userStreamProvider);
+    final activitiesAsyncValue = ref.watch(
+      getActivitiesStreamProvider(
+        (user.value?.userId, ActivityType.individual),
+      ),
+    );
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -20,13 +31,14 @@ class StatisticsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text.rich(
+            Text.rich(
               TextSpan(
                 text: 'Average Footprint: ',
                 children: [
                   TextSpan(
-                    text: '18979kg',
-                    style: TextStyle(
+                    text:
+                        '${user.value?.initialCarbonFootPrint.toStringAsFixed(2)} kg',
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -42,28 +54,28 @@ class StatisticsScreen extends StatelessWidget {
                 Expanded(
                   child: StatisticsCard(
                     type: 'Land',
-                    averageFootPrint: '150',
+                    averageFootPrint: '150 M sqm saved',
                     icon: Icons.landscape,
                   ),
                 ),
                 Expanded(
                   child: StatisticsCard(
                     type: 'Water',
-                    averageFootPrint: '100',
+                    averageFootPrint: '3.08B saved',
                     icon: Icons.waves,
                   ),
                 ),
                 Expanded(
                   child: StatisticsCard(
                     type: 'Energy',
-                    averageFootPrint: '15',
+                    averageFootPrint: '15.3M KWh saved',
                     icon: Icons.flash_on_outlined,
                   ),
                 ),
                 Expanded(
                   child: StatisticsCard(
                     type: 'Co2',
-                    averageFootPrint: '209',
+                    averageFootPrint: '91.9M Kg saved',
                     icon: Icons.cloud_outlined,
                   ),
                 ),
@@ -84,41 +96,33 @@ class StatisticsScreen extends StatelessWidget {
               height: 16,
             ),
             Expanded(
-              child: ListView(
-                children: const [
-                  Text('Activities'),
-                  // WIll make them dynamic later just
-                  ActivityProgressCard(
-                    activityName: 'Electric Car',
-                    icon: Icons.electric_car,
-                    progress: '40',
-                    color: Colors.redAccent,
-                  ),
-                  ActivityProgressCard(
-                    activityName: 'Recycling',
-                    icon: Icons.recycling,
-                    progress: '85',
-                    color: Colors.green,
-                  ),
-                  ActivityProgressCard(
-                    activityName: 'Biking',
-                    icon: Icons.bike_scooter,
-                    progress: '70',
-                    color: Colors.amber,
-                  ),
-                  ActivityProgressCard(
-                    activityName: 'Recycling',
-                    icon: Icons.water_drop_outlined,
-                    progress: '50',
-                    color: Colors.blueAccent,
-                  ),
-                  ActivityProgressCard(
-                    activityName: 'Reusable waste bags',
-                    icon: Icons.shopping_bag_outlined,
-                    progress: '65',
-                    color: Colors.red,
-                  ),
-                ],
+              child: activitiesAsyncValue.when(
+                data: (activities) {
+                  if (activities.isEmpty) {
+                    return const Center(
+                      child: Text('No current activities'),
+                    );
+                  } else {
+                    return ListView.builder(
+                      itemCount: activities.length,
+                      itemBuilder: (context, index) {
+                        return ActivityProgressCard(
+                          activityModel: activities[index],
+                        );
+                      },
+                    );
+                  }
+                },
+                error: (error, stackTrace) {
+                  return Center(
+                    child: Text(
+                      error is Failure ? error.message : error.toString(),
+                    ),
+                  );
+                },
+                loading: () => const Center(
+                  child: CircularProgressIndicator(),
+                ),
               ),
             ),
           ],

@@ -43,7 +43,7 @@ class _ProfilePhotoCardState extends ConsumerState<ProfilePhotoCard> {
             );
           },
           data: (url) {
-            imagePath = url;
+            imagePath = url; // check if this is needed
             final auth = ref.read(authStateChangesProvider);
             if (auth.value != null) {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -103,7 +103,7 @@ class _ProfilePhotoCardState extends ConsumerState<ProfilePhotoCard> {
                                 .uploadProfileImage(imagePath!);
                           }
                         : null,
-                    icon: const Icon(Icons.camera_alt),
+                    icon: const Icon(Icons.add_a_photo_outlined),
                   ),
           ),
         ],

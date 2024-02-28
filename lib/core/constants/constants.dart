@@ -1,3 +1,6 @@
+/// key used to store background notification messages
+const String notificationKey = 'NOTIFICATIONS';
+
 ///enum for app tabs
 enum AppTabs {
   /// home 0
@@ -26,7 +29,10 @@ enum ImageType {
   profile,
 
   /// community image
-  community
+  community,
+
+  /// activity image
+  activity
 }
 
 /// tags
@@ -239,4 +245,13 @@ String getEnergyAsset(EnergyConsumptionType type) {
     case EnergyConsumptionType.wood:
       return 'assets/images/fire.png';
   }
+}
+
+/// ActivityType enum
+enum ActivityType {
+  /// a single user activity
+  individual,
+
+  /// an activity that involves a group of users
+  community,
 }

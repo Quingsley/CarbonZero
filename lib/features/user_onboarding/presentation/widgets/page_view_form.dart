@@ -1,3 +1,4 @@
+import 'package:carbon_zero/features/user_onboarding/presentation/widgets/enable_notifications.dart';
 import 'package:carbon_zero/features/user_onboarding/presentation/widgets/question_1.dart';
 import 'package:carbon_zero/features/user_onboarding/presentation/widgets/question_2.dart';
 import 'package:carbon_zero/features/user_onboarding/presentation/widgets/question_3.dart';
@@ -43,7 +44,10 @@ class _PageViewFormState extends State<PageViewForm> {
           EnergyConsumptionQ(
             controller: widget.controller,
           ),
-          const RecyclingQ(),
+          RecyclingQ(
+            controller: widget.controller,
+          ),
+          const EnableNotifications(),
         ],
       ),
     );

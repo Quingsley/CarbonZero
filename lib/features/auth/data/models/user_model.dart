@@ -14,6 +14,7 @@ class UserModel extends Equatable {
     this.photoId,
     this.carbonFootPrintNow = 0,
     this.initialCarbonFootPrint = 0,
+    this.pushTokens = const [],
   });
 
   /// factory method to create a new instance of [UserModel] from json
@@ -30,6 +31,7 @@ class UserModel extends Equatable {
           'communityIds': final List<dynamic> communityIds,
           'carbonFootPrintNow': final double carbonFootPrintNow,
           'initialCarbonFootPrint': final double initialCarbonFootPrint,
+          'pushTokens': final List<dynamic> pushTokens,
         }) {
       return UserModel(
         userId: userId,
@@ -42,6 +44,7 @@ class UserModel extends Equatable {
         communityIds: List.from(communityIds),
         carbonFootPrintNow: carbonFootPrintNow,
         initialCarbonFootPrint: initialCarbonFootPrint,
+        pushTokens: List.from(pushTokens),
       );
     } else {
       throw const FormatException('Invalid user model');
@@ -79,6 +82,9 @@ class UserModel extends Equatable {
   /// first time the user signed up for the past 12 months
   final double initialCarbonFootPrint;
 
+  /// will have the push tokens of the user
+  final List<String> pushTokens;
+
   /// copy with method to create a new instance of [UserModel]
   /// with updated values
   UserModel copyWith({
@@ -92,6 +98,7 @@ class UserModel extends Equatable {
     String? photoId,
     double? carbonFootPrintNow,
     double? initialCarbonFootPrint,
+    List<String>? pushTokens,
   }) {
     return UserModel(
       userId: userId ?? this.userId,
@@ -105,6 +112,7 @@ class UserModel extends Equatable {
       carbonFootPrintNow: carbonFootPrintNow ?? this.carbonFootPrintNow,
       initialCarbonFootPrint:
           initialCarbonFootPrint ?? this.initialCarbonFootPrint,
+      pushTokens: pushTokens ?? this.pushTokens,
     );
   }
 
@@ -121,6 +129,7 @@ class UserModel extends Equatable {
       'photoId': photoId,
       'carbonFootPrintNow': carbonFootPrintNow,
       'initialCarbonFootPrint': initialCarbonFootPrint,
+      'pushTokens': pushTokens,
     };
   }
 
@@ -134,6 +143,9 @@ class UserModel extends Equatable {
         activityIds,
         communityIds,
         photoId,
+        carbonFootPrintNow,
+        initialCarbonFootPrint,
+        pushTokens,
       ];
 
   @override

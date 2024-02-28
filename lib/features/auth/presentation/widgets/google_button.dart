@@ -2,7 +2,6 @@ import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 /// Google sign in button widget
 class GButton extends ConsumerWidget {
@@ -19,52 +18,12 @@ class GButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authViewModel = ref.watch(authViewModelProvider);
     final isLoading = authViewModel is AsyncLoading;
-    ref.listen(authViewModelProvider, (prev, next) {
-      next.whenOrNull(
-        loading: () async {
-          await showDialog<void>(
-            context: context,
-            builder: (context) => Dialog(
-              // insetPadding: EdgeInsets.zero,
 
-              // backgroundColor: context.colors.primaryContainer,
-              child: Builder(
-                builder: (context) {
-                  final height = MediaQuery.sizeOf(context).height;
-                  final width = MediaQuery.sizeOf(context).width;
-                  return SizedBox(
-                    width: width * .01,
-                    height: height * .1,
-                    child: ClipPath(
-                      clipper: ShapeBorderClipper(
-                        shape: ContinuousRectangleBorder(
-                          borderRadius: BorderRadius.circular(80),
-                        ),
-                      ),
-                      child: ColoredBox(
-                        color: context.colors.primaryContainer,
-                        child: const Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          );
-        },
-        data: (_) {
-          if (!isLogin) {
-            context.go('/home');
-          }
-        },
-      );
-    });
     return ElevatedButton(
       onPressed: !isLoading
-          ? () {
-              ref
+          ? () async {
+              ref.read(isGoogleButtonProvider.notifier).state = true;
+              await ref
                   .read(authViewModelProvider.notifier)
                   .signInWithGoogle(isLogin: isLogin);
             }

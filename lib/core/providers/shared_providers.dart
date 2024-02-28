@@ -1,5 +1,10 @@
+import 'dart:convert';
+
+import 'package:carbon_zero/core/constants/constants.dart';
+import 'package:carbon_zero/services/notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -55,5 +60,18 @@ final appStartupProvider = FutureProvider<void>((ref) async {
     await preference.setString('didUserOnboard', 'didUserOnboard');
   } else {
     ref.read(didUserOnBoardProvider.notifier).state = true;
+    final ntfDataStored = preference.get(notificationKey);
+    if (ntfDataStored != null) {
+      final pendingNotifications =
+          jsonDecode(ntfDataStored.toString()) as List<RemoteMessage>;
+      for (final message in pendingNotifications) {
+        messageStreamController.sink.add(message);
+      }
+    }
   }
+});
+
+/// will provide an instance of [FirebaseMessaging]
+final firebaseMessagingProvider = Provider<FirebaseMessaging>((ref) {
+  return FirebaseMessaging.instance;
 });

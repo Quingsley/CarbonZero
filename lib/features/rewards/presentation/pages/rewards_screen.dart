@@ -1,16 +1,27 @@
+import 'package:carbon_zero/core/constants/constants.dart';
+import 'package:carbon_zero/core/error/failure.dart';
 import 'package:carbon_zero/core/extensions.dart';
+import 'package:carbon_zero/features/activities/presentation/view_models/activity_view_model.dart';
+import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
 import 'package:carbon_zero/features/rewards/presentation/widgets/redeem_card.dart';
 import 'package:carbon_zero/features/rewards/presentation/widgets/reward_progress_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:flutter_svg/flutter_svg.dart';
 
 /// will show the carbon rewards  of the user
-class RewardsScreen extends StatelessWidget {
+class RewardsScreen extends ConsumerWidget {
   /// constructor call
   const RewardsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userStreamProvider);
+    final activitiesAsyncValue = ref.watch(
+      getActivitiesStreamProvider(
+        (user.value?.userId, ActivityType.community),
+      ),
+    );
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -83,7 +94,7 @@ class RewardsScreen extends StatelessWidget {
               height: 4,
             ),
             Text(
-              'Ongoing goals',
+              'Ongoing Community Challenges',
               style: context.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -93,33 +104,38 @@ class RewardsScreen extends StatelessWidget {
             ),
             Expanded(
               flex: 3,
-              child: ListView(
-                children: const [
-                  RewardProgressCard(
-                    image: 'assets/images/food.png',
-                    goalName: 'Meatless Month',
-                    progress: 20,
-                    participants: 500,
-                  ),
-                  Divider(
-                    thickness: 2,
-                  ),
-                  RewardProgressCard(
-                    image: 'assets/images/bike.png',
-                    goalName: 'Bike ride for a week',
-                    progress: 77,
-                    participants: 200,
-                  ),
-                  Divider(
-                    thickness: 2,
-                  ),
-                  RewardProgressCard(
-                    image: 'assets/images/cans.png',
-                    goalName: 'Recycling sprint',
-                    progress: 7,
-                    participants: 200,
-                  ),
-                ],
+              child: activitiesAsyncValue.when(
+                data: (activities) {
+                  if (activities.isEmpty) {
+                    return const Center(
+                      child: Text(
+                        'You have no ongoing community challenges\nPlease join one',
+                      ),
+                    );
+                  } else {
+                    return ListView.separated(
+                      itemCount: activities.length,
+                      separatorBuilder: (context, index) => const Divider(
+                        thickness: 2,
+                      ),
+                      itemBuilder: (context, index) {
+                        return RewardProgressCard(
+                          activityModel: activities[index],
+                        );
+                      },
+                    );
+                  }
+                },
+                error: (error, stackTrace) {
+                  return Center(
+                    child: Text(
+                      error is Failure ? error.message : error.toString(),
+                    ),
+                  );
+                },
+                loading: () => const Center(
+                  child: CircularProgressIndicator(),
+                ),
               ),
             ),
             const SizedBox(

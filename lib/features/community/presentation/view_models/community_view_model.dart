@@ -63,9 +63,10 @@ final userCommunityStreamProvider =
 
 /// admin communities
 final adminCommunityFutureProvider =
-    AutoDisposeFutureProviderFamily<List<CommunityModel>, String>((ref, arg) {
+    AutoDisposeFutureProviderFamily<List<CommunityModel>, String>(
+        (ref, userId) {
   final repo = ref.read(communityRepositoryProvider);
-  return repo.getAdminCommunities(arg);
+  return repo.getAdminCommunities(userId);
 });
 
 /// listen to the stream of searched communities

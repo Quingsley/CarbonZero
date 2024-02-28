@@ -1,15 +1,41 @@
+import 'dart:convert';
+
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:carbon_zero/app.dart';
+import 'package:carbon_zero/core/constants/constants.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/core/theme/theme.dart';
 import 'package:carbon_zero/features/splash/presentation/pages/splash_screen.dart';
-
 import 'package:carbon_zero/firebase_options.dart';
-import 'package:carbon_zero/routes/app_routes.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  final storage = await SharedPreferences.getInstance();
+  if (kDebugMode) {
+    print('Handling a background message: ${message.messageId}');
+    print('Message data: ${message.data}');
+    print('Message notification: ${message.notification?.title}');
+    print('Message notification: ${message.notification?.body}');
+  }
+  // fix should be stored in local storage
+  final dataStored = storage.get(notificationKey);
+  if (dataStored != null) {
+    final pendingNotifications =
+        jsonDecode(dataStored.toString()) as List<RemoteMessage>..add(message);
+    await storage.setString(notificationKey, jsonEncode(pendingNotifications));
+  } else {
+    final initialList = <RemoteMessage>[message];
+    await storage.setString(notificationKey, jsonEncode(initialList));
+  }
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,29 +55,32 @@ Future<void> main() async {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
+
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  await AwesomeNotifications().initialize(
+    // set the icon to null if you want to use the default app icon
+    null,
+    [
+      NotificationChannel(
+        channelGroupKey: 'basic_channel_group',
+        channelKey: 'basic_channel',
+        channelName: 'Basic notifications',
+        channelDescription: 'Notification channel for basic tests',
+        defaultColor: lightTheme.primaryColor,
+        ledColor: lightTheme.primaryColorDark,
+        onlyAlertOnce: true,
+      ),
+    ],
+    // Channel groups are only visual and are not required
+    channelGroups: [
+      NotificationChannelGroup(
+        channelGroupKey: 'basic_channel_group',
+        channelGroupName: 'Basic group',
+      ),
+    ],
+    debug: true,
+  );
   runApp(const ProviderScope(child: AppStartUpWidget()));
-}
-
-/// Root widget of the [CarbonZero] app.
-class CarbonZero extends ConsumerWidget {
-  /// Create const instance of app root widget.
-  const CarbonZero({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final router = ref.watch(AppRoutes.router);
-    final isDarkMode = ref.watch(isDarkModeStateProvider);
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      title: 'CarbonZero',
-      darkTheme: darkTheme,
-      theme: lightTheme,
-      themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
-      routeInformationParser: router.routeInformationParser,
-      routeInformationProvider: router.routeInformationProvider,
-      routerDelegate: router.routerDelegate,
-    );
-  }
 }
 
 /// App start up widget.

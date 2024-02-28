@@ -1,4 +1,3 @@
-import 'package:carbon_zero/core/error/failure.dart';
 import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/core/widgets/profile_photo_card.dart';
@@ -17,22 +16,12 @@ class SettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isLoading = authViewModelProvider is AsyncLoading;
+    final authVm = ref.watch(authViewModelProvider);
+    final isLoading = authVm is AsyncLoading;
     final user = ref.watch(userStreamProvider);
 
     final isDarkMode = ref.read(isDarkModeStateProvider);
-    ref.listen(authViewModelProvider, (previous, next) {
-      next.whenOrNull(
-        error: (error, stackTrace) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content:
-                  Text(error is Failure ? error.message : error.toString()),
-            ),
-          );
-        },
-      );
-    });
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
@@ -109,7 +98,7 @@ class SettingsScreen extends ConsumerWidget {
                             await ref
                                 .read(authViewModelProvider.notifier)
                                 .signOut();
-                            if (context.mounted) context.go('/');
+                            if (context.mounted) context.go('/auth');
                           }
                         : () {},
                     icon: isLoading

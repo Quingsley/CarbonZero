@@ -1,9 +1,19 @@
+import 'package:carbon_zero/core/constants/constants.dart';
+import 'package:carbon_zero/core/error/failure.dart';
 import 'package:carbon_zero/core/extensions.dart';
+import 'package:carbon_zero/core/providers/shared_providers.dart';
+import 'package:carbon_zero/core/widgets/bottom_sheet.dart';
+import 'package:carbon_zero/features/activities/presentation/pages/new_activity.dart';
+import 'package:carbon_zero/features/activities/presentation/view_models/activity_view_model.dart';
+import 'package:carbon_zero/features/auth/data/repositories/auth_repo_impl.dart';
 import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
+import 'package:carbon_zero/features/community/data/models/community_model.dart';
+import 'package:carbon_zero/features/community/presentation/view_models/community_view_model.dart';
 import 'package:carbon_zero/features/home/presentation/widgets/activity_tile.dart';
 import 'package:carbon_zero/features/home/presentation/widgets/carbon_foot_print.dart';
 import 'package:carbon_zero/features/home/presentation/widgets/home_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -20,6 +30,8 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   bool isDay = true;
+  final _fabKey = GlobalKey<ExpandableFabState>();
+  List<CommunityModel> communities = [];
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -29,6 +41,37 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userStreamProvider);
+    // ignore: cascade_invocations
+    user.whenOrNull(
+      data: (user) {
+        if (user != null) {
+          final communities =
+              ref.watch(adminCommunityFutureProvider(user.userId!));
+          setState(() {
+            this.communities = communities.value ?? [];
+          });
+        }
+      },
+    );
+    final activitiesAsyncValue = ref.watch(
+      getActivitiesStreamProvider(
+        (user.value?.userId, ActivityType.individual),
+      ),
+    );
+    final messagingInstance = ref.watch(firebaseMessagingProvider);
+    messagingInstance.onTokenRefresh.listen((token) async {
+      final user = ref.read(userStreamProvider);
+      print('updated token------------- $token---------');
+      if (user.value != null) {
+        final isPresent = user.value!.pushTokens.contains(token);
+        if (!isPresent) {
+          await ref
+              .read(authRepositoryProvider)
+              .updatePushToken(token, user.value!.userId!);
+        }
+      }
+    });
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(top: 50, left: 8, right: 8),
@@ -135,37 +178,107 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             const HomeCard(
               title: null,
               description: '''
-Using reusable bags instead of plastic bags when shopping can help reduce
-                   carbon emissions by reducing the amount of plastic waste produced''',
+Using reusable bags instead of plastic bags when shopping can help reduce 
+carbon emissions by reducing the amount of plastic waste produced''',
               icon: Icons.lightbulb,
             ),
+            const SizedBox(
+              height: 4,
+            ),
+            const Text('Latest activities'),
             Expanded(
-              child: ListView(
-                children: const [
-                  Text(
-                    'Latest activities',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  ActivityTile(
-                    icon: Icons.ev_station,
-                    title: '19 km electric car',
-                    subtitle: '500 n2c points',
-                  ),
-                  ActivityTile(
-                    icon: Icons.recycling,
-                    title: 'Recycling',
-                    subtitle: '500 n2c points',
-                  ),
-                  ActivityTile(
-                    icon: Icons.pedal_bike,
-                    title: '20km biking',
-                    subtitle: '500 n2c points',
-                  ),
-                ],
+              child: activitiesAsyncValue.when(
+                data: (activities) {
+                  if (activities.isEmpty) {
+                    return const Center(child: Text('Please create a goal'));
+                  } else {
+                    return ListView.builder(
+                      itemCount: activities.length,
+                      itemBuilder: (context, index) {
+                        return ActivityTile(
+                          activity: activities[index],
+                        );
+                      },
+                    );
+                  }
+                },
+                error: (error, stackTrace) {
+                  return Center(
+                    child: Text(
+                      error is Failure ? error.message : error.toString(),
+                    ),
+                  );
+                },
+                loading: () {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
               ),
             ),
           ],
         ),
+      ),
+      floatingActionButtonLocation: ExpandableFab.location,
+      floatingActionButton: ExpandableFab(
+        key: _fabKey,
+        type: ExpandableFabType.up,
+        overlayStyle: ExpandableFabOverlayStyle(
+          color: context.colors.primary.withOpacity(.62),
+        ),
+        openButtonBuilder: FloatingActionButtonBuilder(
+          size: 16,
+          builder: (context, onPressed, progress) {
+            return FloatingActionButton(
+              heroTag: null,
+              onPressed: onPressed,
+              child: const Icon(Icons.add),
+            );
+          },
+        ),
+        children: [
+          FloatingActionButton.extended(
+            onPressed: () async {
+              final state = _fabKey.currentState;
+              if (state != null) state.toggle();
+              await kShowBottomSheet(
+                context: context,
+                child: const NewActivity(type: ActivityType.individual),
+                height: MediaQuery.sizeOf(context).height * .9,
+                isDismissible: false,
+              );
+            },
+            heroTag: null,
+            label: const Text('New Activity'),
+          ),
+          FloatingActionButton.extended(
+            heroTag: null,
+            label: const Text('Record emission'),
+            onPressed: () async {
+              final firebaseMessaging = ref.read(firebaseMessagingProvider);
+              final token = await firebaseMessaging.getToken();
+              print(token);
+            },
+          ),
+          FloatingActionButton.extended(
+            heroTag: null,
+            label: const Text('Community challenge'),
+            onPressed: () async {
+              if (user.value != null) {
+                if (communities.isNotEmpty) {
+                  final state = _fabKey.currentState;
+                  if (state != null) state.toggle();
+                  await kShowBottomSheet(
+                    context: context,
+                    child: const NewActivity(type: ActivityType.community),
+                    height: MediaQuery.sizeOf(context).height * .9,
+                    isDismissible: false,
+                  );
+                }
+              }
+            },
+          ),
+        ],
       ),
     );
   }

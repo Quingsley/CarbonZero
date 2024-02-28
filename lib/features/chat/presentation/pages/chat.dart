@@ -42,25 +42,43 @@ class _CommunityInboxState extends ConsumerState<CommunityInbox> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () => context.pop(),
-          icon: const Icon(Icons.arrow_back_ios),
-        ),
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        leadingWidth: 100,
+        leading: Row(
           children: [
+            IconButton(
+              onPressed: () => context.pop(),
+              icon: const Icon(Icons.arrow_back_ios),
+            ),
             CircleAvatar(
               radius: 20,
               backgroundImage: NetworkImage(widget.communityModel.posterId),
             ),
-            const SizedBox(
-              width: 3,
-            ),
-            Text(widget.communityModel.name),
           ],
         ),
+        title: Text(widget.communityModel.name),
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              context.push(
+                '/community/inbox/members',
+                extra: widget.communityModel.userIds,
+              );
+            },
+            tooltip: 'Members',
+            icon: const Icon(Icons.people_alt_outlined),
+          ),
+          IconButton(
+            color: Colors.amber,
+            icon: const Icon(Icons.emoji_events),
+            onPressed: () {
+              context.push(
+                '/community/inbox/challenges',
+                extra: widget.communityModel.id,
+              );
+            },
+          ),
+        ],
       ),
       body: Chat(
         theme: DefaultChatTheme(

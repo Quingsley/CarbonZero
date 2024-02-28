@@ -171,6 +171,7 @@ class AuthDataSource {
   Future<void> signUpWithGoogle({
     required bool isLogIn,
     required (double, double) footPrint,
+    String? token,
   }) async {
     try {
       // Trigger the authentication flow
@@ -199,6 +200,7 @@ class AuthDataSource {
         photoId: credentials.user?.photoURL,
         initialCarbonFootPrint: footPrint.$1,
         carbonFootPrintNow: footPrint.$2,
+        pushTokens: token != null ? [token] : [],
       );
       if (isLogIn) {
         await _db.collection('users').doc(credentials.user?.uid).update({
@@ -216,6 +218,19 @@ class AuthDataSource {
             .set(user);
       }
     } on FirebaseAuthException catch (e) {
+      throw Failure(message: e.message ?? 'Something went wrong');
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  /// updates the push token for given user id
+  Future<void> updatePushToken(String token, String userId) async {
+    try {
+      await _db.collection('users').doc(userId).update({
+        'pushTokens': FieldValue.arrayUnion([token]),
+      });
+    } on FirebaseException catch (e) {
       throw Failure(message: e.message ?? 'Something went wrong');
     } catch (e) {
       rethrow;

@@ -24,8 +24,8 @@ class StatisticsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(right: 8),
-      height: 100,
-      width: 80,
+      height: 120,
+      width: 180,
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: context.colors.inversePrimary.withOpacity(.3),
@@ -40,14 +40,18 @@ class StatisticsCard extends StatelessWidget {
           ),
           Text(
             averageFootPrint,
-            style: context.textTheme.displaySmall?.copyWith(
+            textAlign: TextAlign.center,
+            style: context.textTheme.labelLarge?.copyWith(
               fontWeight: FontWeight.bold,
               color: context.colors.primary,
             ),
           ),
           Text(
             type,
-            style: TextStyle(color: context.colors.primary),
+            textAlign: TextAlign.center,
+            style: context.textTheme.labelLarge?.copyWith(
+              color: context.colors.primary,
+            ),
           ),
         ],
       ),

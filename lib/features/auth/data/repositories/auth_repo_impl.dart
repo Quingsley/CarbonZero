@@ -36,10 +36,12 @@ class AuthRepository {
   Future<void> sigInInWithGoogle({
     required bool isLogin,
     required (double, double) footPrint,
+    String? token,
   }) async {
     return dataSource.signUpWithGoogle(
       isLogIn: isLogin,
       footPrint: footPrint,
+      token: token,
     );
   }
 
@@ -56,6 +58,11 @@ class AuthRepository {
   /// current user model snapshot
   Stream<UserModel?> getCurrentUserSnapshot() {
     return dataSource.getCurrentUserSnapshot();
+  }
+
+  /// update push token
+  Future<void> updatePushToken(String token, String userId) async {
+    return dataSource.updatePushToken(token, userId);
   }
 }
 
