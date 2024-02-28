@@ -9,17 +9,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
 /// image upload service
-class ImageUpload extends AsyncNotifier<String?> {
+class ImageUpload extends AsyncNotifier<Map<ImageType?, String?>> {
   @override
-  FutureOr<String?> build() {
-    return null;
+  FutureOr<Map<ImageType?, String?>> build() {
+    return {};
   }
 
   /// instance of imagePicker
   final _picker = ImagePicker();
 
   /// used to pick an image
-  Future<void> uploadPhoto(ImageType imageType) async {
+  Future<void> uploadPhoto(
+    ImageType imageType, [
+    ImageSource source = ImageSource.gallery,
+  ]) async {
     try {
       final user = ref.watch(authStateChangesProvider).value;
       final storage = ref.read(storageProvider);
@@ -30,7 +33,7 @@ class ImageUpload extends AsyncNotifier<String?> {
 
       state = const AsyncLoading();
       state = await AsyncValue.guard(() async {
-        pickedImage = await _picker.pickImage(source: ImageSource.gallery);
+        pickedImage = await _picker.pickImage(source: source);
 
         if (pickedImage != null) {
           final extension = pickedImage?.path.split('.').last;
@@ -57,10 +60,13 @@ class ImageUpload extends AsyncNotifier<String?> {
           final snapshot = await uploadTask?.whenComplete(() {});
 
           final downloadUrl = await snapshot?.ref.getDownloadURL();
-
-          return downloadUrl;
+          return {imageType: downloadUrl};
         }
-        return null;
+        return {
+          ImageType.profile: null,
+          ImageType.community: null,
+          ImageType.activity: null,
+        };
       });
     } on FirebaseException catch (e) {
       throw Failure(message: e.message ?? 'something went wrong');
@@ -72,4 +78,6 @@ class ImageUpload extends AsyncNotifier<String?> {
 
 /// provides methods to be invoked by ui
 final imageServiceProvider =
-    AsyncNotifierProvider<ImageUpload, String?>(ImageUpload.new);
+    AsyncNotifierProvider<ImageUpload, Map<ImageType?, String?>>(
+  ImageUpload.new,
+);
