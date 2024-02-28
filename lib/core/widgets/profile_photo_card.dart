@@ -1,6 +1,7 @@
 import 'package:carbon_zero/core/constants/constants.dart';
 import 'package:carbon_zero/core/error/failure.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
+import 'package:carbon_zero/core/utils/show_camera_options.dart';
 import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
 import 'package:carbon_zero/services/image_upload.dart';
 import 'package:flutter/material.dart';
@@ -42,10 +43,10 @@ class _ProfilePhotoCardState extends ConsumerState<ProfilePhotoCard> {
               ),
             );
           },
-          data: (url) {
-            imagePath = url; // check if this is needed
+          data: (data) {
+            imagePath = data[ImageType.profile]; // check if this is needed
             final auth = ref.read(authStateChangesProvider);
-            if (auth.value != null) {
+            if (auth.value != null && imagePath != null) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('photo uploaded successfully'),
@@ -94,13 +95,17 @@ class _ProfilePhotoCardState extends ConsumerState<ProfilePhotoCard> {
                 : IconButton.filled(
                     onPressed: !isLoading
                         ? () async {
-                            await ref
-                                .read(imageServiceProvider.notifier)
-                                .uploadPhoto(ImageType.profile);
-
-                            await ref
-                                .read(authViewModelProvider.notifier)
-                                .uploadProfileImage(imagePath!);
+                            final source = await showOptions(context);
+                            if (source != null) {
+                              await ref
+                                  .read(imageServiceProvider.notifier)
+                                  .uploadPhoto(ImageType.profile, source);
+                              if (imagePath != null) {
+                                await ref
+                                    .read(authViewModelProvider.notifier)
+                                    .uploadProfileImage(imagePath!);
+                              }
+                            }
                           }
                         : null,
                     icon: const Icon(Icons.add_a_photo_outlined),
