@@ -137,9 +137,18 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       floatingActionButton: currentPage == 2
           ? Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              child: PrimaryButton(
-                text: 'Get Started',
-                onPressed: () => context.go('/user-onboarding'),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  PrimaryButton(
+                    text: 'Get Started',
+                    onPressed: () => context.go('/user-onboarding'),
+                  ),
+                  PrimaryButton(
+                    text: 'Already have an account?',
+                    onPressed: () => context.push('/auth'),
+                  ),
+                ],
               ),
             )
           : null,
