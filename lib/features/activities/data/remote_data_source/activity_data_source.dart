@@ -173,9 +173,9 @@ class ActivityDataSource implements IActivityDataSource {
         // update the progress of the community
         await activityDoc.reference.update({
           'carbonPoints':
-              FieldValue.increment(activity.imageUrl.isEmpty ? 0.5 : 1),
+              FieldValue.increment(activity.imageUrl.isEmpty ? 1 : 3),
           'cO2Emitted': FieldValue.increment(25), // 25 g (estimate)
-          'progress': progress,
+          'progress': FieldValue.increment(progress),
         });
       }
     } on FirebaseException catch (e) {
