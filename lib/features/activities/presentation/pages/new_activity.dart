@@ -1,6 +1,7 @@
 import 'package:carbon_zero/core/constants/constants.dart';
 import 'package:carbon_zero/core/constants/icon_pack.dart';
 import 'package:carbon_zero/core/extensions.dart';
+import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/core/widgets/add_image_container.dart';
 import 'package:carbon_zero/core/widgets/form_layout.dart';
 import 'package:carbon_zero/core/widgets/notification_tile.dart';
@@ -418,8 +419,3 @@ class _NewActivityState extends ConsumerState<NewActivity> {
     );
   }
 }
-
-/// will highlight the text
-final showErrorProvider = StateProvider<bool>((ref) {
-  return false;
-});
