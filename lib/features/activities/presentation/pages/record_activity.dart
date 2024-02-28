@@ -73,8 +73,8 @@ class _RecordActivityState extends ConsumerState<RecordActivity> {
     final isLoadingActivityVm = activityVm is AsyncLoading;
     ref.listen(imageServiceProvider, (previous, next) {
       next.whenOrNull(
-        data: (url) {
-          imageController.text = url!;
+        data: (data) {
+          imageController.text = data[ImageType.activity] ?? '';
         },
       );
     });
