@@ -62,11 +62,7 @@ class ImageUpload extends AsyncNotifier<Map<ImageType?, String?>> {
           final downloadUrl = await snapshot?.ref.getDownloadURL();
           return {imageType: downloadUrl};
         }
-        return {
-          ImageType.profile: null,
-          ImageType.community: null,
-          ImageType.activity: null,
-        };
+        return {};
       });
     } on FirebaseException catch (e) {
       throw Failure(message: e.message ?? 'something went wrong');
