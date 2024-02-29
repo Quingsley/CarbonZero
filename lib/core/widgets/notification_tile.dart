@@ -26,8 +26,13 @@ class NtfTile extends ConsumerWidget {
         error: (error, stackTrace) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content:
-                  Text(error is Failure ? error.message : error.toString()),
+              content: Text(
+                error is Failure ? error.message : error.toString(),
+                style: TextStyle(
+                  color: context.colors.onError,
+                ),
+              ),
+              backgroundColor: context.colors.error,
             ),
           );
         },
