@@ -50,7 +50,7 @@ class CarbonFootPrintData extends StatelessWidget {
             fontSize: 16,
           ),
           modifier: (val) {
-            return '${val.ceilToDouble()} Kg';
+            return '${val.toStringAsFixed(2)} Kg';
           },
         ),
       ),
