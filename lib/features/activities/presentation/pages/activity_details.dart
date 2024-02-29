@@ -274,9 +274,12 @@ class _ActivityDetailsState extends ConsumerState<ActivityDetails> {
                               for (final recording in data)
                                 ListTile(
                                   leading: CircleAvatar(
-                                    backgroundImage: FirebaseImageProvider(
-                                      FirebaseUrl(recording.imageUrl),
-                                    ),
+                                    backgroundImage:
+                                        recording.imageUrl.isNotEmpty
+                                            ? FirebaseImageProvider(
+                                                FirebaseUrl(recording.imageUrl),
+                                              )
+                                            : null,
                                   ),
                                   title: Text(
                                     'Recorded by: ${recording.userName}',
