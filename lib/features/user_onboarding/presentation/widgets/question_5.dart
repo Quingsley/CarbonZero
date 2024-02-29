@@ -44,6 +44,7 @@ class EnergyConsumptionQ extends ConsumerWidget {
         Slider(
           value: numOfPeople.toDouble(),
           min: 1,
+          label: '$numOfPeople',
           divisions: 49,
           max: 50,
           onChanged: (val) {
