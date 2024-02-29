@@ -3,6 +3,7 @@ import 'package:carbon_zero/features/activities/data/models/activity_recording_m
 import 'package:carbon_zero/features/auth/data/models/user_model.dart';
 import 'package:carbon_zero/features/chat/data/model/chat_model.dart';
 import 'package:carbon_zero/features/community/data/models/community_model.dart';
+import 'package:carbon_zero/features/emission/data/models/emission_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -57,6 +58,14 @@ extension ModelConverter on CollectionReference {
       fromFirestore: (snapshot, _) =>
           ActivityRecordingModel.fromJson(snapshot.data()!),
       toFirestore: (activityRecording, _) => activityRecording.toJson(),
+    );
+  }
+
+  /// adds the [EmissionModel] converter to the collection reference
+  CollectionReference<EmissionModel> withEmissionModelConverter() {
+    return withConverter(
+      fromFirestore: (snapshot, _) => EmissionModel.fromJson(snapshot.data()!),
+      toFirestore: (emission, _) => emission.toJson(),
     );
   }
 }
