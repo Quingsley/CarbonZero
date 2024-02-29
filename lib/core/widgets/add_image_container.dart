@@ -1,5 +1,6 @@
 import 'package:carbon_zero/core/constants/constants.dart';
 import 'package:carbon_zero/core/extensions.dart';
+import 'package:carbon_zero/core/utils/show_camera_options.dart';
 import 'package:carbon_zero/services/image_upload.dart';
 import 'package:firebase_cached_image/firebase_cached_image.dart';
 import 'package:flutter/material.dart';
@@ -34,8 +35,8 @@ class AddImageContainer extends ConsumerWidget {
     final isLoading = imageService is AsyncLoading;
     ref.listen(imageServiceProvider, (previous, next) {
       next.whenOrNull(
-        data: (url) {
-          imageController.text = url!;
+        data: (data) {
+          imageController.text = data[imageType] ?? '';
         },
       );
     });
@@ -76,9 +77,12 @@ class AddImageContainer extends ConsumerWidget {
                   showError ? context.colors.error : context.colors.onPrimary,
               onPressed: !isLoading
                   ? () async {
-                      await ref
-                          .read(imageServiceProvider.notifier)
-                          .uploadPhoto(imageType);
+                      final source = await showOptions(context);
+                      if (source != null) {
+                        await ref
+                            .read(imageServiceProvider.notifier)
+                            .uploadPhoto(imageType, source);
+                      }
                     }
                   : null,
               icon: const Icon(Icons.add_a_photo),

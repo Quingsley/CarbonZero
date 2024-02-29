@@ -75,3 +75,8 @@ final appStartupProvider = FutureProvider<void>((ref) async {
 final firebaseMessagingProvider = Provider<FirebaseMessaging>((ref) {
   return FirebaseMessaging.instance;
 });
+
+/// will highlight the text or imageContainer
+final showErrorProvider = StateProvider<bool>((ref) {
+  return false;
+});

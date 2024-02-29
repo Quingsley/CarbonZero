@@ -255,3 +255,64 @@ enum ActivityType {
   /// an activity that involves a group of users
   community,
 }
+
+/// Enum to represent the type of food
+enum FoodType {
+  /// Meat & Fish
+  meatAndFish('Meat & Fish'),
+
+  /// Dairy & Eggs
+  dairyAndEggs('Dairy & Eggs'),
+
+  /// produce
+  produce('Produce'),
+
+  /// Drinks
+  drinks('Drinks'),
+
+  /// Snacks
+  snacks('Snacks');
+
+  const FoodType(this.label);
+
+  /// label
+  final String label;
+}
+
+/// will return the food icon based on the food name
+String getFoodIcon(String foodName) {
+  final foodIcons = <String, String>{
+    'Beef (herd)': '🐄',
+    'Beef (dairy herd)': '🐮',
+    'Lamb & Mutton': '🐑',
+    'Pig Meat': '🐖',
+    'Poultry Meat': '🐓',
+    'Fish': '🐟',
+    'Prawns': '🦐',
+    'Eggs': '🥚',
+    'Milk': '🥛',
+    'Cheese': '🧀',
+    'Rice': '🍚',
+    'Wheat & Rye': '🥖',
+    'Maize': '🌽',
+    'Potatoes': '🥔',
+    'Cane sugar': '🌾🍚',
+    'Oat meal': '🌾',
+    'Beet sugar': '🌱',
+    'Barley': '🌾',
+    'Tomatoes': '🍅',
+    'Other pulses': '🫘',
+    'Peas': '🫛',
+    'Ground nuts': '🥜',
+    'Cassava': '🌿',
+    'Tofu (Soybeans)': '🥢',
+    'Other Vegetables': '🥦',
+    'Other Fruits': '🍇🍓',
+    'Brassicas': '🥬',
+    'Coffee': '☕',
+    'Wine': '🍷',
+    'Dark Chocolate': '🍫',
+  };
+
+  return foodIcons[foodName] ?? '🍽️';
+}

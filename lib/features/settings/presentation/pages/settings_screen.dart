@@ -101,9 +101,7 @@ class SettingsScreen extends ConsumerWidget {
                             if (context.mounted) context.go('/auth');
                           }
                         : () {},
-                    icon: isLoading
-                        ? const CircularProgressIndicator()
-                        : const Icon(Icons.logout_rounded),
+                    icon: const Icon(Icons.logout_rounded),
                     iconColor: context.colors.error,
                     fillColor: context.colors.errorContainer,
                   ),

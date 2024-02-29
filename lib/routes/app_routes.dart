@@ -17,6 +17,7 @@ import 'package:carbon_zero/features/community/presentation/pages/add_community.
 import 'package:carbon_zero/features/community/presentation/pages/admin_communities.dart';
 import 'package:carbon_zero/features/community/presentation/pages/community.dart';
 import 'package:carbon_zero/features/community/presentation/pages/community_details.dart';
+import 'package:carbon_zero/features/emission/presentation/pages/record_emission_page.dart';
 import 'package:carbon_zero/features/home/presentation/pages/home_screen.dart';
 import 'package:carbon_zero/features/notification/presentation/pages/notification.dart';
 import 'package:carbon_zero/features/onboarding/presentation/pages/onboarding_screen.dart';
@@ -136,6 +137,11 @@ class AppRoutes {
                       parentNavigatorKey: AppRoutes._rootNavigator,
                       path: 'icons',
                       builder: (context, state) => const IconSelectionScreen(),
+                    ),
+                    GoRoute(
+                      parentNavigatorKey: AppRoutes._rootNavigator,
+                      path: 'record-emission',
+                      builder: (context, state) => const RecordEmissionPage(),
                     ),
                   ],
                 ),

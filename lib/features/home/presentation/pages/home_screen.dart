@@ -61,7 +61,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final messagingInstance = ref.watch(firebaseMessagingProvider);
     messagingInstance.onTokenRefresh.listen((token) async {
       final user = ref.read(userStreamProvider);
-      print('updated token------------- $token---------');
+      debugPrint('updated token------------- $token---------');
       if (user.value != null) {
         final isPresent = user.value!.pushTokens.contains(token);
         if (!isPresent) {
@@ -228,11 +228,12 @@ carbon emissions by reducing the amount of plastic waste produced''',
         ),
         openButtonBuilder: FloatingActionButtonBuilder(
           size: 16,
-          builder: (context, onPressed, progress) {
+          builder: (_, onPressed, progress) {
             return FloatingActionButton(
+              backgroundColor: context.colors.primary,
               heroTag: null,
               onPressed: onPressed,
-              child: const Icon(Icons.add),
+              child: Icon(Icons.add, color: context.colors.onPrimary),
             );
           },
         ),
@@ -255,9 +256,12 @@ carbon emissions by reducing the amount of plastic waste produced''',
             heroTag: null,
             label: const Text('Record emission'),
             onPressed: () async {
-              final firebaseMessaging = ref.read(firebaseMessagingProvider);
-              final token = await firebaseMessaging.getToken();
-              print(token);
+              final state = _fabKey.currentState;
+              if (state != null) state.toggle();
+              // final firebaseMessaging = ref.read(firebaseMessagingProvider);
+              // final token = await firebaseMessaging.getToken();
+              // print(token);
+              await context.push('/home/record-emission');
             },
           ),
           FloatingActionButton.extended(

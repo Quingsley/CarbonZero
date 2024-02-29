@@ -55,6 +55,12 @@ class _AddCommunityState extends ConsumerState<AddCommunity> {
 
   Future<void> submit() async {
     final isValid = _formKey.currentState?.validate();
+    if (imageController.text.isEmpty) {
+      ref.read(showErrorProvider.notifier).state = true;
+      return;
+    } else {
+      ref.read(showErrorProvider.notifier).state = false;
+    }
     if (isValid != null && isValid) {
       _formKey.currentState?.save();
 
@@ -97,6 +103,7 @@ class _AddCommunityState extends ConsumerState<AddCommunity> {
     final communityViewModel = ref.watch(communityViewModelProvider);
     final isDarkMode = ref.watch(isDarkModeStateProvider);
     final isAdding = communityViewModel is AsyncLoading;
+    final showError = ref.watch(showErrorProvider);
     ref
       ..listen(communityViewModelProvider, (prev, next) {
         next.whenOrNull(
@@ -124,11 +131,9 @@ class _AddCommunityState extends ConsumerState<AddCommunity> {
       ..listen(imageServiceProvider, (previous, next) {
         next.whenOrNull(
           data: (data) {
-            if (data != null) {
-              setState(() {
-                imageController.text = data;
-              });
-            }
+            setState(() {
+              imageController.text = data[ImageType.community] ?? '';
+            });
           },
         );
       });
@@ -181,12 +186,15 @@ class _AddCommunityState extends ConsumerState<AddCommunity> {
                   imageController: imageController,
                   containerLabel: 'Add a poster for your community',
                   imageType: ImageType.community,
+                  showError: showError,
                 ),
                 const SizedBox(
                   height: 20,
                 ),
                 MultiSelectChipField<String?>(
                   title: const Text('Tags'),
+                  initialValue:
+                      widget.community != null ? widget.community!.tags : [],
                   chipColor: isDarkMode
                       ? context.colors.secondary.withOpacity(.4)
                       : null,

@@ -201,6 +201,8 @@ class _FlightInputQState extends ConsumerState<FlightInputQ> {
           child: Slider(
             value: _distance.toDouble(),
             min: 100,
+            label: '$_distance km',
+            divisions: 1000,
             max: 22000,
             onChanged: (val) {
               setState(() {
@@ -217,6 +219,8 @@ class _FlightInputQState extends ConsumerState<FlightInputQ> {
           child: Slider(
             value: _timeTaken.toDouble(),
             max: 1000,
+            divisions: 100,
+            label: '$_timeTaken Hours',
             onChanged: (val) {
               setState(() {
                 _timeTaken = val.toInt();
