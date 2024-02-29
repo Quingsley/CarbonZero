@@ -178,6 +178,16 @@ class ActivityDataSource implements IActivityDataSource {
           'progress': FieldValue.increment(progress),
         });
       }
+
+      /// update the carbonFootPrintNow of the user
+      final user = await _db
+          .collection('users')
+          .withUserModelConverter()
+          .doc(activity.userId)
+          .get();
+      await user.reference.update({
+        'carbonFootPrintNow': FieldValue.increment(25 / 1000), // in kg
+      });
     } on FirebaseException catch (e) {
       throw Failure(message: e.message ?? e.toString());
     } catch (e) {
