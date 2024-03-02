@@ -75,7 +75,7 @@ class _CarbonFootPrintResultsState
                   height: 30,
                 ),
                 Text(
-                  '🚀 Your carbon footprint is ${footPrint ?? 0} kg CO2e per year',
+                  '🚀 Your carbon footprint is ${footPrint?.toStringAsFixed(2) ?? 0} kg CO2e per year',
                   textAlign: TextAlign.center,
                   style: context.textTheme.titleLarge,
                 ),
@@ -197,7 +197,7 @@ String word(double value) {
   } else if (value >= 2700 && value <= 7250) {
     return 'This is an ideal carbon footprint and continues to be lower than the global average of 7250 kg CO2e per year';
   } else if (value >= 7250 && value <= 10000) {
-    return 'This is an average carbon footprint and continues to be lower than the global average ';
+    return 'This is an average carbon footprint and continues to be higher than the global average of 7250 kg CO2e per year';
   } else {
     return 'You may want to take some of the living green initiatives to reduce your carbon footprint.';
   }
