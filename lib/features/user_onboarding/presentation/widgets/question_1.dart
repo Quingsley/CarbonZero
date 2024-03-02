@@ -1,4 +1,5 @@
 import 'package:carbon_zero/core/extensions.dart';
+import 'package:carbon_zero/core/utils/utils.dart';
 import 'package:carbon_zero/core/widgets/primary_button.dart';
 import 'package:carbon_zero/features/user_onboarding/presentation/widgets/footer_reference.dart';
 import 'package:carbon_zero/features/user_onboarding/providers/user_onboarding_providers.dart';
@@ -56,7 +57,15 @@ class CountryQ extends ConsumerWidget {
           ),
         ),
         const Spacer(),
-        FooterReference(onTap: () {}),
+        FooterReference(
+          onTap: () async {
+            await openCustomTab(
+              context,
+              'https://ourworldindata.org/co2-emissions#per-capita-co2-emissions',
+            );
+          },
+        ),
+        const SizedBox(height: 4),
         PrimaryButton(
           text: 'Continue',
           onPressed: selectedCountry == null
