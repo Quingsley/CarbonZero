@@ -1,4 +1,5 @@
 import 'package:carbon_zero/core/constants/constants.dart';
+import 'package:carbon_zero/services/local_notifications.dart';
 import 'package:carbon_zero/services/notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,6 +33,9 @@ class _TabShellRouteState extends ConsumerState<TabShellRoute> {
       if (message.notification != null) {
         ref.read(notificationMessagesProvider.notifier).state.add(message);
       }
+    });
+    Future.delayed(Duration.zero, () async {
+      await NotificationController.scheduleDailyNotification();
     });
   }
 
