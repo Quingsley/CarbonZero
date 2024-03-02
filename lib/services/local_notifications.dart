@@ -5,6 +5,7 @@ import 'package:carbon_zero/features/activities/data/models/activity_model.dart'
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:cron/cron.dart';
 
 /// contain static methods to handle local notifications
@@ -50,39 +51,17 @@ class NotificationController {
   }
 
   /// request for users permission to send local notifications
-  static Future<void> requestForPermission(BuildContext context) async {
-    await AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+  static Future<void> requestForPermission() async {
+    await AwesomeNotifications()
+        .isNotificationAllowed()
+        .then((isAllowed) async {
       if (!isAllowed) {
         // This is just a basic example. For real apps, you must show some
         // friendly dialog box before call the request method.
         // This is very important to not harm the user experience
-        showDialog<bool>(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: const Text('Allow Notifications'),
-              content: const Text(
-                'We need your permission to send you local notifications',
-              ),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(false);
-                  },
-                  child: const Text('No'),
-                ),
-                TextButton(
-                  onPressed: () async {
-                    final isPermitted = await AwesomeNotifications()
-                        .requestPermissionToSendNotifications();
-                    if (context.mounted) Navigator.of(context).pop(isPermitted);
-                  },
-                  child: const Text('Yes'),
-                ),
-              ],
-            );
-          },
-        );
+        final isPermitted =
+            await AwesomeNotifications().requestPermissionToSendNotifications();
+        debugPrint('isPermitted: $isPermitted');
       }
     });
   }
@@ -93,7 +72,19 @@ class NotificationController {
   ) async {
 // get current time
     final currentTime = DateTime.now();
-// gt start date and end date
+    final today =
+        DateTime(currentTime.year, currentTime.month, currentTime.day);
+
+    final preference = await SharedPreferences.getInstance();
+
+    final storedDate = preference.getString('lastScheduledDate');
+    if (storedDate != null) {
+      final lastScheduledDate = DateTime.parse(storedDate);
+      // if the last scheduled date is the same as today, return
+      // since notification has already been scheduled for today
+      if (lastScheduledDate.isAtSameMomentAs(today)) return;
+    }
+// get start date and end date
     final startDate = DateTime.parse(activity.startDate);
     final endDate = DateTime.parse(activity.endDate);
 // compare current time with start date and date date to ensure that
@@ -146,6 +137,10 @@ class NotificationController {
           timeZone: localTimeZone,
         ),
       );
+      await preference.setString(
+        'lastScheduledDate',
+        currentTime.toIso8601String(),
+      );
     }
   }
 
@@ -161,6 +156,48 @@ class NotificationController {
     }
 
     return dates;
+  }
+
+  /// schedule daily notification for emission recording
+  static Future<void> scheduleDailyNotification() async {
+    final currentTime = DateTime.now();
+    final today =
+        DateTime(currentTime.year, currentTime.month, currentTime.day);
+
+    final preference = await SharedPreferences.getInstance();
+
+    final storedDate = preference.getString('lastScheduledDailyDate');
+    if (storedDate != null) {
+      final lastScheduledDate = DateTime.parse(storedDate);
+      // if the last scheduled date is the same as today, return
+      // since notification has already been scheduled for today
+      if (lastScheduledDate.isAtSameMomentAs(today)) return;
+    }
+
+    final localTimeZone =
+        await AwesomeNotifications().getLocalTimeZoneIdentifier();
+
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: DateTime.now().millisecond,
+        channelKey: 'daily_channel',
+        groupKey: 'daily_channel_group',
+        title: 'Daily Emission Reminder',
+        body: 'Remember to record an emission for today',
+        wakeUpScreen: true,
+        category: NotificationCategory.Reminder,
+        notificationLayout: NotificationLayout.BigText,
+      ),
+      schedule: NotificationCalendar(
+        hour: 12,
+        minute: 0,
+        timeZone: localTimeZone,
+      ),
+    );
+    await preference.setString(
+      'lastScheduledDailyDate',
+      currentTime.toIso8601String(),
+    );
   }
 
   /// converts time to 24 hour format (not working as expected)
