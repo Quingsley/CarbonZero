@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:carbon_zero/core/error/failure.dart';
 import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
+import 'package:carbon_zero/features/auth/data/models/feedback_model.dart';
 import 'package:carbon_zero/features/auth/data/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -235,6 +236,17 @@ class AuthDataSource {
       await _db.collection('users').doc(userId).update({
         'pushTokens': FieldValue.arrayUnion([token]),
       });
+    } on FirebaseException catch (e) {
+      throw Failure(message: e.message ?? 'Something went wrong');
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  /// used to collect user feedback
+  Future<void> collectFeedback(FeedBackModel feedback) async {
+    try {
+      await _db.collection('feedback').add(feedback.toJson());
     } on FirebaseException catch (e) {
       throw Failure(message: e.message ?? 'Something went wrong');
     } catch (e) {
