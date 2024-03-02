@@ -1,3 +1,4 @@
+import 'package:carbon_zero/features/auth/data/models/feedback_model.dart';
 import 'package:carbon_zero/features/auth/data/models/user_model.dart';
 import 'package:carbon_zero/features/auth/data/remote_data_source/auth_data_source.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -65,6 +66,11 @@ class AuthRepository {
   /// update push token
   Future<void> updatePushToken(String token, String userId) async {
     return dataSource.updatePushToken(token, userId);
+  }
+
+  /// collect user feedback
+  Future<void> collectUserFeedback(FeedBackModel feedback) async {
+    return dataSource.collectFeedback(feedback);
   }
 }
 
