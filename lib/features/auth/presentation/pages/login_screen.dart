@@ -1,3 +1,4 @@
+import 'package:carbon_zero/core/constants/constants.dart';
 import 'package:carbon_zero/core/error/failure.dart';
 import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
@@ -111,8 +112,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 label: 'Email',
                 hintText: 'Email Address',
                 validator: (value) {
-                  if (value == null || value.isEmpty || !value.contains('@')) {
-                    return 'Please enter some text';
+                  if (value == null || value.isEmpty) {
+                    return 'Please provide your email';
+                  }
+                  if (!isEmailValid(value)) {
+                    return 'Please provide a valid email';
                   }
                   return null;
                 },
@@ -126,7 +130,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 hintText: 'Enter Password',
                 validator: (value) {
                   if (value == null || value.isEmpty || value.length < 6) {
-                    return 'Please enter some text';
+                    return 'Please enter a valid password';
                   }
                   return null;
                 },
