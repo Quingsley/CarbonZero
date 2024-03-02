@@ -38,7 +38,6 @@ class NotificationService extends AsyncNotifier<void> {
         print('Message notification: ${message.notification?.title}');
         print('Message notification: ${message.notification?.body}');
       }
-
       messageStreamController.sink.add(message);
     });
   }
