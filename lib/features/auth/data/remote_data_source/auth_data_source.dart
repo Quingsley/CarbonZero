@@ -170,7 +170,8 @@ class AuthDataSource {
   /// sign up with google
   Future<void> signUpWithGoogle({
     required bool isLogIn,
-    required (double, double) footPrint,
+    required int totalPoints,
+    required (double, double, String) footPrint,
     String? token,
   }) async {
     try {
@@ -201,6 +202,10 @@ class AuthDataSource {
         initialCarbonFootPrint: footPrint.$1,
         carbonFootPrintNow: footPrint.$2,
         pushTokens: token != null ? [token] : [],
+        totalCarbonPoints: totalPoints,
+        monthlyFootPrintData: {
+          footPrint.$3: footPrint.$2,
+        },
       );
       if (isLogIn) {
         await _db.collection('users').doc(credentials.user?.uid).update({

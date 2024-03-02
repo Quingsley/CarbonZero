@@ -35,13 +35,15 @@ class AuthRepository {
   /// sign in with google method
   Future<void> sigInInWithGoogle({
     required bool isLogin,
-    required (double, double) footPrint,
+    required int totalPoints,
+    required (double, double, String) footPrint,
     String? token,
   }) async {
     return dataSource.signUpWithGoogle(
       isLogIn: isLogin,
       footPrint: footPrint,
       token: token,
+      totalPoints: totalPoints,
     );
   }
 
