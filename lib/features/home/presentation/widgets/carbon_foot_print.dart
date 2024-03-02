@@ -38,7 +38,7 @@ class CarbonFootPrintData extends StatelessWidget {
         infoProperties: InfoProperties(
           topLabelText: 'CO2e/$per',
           topLabelStyle: context.textTheme.bodyMedium?.copyWith(
-            color: context.colors.onPrimary.withOpacity(.62),
+            color: context.colors.onSurface.withOpacity(.62),
             fontSize: 20,
           ),
           mainLabelStyle: context.textTheme.displaySmall?.copyWith(
