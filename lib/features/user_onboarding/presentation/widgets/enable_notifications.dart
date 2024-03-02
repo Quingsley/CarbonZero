@@ -39,10 +39,10 @@ CarbonZero would like to send you notifications to help you stay on track with y
           onPressed: isLoading
               ? null
               : () async {
-                  await NotificationController.requestForPermission(context);
                   await ref
                       .read(notificationsProvider.notifier)
                       .requestPermission();
+                  await NotificationController.requestForPermission();
                 },
         ),
         const Spacer(),
