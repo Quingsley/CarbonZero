@@ -66,6 +66,25 @@ class ActivityDataSource implements IActivityDataSource {
       await doc.update({
         'id': doc.id,
       });
+
+      if (activity.type == ActivityType.individual) {
+        await _db.collection('users').doc(activity.parentId).update({
+          'totalCarbonPoints':
+              FieldValue.increment(1), // 1 point for creating an activity
+        });
+      } else {
+        final communityDoc = await _db
+            .collection('communities')
+            .withCommunityModelConverter()
+            .doc(activity.parentId)
+            .get();
+        final data = communityDoc.data()!;
+        await _db.collection('users').doc(data.adminId).update({
+          'totalCarbonPoints': FieldValue.increment(
+            3,
+          ), // 3 point for creating a community activity
+        });
+      }
     } on FirebaseException catch (e) {
       throw Failure(message: e.message ?? e.toString());
     } catch (e) {
@@ -187,6 +206,9 @@ class ActivityDataSource implements IActivityDataSource {
           .get();
       await user.reference.update({
         'carbonFootPrintNow': FieldValue.increment(25 / 1000), // in kg
+        'totalCarbonPoints': FieldValue.increment(
+          activity.imageUrl.isEmpty ? 7 : 15,
+        ),
       });
     } on FirebaseException catch (e) {
       throw Failure(message: e.message ?? e.toString());
