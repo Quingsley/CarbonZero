@@ -84,7 +84,7 @@ class StatisticsScreen extends ConsumerWidget {
             const SizedBox(
               height: 16,
             ),
-            const Text('CO2 Statistics'),
+            const Text('CO2 emitted Statistics for the last 7 days'),
             const SizedBox(
               height: 16,
             ),
