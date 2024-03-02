@@ -1,4 +1,5 @@
 import 'package:carbon_zero/core/error/error_screen.dart';
+import 'package:carbon_zero/core/pages/licenses.dart';
 import 'package:carbon_zero/core/pages/shell_route.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/features/activities/data/models/activity_model.dart';
@@ -227,6 +228,13 @@ class AppRoutes {
                 GoRoute(
                   path: '/settings',
                   builder: (context, state) => const SettingsScreen(),
+                  routes: [
+                    GoRoute(
+                      parentNavigatorKey: AppRoutes._rootNavigator,
+                      path: 'licenses',
+                      builder: (context, state) => const LicensesPage(),
+                    ),
+                  ],
                 ),
               ],
             ),
