@@ -62,7 +62,7 @@ class RewardsScreen extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        25.toString(),
+                        user.value?.totalCarbonPoints.toString() ?? '0',
                         style: context.textTheme.headlineMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
