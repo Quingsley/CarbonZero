@@ -95,7 +95,13 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               child: Row(
                 children: [
                   TextButton(
-                    onPressed: () => context.go('/user-onboarding'),
+                    onPressed: () {
+                      pageController.animateToPage(
+                        2,
+                        duration: Durations.medium1,
+                        curve: Curves.easeIn,
+                      );
+                    },
                     child: Text(
                       'Skip',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
