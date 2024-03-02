@@ -16,6 +16,7 @@ class FooterReference extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: onTap,
       child: Text(
         'why we need this information',
         style: TextStyle(
