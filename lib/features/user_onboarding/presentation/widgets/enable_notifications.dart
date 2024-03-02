@@ -27,7 +27,7 @@ class EnableNotifications extends ConsumerWidget {
           '''
 CarbonZero would like to send you notifications to help you stay on track with your carbon footprint, goals, community updates and challenges.
         ''',
-          textAlign: TextAlign.start,
+          textAlign: TextAlign.center,
           style: context.textTheme.titleLarge,
         ),
         const SizedBox(
