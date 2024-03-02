@@ -193,8 +193,9 @@ class _AddCommunityState extends ConsumerState<AddCommunity> {
                 ),
                 MultiSelectChipField<String?>(
                   title: const Text('Tags'),
-                  initialValue:
-                      widget.community != null ? widget.community!.tags : [],
+                  initialValue: widget.community != null
+                      ? widget.community!.tags
+                      : _selectedTags,
                   chipColor: isDarkMode
                       ? context.colors.secondary.withOpacity(.4)
                       : null,
