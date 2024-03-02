@@ -1,4 +1,5 @@
 import 'package:carbon_zero/core/error/failure.dart';
+import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/core/widgets/form_layout.dart';
 import 'package:carbon_zero/core/widgets/primary_button.dart';
@@ -51,6 +52,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         error: (error, stackTrace) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
+              backgroundColor: context.colors.error,
               content:
                   Text(error is Failure ? error.message : error.toString()),
             ),

@@ -31,6 +31,7 @@ class CommunityDetails extends ConsumerWidget {
         error: (error, _) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
+              backgroundColor: context.colors.error,
               content:
                   Text(error is Failure ? error.message : error.toString()),
             ),

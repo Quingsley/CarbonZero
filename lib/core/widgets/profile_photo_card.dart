@@ -1,5 +1,6 @@
 import 'package:carbon_zero/core/constants/constants.dart';
 import 'package:carbon_zero/core/error/failure.dart';
+import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/core/utils/show_camera_options.dart';
 import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
@@ -38,8 +39,13 @@ class _ProfilePhotoCardState extends ConsumerState<ProfilePhotoCard> {
           error: (error, stackTrace) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content:
-                    Text(error is Failure ? error.message : error.toString()),
+                content: Text(
+                  error is Failure ? error.message : error.toString(),
+                  style: TextStyle(
+                    color: context.colors.onError,
+                  ),
+                ),
+                backgroundColor: context.colors.error,
               ),
             );
           },

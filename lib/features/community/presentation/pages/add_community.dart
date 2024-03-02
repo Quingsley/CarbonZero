@@ -121,6 +121,7 @@ class _AddCommunityState extends ConsumerState<AddCommunity> {
           error: (error, stackTrace) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
+                backgroundColor: context.colors.error,
                 content:
                     Text(error is Failure ? error.message : error.toString()),
               ),
