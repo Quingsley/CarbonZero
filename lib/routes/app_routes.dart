@@ -1,4 +1,5 @@
 import 'package:carbon_zero/core/error/error_screen.dart';
+import 'package:carbon_zero/core/pages/feedback.dart';
 import 'package:carbon_zero/core/pages/licenses.dart';
 import 'package:carbon_zero/core/pages/shell_route.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
@@ -233,6 +234,11 @@ class AppRoutes {
                       parentNavigatorKey: AppRoutes._rootNavigator,
                       path: 'licenses',
                       builder: (context, state) => const LicensesPage(),
+                    ),
+                    GoRoute(
+                      parentNavigatorKey: AppRoutes._rootNavigator,
+                      path: 'feedback',
+                      builder: (context, state) => const FeedBackPage(),
                     ),
                   ],
                 ),
