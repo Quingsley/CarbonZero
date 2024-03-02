@@ -87,7 +87,9 @@ class SettingsScreen extends ConsumerWidget {
                   ),
                   SettingsTile(
                     title: 'FAQs',
-                    onTap: () {},
+                    onTap: () {
+                      // context.go('/carbon-footprint-results');
+                    },
                     icon: const Icon(Icons.message),
                     iconColor: context.colors.primary,
                   ),
