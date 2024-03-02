@@ -95,6 +95,14 @@ class SettingsScreen extends ConsumerWidget {
                 iconColor: context.colors.primary,
               ),
               SettingsTile(
+                title: 'Feedback',
+                onTap: () {
+                  context.push('/settings/feedback');
+                },
+                icon: const Icon(Icons.feedback),
+                iconColor: context.colors.primary,
+              ),
+              SettingsTile(
                 title: 'Credits',
                 onTap: () {
                   context.push('/settings/licenses');
