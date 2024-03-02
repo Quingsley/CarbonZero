@@ -332,3 +332,22 @@ Map<int, String> getMonth = {
   11: 'NOV',
   12: 'DEC',
 };
+
+/// reason for collecting lifestyle info
+const String lifeStyleMessage =
+    '''Understanding your activity level helps us tailor our carbon footprint calculation to your lifestyle. By knowing whether you're sedentary or active, we can accurately estimate the carbon emissions associated with your daily activities. This information allows us to provide you with personalized recommendations on how to reduce your carbon footprint effectively. Additionally, it enables us to highlight areas where you can make the most significant environmental impact, whether it's through transportation choices, energy consumption, or other daily habits. By sharing your activity level with us, you're helping us create a more customized and impactful sustainability plan tailored specifically to your needs and habits.''';
+
+/// reason for collecting diet info
+const dietMessage =
+    """Understanding your dietary preferences allows us to provide you with more accurate insights into your carbon footprint. Different dietary choices have varying environmental impacts, and by knowing whether you follow a vegan, vegetarian, pescatarian, or specific meat consumption diet, we can better estimate the carbon emissions associated with your food consumption. This information enables us to offer personalized recommendations on how you can reduce your carbon footprint through dietary adjustments. For example, we can suggest plant-based alternatives, sustainable sourcing options, or other strategies tailored to your diet. By sharing your dietary preferences with us, you're helping us create a more comprehensive and effective sustainability plan that aligns with your lifestyle and values.""";
+
+/// checks if email isValid
+bool isEmailValid(String email) {
+  // Define a regular expression for email validation
+  final RegExp emailRegex = RegExp(
+    r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+  );
+
+  // Use the RegExp class to check if the email matches the pattern
+  return emailRegex.hasMatch(email);
+}
