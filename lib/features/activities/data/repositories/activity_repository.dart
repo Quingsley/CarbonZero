@@ -54,6 +54,11 @@ class ActivityRepository implements IActivityDataSource {
   Future<void> addParticipants(String activityId, String userId) {
     return _dataSource.addParticipants(activityId, userId);
   }
+
+  @override
+  Future<List<Map<String, dynamic>>> getChartData(String userId) async {
+    return _dataSource.getChartData(userId);
+  }
 }
 
 /// activity repo provider
