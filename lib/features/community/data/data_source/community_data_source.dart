@@ -32,6 +32,8 @@ class CommunityDataSource extends ICommunity {
       // update the user with the community id
       await _db.collection('users').doc(community.adminId).update({
         'communityIds': FieldValue.arrayUnion([doc.id]),
+        'totalCarbonPoints':
+            FieldValue.increment(5), // 5 points for creating a community
       });
     } on FirebaseException catch (e) {
       throw Failure(message: e.message ?? e.toString());
@@ -146,6 +148,7 @@ class CommunityDataSource extends ICommunity {
       });
       await _db.collection('users').doc(userId).update({
         'communityIds': FieldValue.arrayUnion([communityId]),
+        'totalCarbonPoints': FieldValue.increment(2), // 2 points for joining
       });
     } on FirebaseException catch (e) {
       throw Failure(message: e.message ?? e.toString());
