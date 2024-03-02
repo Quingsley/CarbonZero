@@ -81,3 +81,12 @@ final communityActivityStreamProvider =
   final repo = ref.read(activityRepositoryProvider);
   return repo.getCommunityActivities(communityId);
 });
+
+/// chart data future provider
+final chartDataFutureProvider =
+    FutureProviderFamily<List<Map<String, dynamic>>, String>(
+  (ref, userId) {
+    final repo = ref.read(activityRepositoryProvider);
+    return repo.getChartData(userId);
+  },
+);
