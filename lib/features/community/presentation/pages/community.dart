@@ -93,8 +93,11 @@ class CommunityScreen extends ConsumerWidget {
                             );
                           },
                         )
-                      : const Text(
-                          'You  have not joined any communities yet , please join one',
+                      : const Center(
+                          child: Text(
+                            'You  have not joined any communities yet , please join one',
+                            textAlign: TextAlign.center,
+                          ),
                         );
                 },
                 error: (error, _) => Center(
