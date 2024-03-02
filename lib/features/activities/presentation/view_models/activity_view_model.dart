@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:carbon_zero/algorithm.dart';
 import 'package:carbon_zero/core/constants/constants.dart';
 import 'package:carbon_zero/features/activities/data/models/activity_model.dart';
 import 'package:carbon_zero/features/activities/data/models/activity_recording_model.dart';
@@ -27,9 +28,12 @@ class ActivityViewModel extends AsyncNotifier<void> {
     ActivityType type,
   ) async {
     final repo = ref.read(activityRepositoryProvider);
+    final updatedARecord = activityRecordingModel.copyWith(
+      co2Emitted: getCo2emitted(activityRecordingModel),
+    );
     state = const AsyncLoading();
     state = await AsyncValue.guard(
-      () => repo.recordActivity(activityRecordingModel, type),
+      () => repo.recordActivity(updatedARecord, type),
     );
   }
 
