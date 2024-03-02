@@ -309,8 +309,8 @@ class _ActivityDetailsState extends ConsumerState<ActivityDetails> {
             ],
           );
         },
-        error: (error, stackTrace) => const Center(
-          child: CircularProgressIndicator(),
+        error: (error, stackTrace) => Center(
+          child: Text(error is Failure ? error.message : error.toString()),
         ),
         loading: () => const Center(
           child: CircularProgressIndicator(),

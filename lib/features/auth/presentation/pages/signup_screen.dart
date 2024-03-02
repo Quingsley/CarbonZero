@@ -1,4 +1,5 @@
 // import 'package:carbon_zero/core/error/failure.dart';
+import 'package:carbon_zero/core/constants/constants.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/core/widgets/form_layout.dart';
 import 'package:carbon_zero/core/widgets/primary_button.dart';
@@ -133,8 +134,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 label: 'Email',
                 hintText: 'Email Address',
                 validator: (value) {
-                  if (value == null || value.isEmpty || !value.contains('@')) {
+                  if (value == null || value.isEmpty) {
                     return 'Please enter your email';
+                  }
+                  if (!isEmailValid(value)) {
+                    return 'Please provide a valid email';
                   }
                   return null;
                 },

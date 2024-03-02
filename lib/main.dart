@@ -62,10 +62,19 @@ Future<void> main() async {
     null,
     [
       NotificationChannel(
-        channelGroupKey: 'basic_channel_group',
-        channelKey: 'basic_channel',
-        channelName: 'Basic notifications',
-        channelDescription: 'Notification channel for basic tests',
+        channelGroupKey: 'activity_channel_group',
+        channelKey: 'activity_channel',
+        channelName: 'Activity notifications',
+        channelDescription: 'Notification channel for activities',
+        defaultColor: lightTheme.primaryColor,
+        ledColor: lightTheme.primaryColorDark,
+        onlyAlertOnce: true,
+      ),
+      NotificationChannel(
+        channelGroupKey: 'daily_channel_group',
+        channelKey: 'daily_channel',
+        channelName: 'Daily notifications',
+        channelDescription: 'Notification channel for daily emission',
         defaultColor: lightTheme.primaryColor,
         ledColor: lightTheme.primaryColorDark,
         onlyAlertOnce: true,
@@ -74,8 +83,12 @@ Future<void> main() async {
     // Channel groups are only visual and are not required
     channelGroups: [
       NotificationChannelGroup(
-        channelGroupKey: 'basic_channel_group',
-        channelGroupName: 'Basic group',
+        channelGroupKey: 'activity_channel_group',
+        channelGroupName: 'Activity notifications',
+      ),
+      NotificationChannelGroup(
+        channelGroupKey: 'daily_channel_group',
+        channelGroupName: 'Daily notifications',
       ),
     ],
     debug: true,

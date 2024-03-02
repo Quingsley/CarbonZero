@@ -12,6 +12,7 @@ class ActivityRecordingModel extends Equatable {
     required this.userId,
     required this.userName,
     this.id,
+    this.co2Emitted = 0,
   });
 
   /// converts the json to ActivityRecordingModel type
@@ -26,6 +27,7 @@ class ActivityRecordingModel extends Equatable {
           'imageUrl': final String imageUrl,
           'userId': final String userId,
           'userName': final String userName,
+          'co2Emitted': final int co2Emitted,
         }) {
       return ActivityRecordingModel(
         id: id,
@@ -36,6 +38,7 @@ class ActivityRecordingModel extends Equatable {
         imageUrl: imageUrl,
         userId: userId,
         userName: userName,
+        co2Emitted: co2Emitted,
       );
     } else {
       throw FormatException('Invalid JSON format $json');
@@ -53,6 +56,7 @@ class ActivityRecordingModel extends Equatable {
       'imageUrl': imageUrl,
       'userId': userId,
       'userName': userName,
+      'co2Emitted': co2Emitted,
     };
   }
 
@@ -81,6 +85,9 @@ class ActivityRecordingModel extends Equatable {
   /// name of the user who recorded the activity (used for community activities)
   final String userName;
 
+  /// co2e for the given recording
+  final int co2Emitted;
+
   @override
   List<Object?> get props =>
       [id, activityId, parentId, date, description, imageUrl, userId, userName];
@@ -95,6 +102,7 @@ class ActivityRecordingModel extends Equatable {
     String? imageUrl,
     String? userId,
     String? userName,
+    int? co2Emitted,
   }) {
     return ActivityRecordingModel(
       id: id ?? this.id,
@@ -105,6 +113,7 @@ class ActivityRecordingModel extends Equatable {
       description: description ?? this.description,
       userId: userId ?? this.userId,
       userName: userName ?? this.userName,
+      co2Emitted: co2Emitted ?? this.co2Emitted,
     );
   }
 }

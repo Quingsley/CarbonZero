@@ -1,5 +1,6 @@
 import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
+import 'package:carbon_zero/core/utils/utils.dart';
 import 'package:carbon_zero/core/widgets/profile_photo_card.dart';
 import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
 import 'package:carbon_zero/features/settings/presentation/widgets/setting_tile.dart';
@@ -27,88 +28,108 @@ class SettingsScreen extends ConsumerWidget {
         title: const Text('Settings'),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const SizedBox(child: ProfilePhotoCard()),
-            GestureDetector(
-              onTap: () async {
-                final user = ref.read(userStreamProvider);
-                if (context.mounted) await updateUser(context, user.value, ref);
-              },
-              child: Chip(
-                label: Text('${user.value?.fName} ${user.value?.lName}'),
-                color: MaterialStatePropertyAll<Color>(
-                  context.colors.primaryContainer,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const SizedBox(child: ProfilePhotoCard()),
+              GestureDetector(
+                onTap: () async {
+                  final user = ref.read(userStreamProvider);
+                  if (context.mounted && user.value != null) {
+                    await updateUser(
+                      context,
+                      user.value!,
+                    );
+                  }
+                },
+                child: Chip(
+                  label: Text('${user.value?.fName} ${user.value?.lName}'),
+                  color: MaterialStatePropertyAll<Color>(
+                    context.colors.primaryContainer,
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              child: ListView(
-                children: [
-                  SettingsTile(
-                    title: 'Notifications',
-                    onTap: () => context.push('/notification'),
-                    icon: const Icon(Icons.notifications),
-                    iconColor: context.colors.primary,
-                  ),
-                  SettingsTile(
-                    title: 'App Theme',
-                    onTap: () {
-                      ref.read(isDarkModeStateProvider.notifier).state =
-                          !ref.read(isDarkModeStateProvider);
-                    },
-                    icon: Icon(isDarkMode ? Icons.dark_mode : Icons.light_mode),
-                    iconColor: context.colors.primary,
-                  ),
-                  SettingsTile(
-                    title: 'Privacy',
-                    onTap: () {},
-                    icon: const Icon(Icons.privacy_tip),
-                    iconColor: context.colors.primary,
-                  ),
-                  const Divider(
-                    thickness: 2,
-                  ),
-                  SettingsTile(
-                    title: 'Community',
-                    onTap: () => context.go('/community/admin'),
-                    icon: SvgPicture.asset(
-                      'assets/images/community-icon.svg',
-                      width: 24,
-                      colorFilter: ColorFilter.mode(
-                        context.colors.primary,
-                        BlendMode.srcIn,
-                      ),
-                    ),
-                    iconColor: context.colors.primary,
-                  ),
-                  SettingsTile(
-                    title: 'FAQs',
-                    onTap: () {},
-                    icon: const Icon(Icons.message),
-                    iconColor: context.colors.primary,
-                  ),
-                  SettingsTile(
-                    title: 'Log out',
-                    onTap: !isLoading
-                        ? () async {
-                            await ref
-                                .read(authViewModelProvider.notifier)
-                                .signOut();
-                            if (context.mounted) context.go('/auth');
-                          }
-                        : () {},
-                    icon: const Icon(Icons.logout_rounded),
-                    iconColor: context.colors.error,
-                    fillColor: context.colors.errorContainer,
-                  ),
-                ],
+              SettingsTile(
+                title: 'Notifications',
+                onTap: () => context.push('/notification'),
+                icon: const Icon(Icons.notifications),
+                iconColor: context.colors.primary,
               ),
-            ),
-          ],
+              SettingsTile(
+                title: 'App Theme',
+                onTap: () {
+                  ref.read(isDarkModeStateProvider.notifier).state =
+                      !ref.read(isDarkModeStateProvider);
+                },
+                icon: Icon(isDarkMode ? Icons.dark_mode : Icons.light_mode),
+                iconColor: context.colors.primary,
+              ),
+              SettingsTile(
+                title: 'Privacy',
+                onTap: () async {
+                  await openCustomTab(
+                    context,
+                    'https://doc-hosting.flycricket.io/carbonzero-privacy-policy/db0ec803-a6e1-4c06-b22b-868fdba8ed8a/privacy',
+                  );
+                },
+                icon: const Icon(Icons.privacy_tip),
+                iconColor: context.colors.primary,
+              ),
+              const Divider(
+                thickness: 2,
+              ),
+              SettingsTile(
+                title: 'Community',
+                onTap: () => context.go('/community/admin'),
+                icon: SvgPicture.asset(
+                  'assets/images/community-icon.svg',
+                  width: 24,
+                  colorFilter: ColorFilter.mode(
+                    context.colors.primary,
+                    BlendMode.srcIn,
+                  ),
+                ),
+                iconColor: context.colors.primary,
+              ),
+              SettingsTile(
+                title: 'Feedback',
+                onTap: () {
+                  context.push('/settings/feedback');
+                },
+                icon: const Icon(Icons.feedback),
+                iconColor: context.colors.primary,
+              ),
+              SettingsTile(
+                title: 'Credits',
+                onTap: () {
+                  context.push('/settings/licenses');
+                },
+                icon: const Icon(Icons.code),
+                iconColor: context.colors.primary,
+              ),
+              SettingsTile(
+                title: 'Log out',
+                onTap: !isLoading
+                    ? () async {
+                        await ref
+                            .read(authViewModelProvider.notifier)
+                            .signOut();
+                        if (context.mounted) context.go('/auth');
+                      }
+                    : () {},
+                icon: const Icon(Icons.logout_rounded),
+                iconColor: context.colors.error,
+                fillColor: context.colors.errorContainer,
+              ),
+              Text(
+                'Made with ☕ and ❤️ by Jerome Jumah\n © 2024 CarbonZero. All rights reserved.',
+                style: TextStyle(color: context.colors.primary),
+              ),
+            ],
+          ),
         ),
       ),
     );

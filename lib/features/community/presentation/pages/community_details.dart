@@ -31,6 +31,7 @@ class CommunityDetails extends ConsumerWidget {
         error: (error, _) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
+              backgroundColor: context.colors.error,
               content:
                   Text(error is Failure ? error.message : error.toString()),
             ),
@@ -100,8 +101,9 @@ class CommunityDetails extends ConsumerWidget {
                             data: (users) {
                               if (users.isEmpty) return const SizedBox();
                               users.shuffle();
+                              final selectedUsers = users.take(10).toList();
                               return FacePile(
-                                faces: users
+                                faces: selectedUsers
                                     .map(
                                       (user) => FaceHolder(
                                         id: user.userId!,
@@ -127,6 +129,24 @@ class CommunityDetails extends ConsumerWidget {
                             ),
                           ),
                         ),
+                        if (communityUsers is AsyncData &&
+                            communityUsers.value!.length > 10)
+                          Expanded(
+                            child: CircleAvatar(
+                              radius: 30,
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      '+${communityUsers.value!.length - 10}',
+                                    ),
+                                    const Text('more'),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                   ),

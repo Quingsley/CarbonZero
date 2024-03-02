@@ -38,7 +38,7 @@ class CarbonFootPrintData extends StatelessWidget {
         infoProperties: InfoProperties(
           topLabelText: 'CO2e/$per',
           topLabelStyle: context.textTheme.bodyMedium?.copyWith(
-            color: Colors.grey[500],
+            color: context.colors.onSurface.withOpacity(.62),
             fontSize: 20,
           ),
           mainLabelStyle: context.textTheme.displaySmall?.copyWith(
@@ -63,7 +63,7 @@ class CarbonFootPrintData extends StatelessWidget {
 /// [conclusion] returns a string based on the value of the carbon footprint
 String conclusion(double value) {
   if (value < 2700) {
-    return '👌 Low';
+    return ' ↘️ Very Low';
   } else if (value >= 2700 && value <= 7250) {
     return '👍 Ideal';
   } else if (value >= 7250 && value <= 10000) {

@@ -62,7 +62,8 @@ class _RecordActivityState extends ConsumerState<RecordActivity> {
       imageController.clear();
       ref
         ..invalidate(getSingleActivityProvider)
-        ..invalidate(getActivityRecodingFutureProvider);
+        ..invalidate(getActivityRecodingFutureProvider)
+        ..invalidate(chartDataFutureProvider);
       if (mounted) Navigator.of(context).pop();
     }
   }

@@ -16,7 +16,6 @@ class NtfTile extends ConsumerWidget {
     ref.listen(notificationsProvider, (previous, next) {
       next.whenOrNull(
         loading: () {
-          //TODO: FIX THIS ALSO ALL LOGIN AND SIGNUP LOADING DIALOGS
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Requesting permission...'),

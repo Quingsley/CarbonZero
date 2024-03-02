@@ -9,12 +9,13 @@ class UserModel extends Equatable {
     required this.email,
     required this.activityIds,
     required this.communityIds,
-    this.rewardId,
+    this.totalCarbonPoints = 0,
     this.userId,
     this.photoId,
     this.carbonFootPrintNow = 0,
     this.initialCarbonFootPrint = 0,
     this.pushTokens = const [],
+    this.monthlyFootPrintData = const {},
   });
 
   /// factory method to create a new instance of [UserModel] from json
@@ -26,25 +27,30 @@ class UserModel extends Equatable {
           'lName': final String lName,
           'email': final String email,
           'photoId': final String? photoId,
-          'rewardId': final String? rewardId,
+          'totalCarbonPoints': final int totalCarbonPoints,
           'activityIds': final List<dynamic> activityIds,
           'communityIds': final List<dynamic> communityIds,
           'carbonFootPrintNow': final double carbonFootPrintNow,
           'initialCarbonFootPrint': final double initialCarbonFootPrint,
           'pushTokens': final List<dynamic> pushTokens,
+          'monthlyFootPrintData': final Map<String, dynamic>
+              monthlyFootPrintData,
         }) {
       return UserModel(
         userId: userId,
         fName: fName,
         lName: lName,
         email: email,
-        rewardId: rewardId,
+        totalCarbonPoints: totalCarbonPoints,
         photoId: photoId,
         activityIds: List.from(activityIds),
         communityIds: List.from(communityIds),
         carbonFootPrintNow: carbonFootPrintNow,
         initialCarbonFootPrint: initialCarbonFootPrint,
         pushTokens: List.from(pushTokens),
+        monthlyFootPrintData: monthlyFootPrintData.map(
+          (key, value) => MapEntry(key, value as double),
+        ),
       );
     } else {
       throw const FormatException('Invalid user model');
@@ -63,8 +69,8 @@ class UserModel extends Equatable {
   /// user id
   final String? userId;
 
-  /// reward id
-  final String? rewardId;
+  /// total carbon points earned
+  final int totalCarbonPoints;
 
   /// list of activity ids
   final List<String> activityIds;
@@ -85,6 +91,9 @@ class UserModel extends Equatable {
   /// will have the push tokens of the user
   final List<String> pushTokens;
 
+  ///monthlyFootPrintData
+  final Map<String, double> monthlyFootPrintData;
+
   /// copy with method to create a new instance of [UserModel]
   /// with updated values
   UserModel copyWith({
@@ -92,20 +101,21 @@ class UserModel extends Equatable {
     String? fName,
     String? lName,
     String? email,
-    String? rewardId,
+    int? totalCarbonPoints,
     List<String>? activityIds,
     List<String>? communityIds,
     String? photoId,
     double? carbonFootPrintNow,
     double? initialCarbonFootPrint,
     List<String>? pushTokens,
+    Map<String, double>? monthlyFootPrintData,
   }) {
     return UserModel(
       userId: userId ?? this.userId,
       fName: fName ?? this.fName,
       lName: lName ?? this.lName,
       email: email ?? this.email,
-      rewardId: rewardId ?? this.rewardId,
+      totalCarbonPoints: totalCarbonPoints ?? this.totalCarbonPoints,
       activityIds: activityIds ?? this.activityIds,
       communityIds: communityIds ?? this.communityIds,
       photoId: photoId ?? this.photoId,
@@ -113,6 +123,7 @@ class UserModel extends Equatable {
       initialCarbonFootPrint:
           initialCarbonFootPrint ?? this.initialCarbonFootPrint,
       pushTokens: pushTokens ?? this.pushTokens,
+      monthlyFootPrintData: monthlyFootPrintData ?? this.monthlyFootPrintData,
     );
   }
 
@@ -123,13 +134,14 @@ class UserModel extends Equatable {
       'fName': fName,
       'lName': lName,
       'email': email,
-      'rewardId': rewardId,
+      'totalCarbonPoints': totalCarbonPoints,
       'activityIds': activityIds,
       'communityIds': communityIds,
       'photoId': photoId,
       'carbonFootPrintNow': carbonFootPrintNow,
       'initialCarbonFootPrint': initialCarbonFootPrint,
       'pushTokens': pushTokens,
+      'monthlyFootPrintData': monthlyFootPrintData,
     };
   }
 
@@ -139,7 +151,7 @@ class UserModel extends Equatable {
         fName,
         lName,
         email,
-        rewardId,
+        totalCarbonPoints,
         activityIds,
         communityIds,
         photoId,

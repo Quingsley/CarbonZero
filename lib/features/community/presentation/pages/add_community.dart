@@ -121,6 +121,7 @@ class _AddCommunityState extends ConsumerState<AddCommunity> {
           error: (error, stackTrace) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
+                backgroundColor: context.colors.error,
                 content:
                     Text(error is Failure ? error.message : error.toString()),
               ),
@@ -193,8 +194,9 @@ class _AddCommunityState extends ConsumerState<AddCommunity> {
                 ),
                 MultiSelectChipField<String?>(
                   title: const Text('Tags'),
-                  initialValue:
-                      widget.community != null ? widget.community!.tags : [],
+                  initialValue: widget.community != null
+                      ? widget.community!.tags
+                      : _selectedTags,
                   chipColor: isDarkMode
                       ? context.colors.secondary.withOpacity(.4)
                       : null,

@@ -1,5 +1,6 @@
 import 'package:carbon_zero/core/constants/constants.dart';
 import 'package:carbon_zero/core/extensions.dart';
+import 'package:carbon_zero/core/utils/utils.dart';
 import 'package:carbon_zero/core/widgets/primary_button.dart';
 import 'package:carbon_zero/features/user_onboarding/presentation/widgets/box_image.dart';
 import 'package:carbon_zero/features/user_onboarding/presentation/widgets/footer_reference.dart';
@@ -125,7 +126,14 @@ class EnergyConsumptionQ extends ConsumerWidget {
           ),
         ),
         const Spacer(),
-        FooterReference(onTap: () {}),
+        FooterReference(
+          onTap: () async {
+            await openCustomTab(
+              context,
+              'https://www.carbonindependent.org/15.html',
+            );
+          },
+        ),
         PrimaryButton(
           text: 'Continue',
           onPressed: () {

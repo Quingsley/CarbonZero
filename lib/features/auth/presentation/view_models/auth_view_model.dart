@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:carbon_zero/core/constants/constants.dart';
 import 'package:carbon_zero/core/constants/utils.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
+import 'package:carbon_zero/features/auth/data/models/feedback_model.dart';
 import 'package:carbon_zero/features/auth/data/models/user_model.dart';
 import 'package:carbon_zero/features/auth/data/repositories/auth_repo_impl.dart';
 import 'package:carbon_zero/features/user_onboarding/presentation/view_models/carbon_foot_print_results_view_model.dart';
@@ -17,11 +19,16 @@ class AuthViewModel extends AsyncNotifier<void> {
     final repo = ref.read(authRepositoryProvider);
 
     final token = ref.read(pushTokenProvider);
-    final (footPrint, currentFootPrint) = _getFootPrintData();
+    final (footPrint, currentFootPrint, month) = _getFootPrintData();
+
     final updatedUser = user.copyWith(
       initialCarbonFootPrint: footPrint,
       carbonFootPrintNow: currentFootPrint,
       pushTokens: [token!],
+      totalCarbonPoints: _totalPoints(),
+      monthlyFootPrintData: {
+        month: currentFootPrint,
+      },
     );
     state = const AsyncLoading();
     state = await AsyncValue.guard(
@@ -66,6 +73,7 @@ class AuthViewModel extends AsyncNotifier<void> {
           isLogin: isLogin,
           footPrint: footPrints,
           token: token,
+          totalPoints: _totalPoints(),
         );
         router.go('/home');
       },
@@ -88,13 +96,36 @@ class AuthViewModel extends AsyncNotifier<void> {
 
   /// returns the current foot print of a user and the footprint
   /// for the last 12 months
-  (double, double) _getFootPrintData() {
+  (double, double, String) _getFootPrintData() {
     final carbonVm = ref.read(carbonFootPrintViewModelProvider);
     final footPrint = carbonVm.value;
     final daysElapsed = getNumberOfDaysElapsed(DateTime.now().year);
     final totalDays = getNumberOfDaysInYear(DateTime.now().year);
+    final currentMonth = DateTime.now().month;
+    final month = getMonth[currentMonth]!;
     final currentFootPrint = (daysElapsed / totalDays) * (footPrint ?? 0);
-    return (footPrint ?? 0, currentFootPrint);
+    return (footPrint ?? 0, currentFootPrint, month);
+  }
+
+  int _totalPoints() {
+    final (_, value, _) = _getFootPrintData();
+    if (value < 2700) {
+      return 20;
+    } else if (value >= 2700 && value <= 7250) {
+      return 14;
+    } else if (value >= 7250 && value <= 10000) {
+      return 4;
+    } else {
+      return 2;
+    }
+  }
+
+  /// collect feedback method
+  Future<void> collectFeedback(FeedBackModel feedback) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(
+      () => ref.read(authRepositoryProvider).collectUserFeedback(feedback),
+    );
   }
 
   @override

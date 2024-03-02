@@ -20,6 +20,7 @@ class ActivityTile extends StatefulWidget {
 }
 
 class _ActivityTileState extends State<ActivityTile> {
+  // FIXME: SCHEDULES MULTiPLE NOTIFiCATIONS
   @override
   void initState() {
     super.initState();
