@@ -102,10 +102,10 @@ class NotificationController {
 // if the activity is not over, schedule a notification
 // time to schedule the notification format  (4: 47 PM)
       // final [hour, minute] = activity.reminderTime.split(':');
-      final time = NotificationController.convertTo24HourFormat(
-        activity.reminderTime,
-      );
-      final [hour, minute] = time.split(':');
+      // final time = NotificationController.convertTo24HourFormat(
+      //   activity.reminderTime,
+      // );
+      final [hour, minute] = activity.reminderTime.split(':');
       final scheduleTime = DateTime(
         currentTime.year,
         currentTime.month,
@@ -124,8 +124,8 @@ class NotificationController {
       await AwesomeNotifications().createNotification(
         content: NotificationContent(
           id: DateTime.now().millisecond,
-          channelKey: 'basic_channel',
-          groupKey: 'basic_channel_group',
+          channelKey: 'activity_channel',
+          groupKey: 'activity_channel_group',
           title: activity.name,
           body:
               'Its time to add a completion on ${activity.name} to your daily activities.',
@@ -163,9 +163,9 @@ class NotificationController {
     return dates;
   }
 
-  /// converts time to 24 hour format
+  /// converts time to 24 hour format (not working as expected)
   static String convertTo24HourFormat(String timeIn12HourFormat) {
-    final format12Hour = DateFormat('h:mm a');
+    final format12Hour = DateFormat('hh:mm a');
     final format24Hour = DateFormat('HH:mm');
 
     final time = format12Hour.parse(timeIn12HourFormat);
