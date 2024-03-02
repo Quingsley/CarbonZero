@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:carbon_zero/core/constants/constants.dart';
 import 'package:carbon_zero/core/constants/utils.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
+import 'package:carbon_zero/features/auth/data/models/feedback_model.dart';
 import 'package:carbon_zero/features/auth/data/models/user_model.dart';
 import 'package:carbon_zero/features/auth/data/repositories/auth_repo_impl.dart';
 import 'package:carbon_zero/features/user_onboarding/presentation/view_models/carbon_foot_print_results_view_model.dart';
@@ -117,6 +118,14 @@ class AuthViewModel extends AsyncNotifier<void> {
     } else {
       return 2;
     }
+  }
+
+  /// collect feedback method
+  Future<void> collectFeedback(FeedBackModel feedback) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(
+      () => ref.read(authRepositoryProvider).collectUserFeedback(feedback),
+    );
   }
 
   @override
