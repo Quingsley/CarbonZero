@@ -12,6 +12,7 @@ Future<void> kShowBottomSheet({
   return showMaterialModalBottomSheet(
     isDismissible: isDismissible,
     context: context,
+    enableDrag: false,
     useRootNavigator: true,
     backgroundColor: context.colors.surface,
     builder: (context) => Container(
