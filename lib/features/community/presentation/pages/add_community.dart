@@ -77,6 +77,7 @@ class _AddCommunityState extends ConsumerState<AddCommunity> {
         await ref
             .read(communityViewModelProvider.notifier)
             .createCommunity(community);
+        ref.invalidate(adminCommunityFutureProvider);
       } else {
         final updatedCommunity = widget.community!.copyWith(
           name: communityNameController.text,

@@ -98,7 +98,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     onPressed: () {
                       pageController.animateToPage(
                         2,
-                        duration: Durations.medium1,
+                        duration: Durations.short4,
                         curve: Curves.easeIn,
                       );
                     },
@@ -121,7 +121,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     child: InkWell(
                       onTap: () {
                         pageController.nextPage(
-                          duration: const Duration(milliseconds: 500),
+                          duration: Durations.short4,
                           curve: Curves.easeIn,
                         );
                       },

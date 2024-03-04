@@ -198,7 +198,8 @@ class _NewActivityState extends ConsumerState<NewActivity> {
                   ),
                 ),
                 const Spacer(),
-                IconButton(
+                TextButton.icon(
+                  label: const Text('Save'),
                   onPressed: isLoading ? null : submit,
                   icon: isLoading
                       ? const CircularProgressIndicator()

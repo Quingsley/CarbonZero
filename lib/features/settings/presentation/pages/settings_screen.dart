@@ -1,3 +1,4 @@
+import 'package:carbon_zero/core/constants/constants.dart';
 import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/core/utils/utils.dart';
@@ -59,12 +60,12 @@ class SettingsScreen extends ConsumerWidget {
                 iconColor: context.colors.primary,
               ),
               SettingsTile(
-                title: 'App Theme',
+                title: isDarkMode ? 'Light Theme' : 'Dark Theme',
                 onTap: () {
                   ref.read(isDarkModeStateProvider.notifier).state =
                       !ref.read(isDarkModeStateProvider);
                 },
-                icon: Icon(isDarkMode ? Icons.dark_mode : Icons.light_mode),
+                icon: Icon(!isDarkMode ? Icons.dark_mode : Icons.light_mode),
                 iconColor: context.colors.primary,
               ),
               SettingsTile(
@@ -72,7 +73,7 @@ class SettingsScreen extends ConsumerWidget {
                 onTap: () async {
                   await openCustomTab(
                     context,
-                    'https://doc-hosting.flycricket.io/carbonzero-privacy-policy/db0ec803-a6e1-4c06-b22b-868fdba8ed8a/privacy',
+                    privacyUrl,
                   );
                 },
                 icon: const Icon(Icons.privacy_tip),

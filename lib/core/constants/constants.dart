@@ -351,3 +351,11 @@ bool isEmailValid(String email) {
   // Use the RegExp class to check if the email matches the pattern
   return emailRegex.hasMatch(email);
 }
+
+/// privacy policy url
+const String privacyUrl =
+    'https://doc-hosting.flycricket.io/carbonzero-privacy-policy/db0ec803-a6e1-4c06-b22b-868fdba8ed8a/privacy';
+
+/// terms
+const String terms =
+    'https://doc-hosting.flycricket.io/carbonzero-terms-of-use/be1512b4-fe46-42e3-9725-249a77b97e01/terms';

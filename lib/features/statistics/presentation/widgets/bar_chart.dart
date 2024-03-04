@@ -40,12 +40,12 @@ class Carbon2StatsBarChart extends ConsumerWidget {
                     getTitlesWidget: (value, meta) {
                       final text = switch (meta.formattedValue) {
                         '0' => data[0]['date'] as String,
-                        '1' => 'T',
-                        '2' => 'W',
-                        '3' => 'T',
-                        '4' => 'F',
-                        '5' => 'S',
-                        '6' => 'S',
+                        '1' => data[1]['date'] as String,
+                        '2' => data[2]['date'] as String,
+                        '3' => data[3]['date'] as String,
+                        '4' => data[4]['date'] as String,
+                        '5' => data[5]['date'] as String,
+                        '6' => data[6]['date'] as String,
                         String() => '',
                       };
                       return SideTitleWidget(

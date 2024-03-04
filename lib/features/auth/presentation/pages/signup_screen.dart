@@ -1,6 +1,7 @@
 // import 'package:carbon_zero/core/error/failure.dart';
 import 'package:carbon_zero/core/constants/constants.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
+import 'package:carbon_zero/core/utils/utils.dart';
 import 'package:carbon_zero/core/widgets/form_layout.dart';
 import 'package:carbon_zero/core/widgets/primary_button.dart';
 import 'package:carbon_zero/core/widgets/text_field.dart';
@@ -179,24 +180,44 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   text: 'By Creating an account you agree tou our ',
                   style: Theme.of(context).textTheme.bodyMedium,
                   children: [
-                    TextSpan(
-                      text: 'Terms of Service',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                            decoration: TextDecoration.underline,
-                            decorationColor:
-                                Theme.of(context).colorScheme.primary,
-                          ),
+                    WidgetSpan(
+                      child: GestureDetector(
+                        onTap: () async {
+                          await openCustomTab(context, terms);
+                        },
+                        child: Text(
+                          'Terms of Service',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                                decoration: TextDecoration.underline,
+                                decorationColor:
+                                    Theme.of(context).colorScheme.primary,
+                              ),
+                        ),
+                      ),
                     ),
                     const TextSpan(text: ' and '),
-                    TextSpan(
-                      text: 'Privacy Policy',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                            decoration: TextDecoration.underline,
-                            decorationColor:
-                                Theme.of(context).colorScheme.primary,
-                          ),
+                    WidgetSpan(
+                      child: GestureDetector(
+                        onTap: () async {
+                          await openCustomTab(context, privacyUrl);
+                        },
+                        child: Text(
+                          'Privacy Policy',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                                decoration: TextDecoration.underline,
+                                decorationColor:
+                                    Theme.of(context).colorScheme.primary,
+                              ),
+                        ),
+                      ),
                     ),
                   ],
                 ),

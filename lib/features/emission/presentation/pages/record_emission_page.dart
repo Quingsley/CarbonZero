@@ -1,13 +1,17 @@
 import 'package:carbon_zero/core/error/failure.dart';
 import 'package:carbon_zero/core/extensions.dart';
+import 'package:carbon_zero/core/utils/food_emission_utils.dart';
 import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
 import 'package:carbon_zero/features/emission/data/models/emission_model.dart';
+import 'package:carbon_zero/features/emission/presentation/providers/food_emission_providers.dart';
+import 'package:carbon_zero/features/emission/presentation/providers/transport_emission_providers.dart';
 import 'package:carbon_zero/features/emission/presentation/view_models/emission_view_model.dart';
 import 'package:carbon_zero/features/emission/presentation/widgets/food_emission_form.dart';
 import 'package:carbon_zero/features/emission/presentation/widgets/record_filled_button.dart';
 import 'package:carbon_zero/features/emission/presentation/widgets/transport_emission_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 /// will contain the form where the user can record an emission
 class RecordEmissionPage extends ConsumerStatefulWidget {
@@ -25,13 +29,20 @@ class _RecordEmissionPageState extends ConsumerState<RecordEmissionPage>
   @override
   void initState() {
     super.initState();
-    controller = TabController(length: 2, vsync: this);
+    controller = TabController(length: 2, vsync: this)
+      ..addListener(updateTabIndex);
+  }
+
+  void updateTabIndex() {
+    ref.read(currentTabProvider.notifier).state = controller.index;
   }
 
   @override
   void dispose() {
     super.dispose();
-    controller.dispose();
+    controller
+      ..dispose()
+      ..removeListener(updateTabIndex);
   }
 
   @override
@@ -67,6 +78,20 @@ class _RecordEmissionPageState extends ConsumerState<RecordEmissionPage>
       length: 2,
       child: Scaffold(
         appBar: AppBar(
+          leading: BackButton(
+            onPressed: () {
+              final foodEmissionList = ref.read(foodEmissionListProvider);
+              ref.read(mealCountProvider.notifier).state = 1;
+              ref.read(selectedModeProvider.notifier).state = null;
+              ref.read(hoursTakenProvider.notifier).state = 0;
+              ref.read(distanceCoveredProvider.notifier).state = 0;
+              ref.read(foodEmissionListProvider.notifier).state = [
+                for (final food in foodEmissionList)
+                  food.copyWith(isSelected: false),
+              ];
+              context.pop();
+            },
+          ),
           title: const Text('Record Emission'),
           bottom: TabBar(
             controller: controller,
@@ -97,7 +122,6 @@ class _RecordEmissionPageState extends ConsumerState<RecordEmissionPage>
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: RecordFilledButton(
           text: 'Record',
-          currentTabIndex: controller.index,
           isLoading: isLoading,
           onPressed: () async {
             final type = controller.index == 0

@@ -278,6 +278,22 @@ carbon emissions by reducing the amount of plastic waste produced''',
                     height: MediaQuery.sizeOf(context).height * .9,
                     isDismissible: false,
                   );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Text(
+                        'You do not own any communities yet, create one to create a community challenge.',
+                      ),
+                      action: SnackBarAction(
+                        label: 'Create',
+                        onPressed: () {
+                          final state = _fabKey.currentState;
+                          if (state != null) state.toggle();
+                          context.go('/community/add-community');
+                        },
+                      ),
+                    ),
+                  );
                 }
               }
             },
