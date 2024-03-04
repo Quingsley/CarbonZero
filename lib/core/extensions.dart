@@ -16,6 +16,14 @@ extension AppThemeExtension on BuildContext {
   ColorScheme get colors => Theme.of(this).colorScheme;
 }
 
+/// will be used to compare two dates and check if they are the same
+/// exclusive of the time
+extension DateComparison on DateTime {
+  /// compares two dates and checks if they are the same
+  bool dateComparison(DateTime other) =>
+      year == other.year && month == other.month && day == other.day;
+}
+
 /// [CollectionReference] extension will add a community model converter
 /// to the collection reference
 extension ModelConverter on CollectionReference {
