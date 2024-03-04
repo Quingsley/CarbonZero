@@ -1,12 +1,13 @@
 import 'dart:convert';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
+// import 'package:cron/cron.dart';
+import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/features/activities/data/models/activity_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:cron/cron.dart';
 
 /// contain static methods to handle local notifications
 class NotificationController {
@@ -82,7 +83,7 @@ class NotificationController {
       final lastScheduledDate = DateTime.parse(storedDate);
       // if the last scheduled date is the same as today, return
       // since notification has already been scheduled for today
-      if (lastScheduledDate.isAtSameMomentAs(today)) return;
+      if (lastScheduledDate.dateComparison(today)) return;
     }
 // get start date and end date
     final startDate = DateTime.parse(activity.startDate);
@@ -117,7 +118,7 @@ class NotificationController {
           id: DateTime.now().millisecond,
           channelKey: 'activity_channel',
           groupKey: 'activity_channel_group',
-          title: activity.name,
+          title: ' ${activity.icon} ${activity.name}',
           body:
               'Its time to add a completion on ${activity.name} to your daily activities.',
           wakeUpScreen: true,
@@ -171,7 +172,7 @@ class NotificationController {
       final lastScheduledDate = DateTime.parse(storedDate);
       // if the last scheduled date is the same as today, return
       // since notification has already been scheduled for today
-      if (lastScheduledDate.isAtSameMomentAs(today)) return;
+      if (lastScheduledDate.dateComparison(today)) return;
     }
 
     final localTimeZone =
