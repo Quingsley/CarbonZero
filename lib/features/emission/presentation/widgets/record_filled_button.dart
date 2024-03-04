@@ -1,6 +1,7 @@
 import 'package:carbon_zero/core/constants/constants.dart';
 import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/core/utils/food_emission_utils.dart';
+import 'package:carbon_zero/features/emission/presentation/providers/food_emission_providers.dart';
 import 'package:carbon_zero/features/emission/presentation/providers/transport_emission_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,7 +13,6 @@ class RecordFilledButton extends ConsumerWidget {
     required this.text,
     required this.onPressed,
     required this.isLoading,
-    required this.currentTabIndex,
     super.key,
   });
 
@@ -25,10 +25,9 @@ class RecordFilledButton extends ConsumerWidget {
   /// isLoading
   final bool isLoading;
 
-  /// current tab index
-  final int currentTabIndex;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final currentTabIndex = ref.watch(currentTabProvider);
     final selectedFoods = ref.watch(foodEmissionListProvider);
     final selectedMode = ref.watch(selectedModeProvider);
     final distance = ref.watch(distanceCoveredProvider);
