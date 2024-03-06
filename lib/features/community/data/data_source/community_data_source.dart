@@ -132,6 +132,18 @@ class CommunityDataSource extends ICommunity {
           });
         }
       });
+
+      // delete any activities associated with the community
+      await _db
+          .collection('activities')
+          .withCommunityModelConverter()
+          .where('parentId', isEqualTo: communityId)
+          .get()
+          .then((value) {
+        for (final element in value.docs) {
+          element.reference.delete();
+        }
+      });
     } on FirebaseException catch (e) {
       throw Failure(message: e.message ?? e.toString());
     } catch (e) {
