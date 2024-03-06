@@ -73,6 +73,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     });
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: Padding(
         padding: const EdgeInsets.only(top: 50, left: 8, right: 8),
         child: Column(
@@ -245,8 +246,8 @@ carbon emissions by reducing the amount of plastic waste produced''',
               await kShowBottomSheet(
                 context: context,
                 child: const NewActivity(type: ActivityType.individual),
-                height: MediaQuery.sizeOf(context).height * .9,
                 isDismissible: false,
+                isFullScreen: true,
               );
             },
             heroTag: null,
@@ -275,8 +276,8 @@ carbon emissions by reducing the amount of plastic waste produced''',
                   await kShowBottomSheet(
                     context: context,
                     child: const NewActivity(type: ActivityType.community),
-                    height: MediaQuery.sizeOf(context).height * .9,
                     isDismissible: false,
+                    isFullScreen: true,
                   );
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(

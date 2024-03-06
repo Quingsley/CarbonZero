@@ -84,7 +84,7 @@ class StatisticsScreen extends ConsumerWidget {
             const SizedBox(
               height: 16,
             ),
-            const Text('CO2 emitted Statistics for the last 7 days'),
+            const Text('CO2e in grams for the last 7 days'),
             const SizedBox(
               height: 16,
             ),
@@ -95,6 +95,7 @@ class StatisticsScreen extends ConsumerWidget {
             const SizedBox(
               height: 16,
             ),
+            const Text('Activities'),
             Expanded(
               child: activitiesAsyncValue.when(
                 data: (activities) {

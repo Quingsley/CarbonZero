@@ -130,14 +130,14 @@ class ActivityDataSource implements IActivityDataSource {
 
   @override
   Future<void> recordActivity(
-    ActivityRecordingModel activity,
+    ActivityRecordingModel recording,
     ActivityType type,
   ) async {
     try {
       final doc = await _db
           .collection('activity_recordings')
           .withActivityRecordingModelConverter()
-          .add(activity);
+          .add(recording);
 
       await doc.update({'id': doc.id});
 
@@ -145,12 +145,12 @@ class ActivityDataSource implements IActivityDataSource {
       final activityDoc = await _db
           .collection('activities')
           .withActivityModelConverter()
-          .doc(activity.activityId)
+          .doc(recording.activityId)
           .get();
       if (type == ActivityType.individual) {
         final totalDocuments = await _db
             .collection('activity_recordings')
-            .where('activityId', isEqualTo: activity.activityId)
+            .where('activityId', isEqualTo: recording.activityId)
             .get();
         final userActivity = activityDoc.data()!;
         final startDate = DateTime.parse(userActivity.startDate);
@@ -162,8 +162,8 @@ class ActivityDataSource implements IActivityDataSource {
         /// TODO: use cloud function here
         await activityDoc.reference.update({
           'carbonPoints':
-              FieldValue.increment(activity.imageUrl.isEmpty ? 1 : 3),
-          'cO2Emitted': FieldValue.increment(activity.co2Emitted),
+              FieldValue.increment(recording.imageUrl.isEmpty ? 1 : 3),
+          'cO2Emitted': FieldValue.increment(recording.co2Emitted),
           'progress': progress,
         });
       } else {
@@ -181,9 +181,9 @@ class ActivityDataSource implements IActivityDataSource {
               isGreaterThanOrEqualTo: startOfDay.toIso8601String(),
             )
             .where('date', isLessThanOrEqualTo: endOfDay.toIso8601String())
-            .where('activityId', isEqualTo: activity.activityId)
-            .where('type', isEqualTo: ActivityType.community.name)
+            .where('activityId', isEqualTo: recording.activityId)
             .get();
+
         final communityActivity = activityDoc.data()!;
         final startDate = DateTime.parse(communityActivity.startDate);
         final endDate = DateTime.parse(communityActivity.endDate);
@@ -191,14 +191,17 @@ class ActivityDataSource implements IActivityDataSource {
         //the community  when the challenge ends
         final expectedTotalActivities = endDate.difference(startDate).inDays *
             communityActivity.participants.length;
+
         final activitiesDoneInADay = totalDocumentsInADay.docs.length;
+
         final progress = activitiesDoneInADay / expectedTotalActivities;
+
         // update the progress of the community
         await activityDoc.reference.update({
           'carbonPoints':
-              FieldValue.increment(activity.imageUrl.isEmpty ? 1 : 3),
-          'cO2Emitted': FieldValue.increment(activity.co2Emitted),
-          'progress': FieldValue.increment(progress),
+              FieldValue.increment(recording.imageUrl.isEmpty ? 1 : 3),
+          'cO2Emitted': FieldValue.increment(recording.co2Emitted),
+          'progress': progress,
         });
       }
 
@@ -206,12 +209,12 @@ class ActivityDataSource implements IActivityDataSource {
       final user = await _db
           .collection('users')
           .withUserModelConverter()
-          .doc(activity.userId)
+          .doc(recording.userId)
           .get();
       await user.reference.update({
         'carbonFootPrintNow': FieldValue.increment(25 / 1000), // in kg
         'totalCarbonPoints': FieldValue.increment(
-          activity.imageUrl.isEmpty ? 7 : 15,
+          recording.imageUrl.isEmpty ? 7 : 15,
         ),
       });
     } on FirebaseException catch (e) {
@@ -345,8 +348,7 @@ class ActivityDataSource implements IActivityDataSource {
             .doc(doc.data().activityId)
             .get();
         chartData.add({
-          'date':
-              DateFormat('dd-MM-yyyy').format(DateTime.parse(doc.data().date)),
+          'date': DateFormat('E').format(DateTime.parse(doc.data().date)),
           'co2Emitted': doc.data().co2Emitted,
           'title': snapshot.data()?.name,
           'color': snapshot.data()?.color,

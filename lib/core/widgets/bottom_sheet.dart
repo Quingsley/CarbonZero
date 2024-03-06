@@ -7,6 +7,7 @@ Future<void> kShowBottomSheet({
   required BuildContext context,
   required Widget child,
   bool isDismissible = true,
+  bool isFullScreen = false,
   double? height,
 }) {
   return showMaterialModalBottomSheet(
@@ -15,10 +16,12 @@ Future<void> kShowBottomSheet({
     enableDrag: false,
     useRootNavigator: true,
     backgroundColor: context.colors.surface,
-    builder: (context) => Container(
-      margin: const EdgeInsets.all(12),
-      height: height ?? MediaQuery.sizeOf(context).height * .4,
-      child: child,
-    ),
+    builder: (context) => isFullScreen
+        ? child // a scaffold will be added to the child
+        : Container(
+            margin: const EdgeInsets.all(12),
+            height: height ?? MediaQuery.sizeOf(context).height * .4,
+            child: child,
+          ),
   );
 }
