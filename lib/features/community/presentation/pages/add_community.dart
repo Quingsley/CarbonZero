@@ -96,6 +96,7 @@ class _AddCommunityState extends ConsumerState<AddCommunity> {
       setState(() {
         _selectedTags = [];
       });
+      ref.invalidate(adminCommunityFutureProvider);
     }
   }
 
