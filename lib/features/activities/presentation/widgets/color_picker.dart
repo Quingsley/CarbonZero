@@ -16,7 +16,7 @@ class ColorPicker extends ConsumerWidget {
     final color = ref.watch(selectedColorProvider);
     final isDark = ref.watch(isDarkModeStateProvider);
     return SizedBox(
-      height: 500,
+      height: 350,
       child: GridView.builder(
         itemCount: ecoFriendlyColors.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
