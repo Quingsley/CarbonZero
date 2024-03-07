@@ -22,6 +22,7 @@ class RewardsScreen extends ConsumerWidget {
         (user.value?.userId, ActivityType.community),
       ),
     );
+    final points = user.value?.totalCarbonPoints ?? 0;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -148,7 +149,8 @@ class RewardsScreen extends ConsumerWidget {
                 children: List.generate(
                   4,
                   (index) => RedeemCard(
-                    enabled: index == 0,
+                    enabled: (index == 0 && points > 25) ||
+                        (index != 0 && points > 25 * (index * 2)),
                     points: index == 0 ? 25 : 25 * (index * 2),
                   ),
                 ),

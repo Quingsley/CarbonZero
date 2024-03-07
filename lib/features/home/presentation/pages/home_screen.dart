@@ -1,3 +1,4 @@
+import 'package:carbon_zero/algorithm.dart';
 import 'package:carbon_zero/core/constants/constants.dart';
 import 'package:carbon_zero/core/error/failure.dart';
 import 'package:carbon_zero/core/extensions.dart';
@@ -157,17 +158,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             const SizedBox(
               height: 8,
             ),
-            const Row(
+            Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Expanded(
                   child: HomeCard(
                     title: 'Reach to goal',
-                    description: '9453 co2',
+                    description: '${calculateAchievableTarget(
+                      user.value?.initialCarbonFootPrint ?? 0,
+                    ).toStringAsFixed(2)} co2',
                     icon: Icons.line_axis,
                   ),
                 ),
-                Expanded(
+                const Expanded(
                   child: HomeCard(
                     title: 'Community goal',
                     description: '10489 co2',
