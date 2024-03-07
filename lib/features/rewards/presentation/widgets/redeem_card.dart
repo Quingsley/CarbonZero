@@ -1,5 +1,5 @@
 import 'package:carbon_zero/core/extensions.dart';
-import 'package:carbon_zero/features/rewards/data/repositories/example_pass.dart';
+// import 'package:carbon_zero/features/rewards/data/repositories/example_pass.dart';
 import 'package:flutter/material.dart';
 
 /// will show the redeem points that are
@@ -22,7 +22,14 @@ class RedeemCard extends StatelessWidget {
           await showDialog<void>(
             context: context,
             builder: (context) => const Dialog(
-              child: PassReward(),
+              child: SizedBox(
+                child: Column(
+                  children: [
+                    Icon(Icons.hourglass_bottom),
+                    Text('Coming soon , in future updates'),
+                  ],
+                ),
+              ),
             ),
           );
         }
