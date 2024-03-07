@@ -1,4 +1,5 @@
 import 'package:carbon_zero/core/extensions.dart';
+import 'package:carbon_zero/features/rewards/data/repositories/example_pass.dart';
 import 'package:flutter/material.dart';
 
 /// will show the redeem points that are
@@ -15,38 +16,50 @@ class RedeemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 80,
-      height: 100,
-      margin: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: context.colors.tertiary.withOpacity(.82),
-        image: enabled
-            ? const DecorationImage(
-                image: AssetImage('assets/images/reedim.png'),
-                fit: BoxFit.cover,
-              )
-            : null,
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            points.toString(),
-            style: context.textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: context.colors.onPrimary,
+    return GestureDetector(
+      onTap: () async {
+        if (enabled) {
+          await showDialog<void>(
+            context: context,
+            builder: (context) => const Dialog(
+              child: PassReward(),
             ),
-          ),
-          Text(
-            'Redeem now',
-            textAlign: TextAlign.center,
-            style: context.textTheme.titleSmall?.copyWith(
-              color: context.colors.onPrimary,
+          );
+        }
+      },
+      child: Container(
+        width: 80,
+        height: 100,
+        margin: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: context.colors.tertiary.withOpacity(.82),
+          image: enabled
+              ? const DecorationImage(
+                  image: AssetImage('assets/images/reedim.png'),
+                  fit: BoxFit.cover,
+                )
+              : null,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              points.toString(),
+              style: context.textTheme.headlineMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: context.colors.onPrimary,
+              ),
             ),
-          ),
-        ],
+            Text(
+              'Redeem now',
+              textAlign: TextAlign.center,
+              style: context.textTheme.titleSmall?.copyWith(
+                color: context.colors.onPrimary,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
