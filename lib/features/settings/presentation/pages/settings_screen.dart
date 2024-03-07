@@ -88,10 +88,7 @@ class SettingsScreen extends ConsumerWidget {
                 icon: SvgPicture.asset(
                   'assets/images/community-icon.svg',
                   width: 24,
-                  colorFilter: ColorFilter.mode(
-                    context.colors.primary,
-                    BlendMode.srcIn,
-                  ),
+                  color: context.colors.primary,
                 ),
                 iconColor: context.colors.primary,
               ),

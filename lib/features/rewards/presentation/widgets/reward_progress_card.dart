@@ -65,10 +65,7 @@ class RewardProgressCard extends ConsumerWidget {
                     avatar: SvgPicture.asset(
                       'assets/images/community-icon.svg',
                       width: 24,
-                      colorFilter: ColorFilter.mode(
-                        context.colors.tertiary,
-                        BlendMode.srcIn,
-                      ),
+                      color: context.colors.tertiary,
                     ),
                     labelPadding: EdgeInsets.zero,
                     label: Text(

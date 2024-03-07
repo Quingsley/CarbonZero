@@ -59,15 +59,9 @@ class _TabShellRouteState extends ConsumerState<TabShellRoute> {
             icon: SvgPicture.asset(
               'assets/images/home.svg',
               // width: 10,
-              colorFilter: ColorFilter.mode(
-                AppTabs.home.index == widget.navigationShell.currentIndex
-                    ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context)
-                        .colorScheme
-                        .onBackground
-                        .withOpacity(.62),
-                BlendMode.srcIn,
-              ),
+              color: AppTabs.home.index == widget.navigationShell.currentIndex
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.onBackground.withOpacity(.62),
             ),
             label: 'Home',
           ),
@@ -75,15 +69,10 @@ class _TabShellRouteState extends ConsumerState<TabShellRoute> {
             icon: SvgPicture.asset(
               'assets/images/statistics.svg',
               // width: 10,
-              colorFilter: ColorFilter.mode(
-                AppTabs.statistics.index == widget.navigationShell.currentIndex
-                    ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context)
-                        .colorScheme
-                        .onBackground
-                        .withOpacity(.62),
-                BlendMode.srcIn,
-              ),
+              color: AppTabs.statistics.index ==
+                      widget.navigationShell.currentIndex
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.onBackground.withOpacity(.62),
             ),
             label: 'Statistics',
           ),
@@ -91,15 +80,10 @@ class _TabShellRouteState extends ConsumerState<TabShellRoute> {
             icon: SvgPicture.asset(
               'assets/images/community.svg',
               // width: 10,
-              colorFilter: ColorFilter.mode(
-                AppTabs.community.index == widget.navigationShell.currentIndex
-                    ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context)
-                        .colorScheme
-                        .onBackground
-                        .withOpacity(.62),
-                BlendMode.srcIn,
-              ),
+              color: AppTabs.community.index ==
+                      widget.navigationShell.currentIndex
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.onBackground.withOpacity(.62),
             ),
             label: 'Community',
           ),
@@ -107,15 +91,10 @@ class _TabShellRouteState extends ConsumerState<TabShellRoute> {
             icon: SvgPicture.asset(
               'assets/images/rewards.svg',
               // width: 10,
-              colorFilter: ColorFilter.mode(
-                AppTabs.rewards.index == widget.navigationShell.currentIndex
-                    ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context)
-                        .colorScheme
-                        .onBackground
-                        .withOpacity(.62),
-                BlendMode.srcIn,
-              ),
+              color: AppTabs.rewards.index ==
+                      widget.navigationShell.currentIndex
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.onBackground.withOpacity(.62),
             ),
             label: 'Rewards',
           ),
@@ -123,15 +102,10 @@ class _TabShellRouteState extends ConsumerState<TabShellRoute> {
             icon: SvgPicture.asset(
               'assets/images/settings.svg',
               // width: 10,
-              colorFilter: ColorFilter.mode(
-                AppTabs.settings.index == widget.navigationShell.currentIndex
-                    ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context)
-                        .colorScheme
-                        .onBackground
-                        .withOpacity(.62),
-                BlendMode.srcIn,
-              ),
+              color: AppTabs.settings.index ==
+                      widget.navigationShell.currentIndex
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.onBackground.withOpacity(.62),
             ),
             label: 'Settings',
           ),
