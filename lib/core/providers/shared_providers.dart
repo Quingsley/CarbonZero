@@ -59,13 +59,18 @@ final appStartupProvider = FutureProvider<void>((ref) async {
   if (storedValue == null) {
     await preference.setString('didUserOnboard', 'didUserOnboard');
   } else {
+    final themeState = preference.getBool('themeState');
+    if (themeState != null && themeState) {
+      ref.read(isDarkModeStateProvider.notifier).state = !themeState;
+    }
     ref.read(didUserOnBoardProvider.notifier).state = true;
     final ntfDataStored = preference.get(notificationKey);
     if (ntfDataStored != null) {
       final pendingNotifications =
-          jsonDecode(ntfDataStored.toString()) as List<RemoteMessage>;
-      for (final message in pendingNotifications) {
-        messageStreamController.sink.add(message);
+          jsonDecode(ntfDataStored.toString()) as Map<String, dynamic>;
+      for (final message in pendingNotifications.values) {
+        messageStreamController.sink
+            .add(RemoteMessage.fromMap(message as Map<String, dynamic>));
       }
     }
   }
