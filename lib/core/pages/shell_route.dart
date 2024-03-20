@@ -24,9 +24,13 @@ class TabShellRoute extends ConsumerStatefulWidget {
 }
 
 class _TabShellRouteState extends ConsumerState<TabShellRoute> {
+  late int _currentPageIndex;
+
   @override
   void initState() {
     super.initState();
+    _currentPageIndex = widget.navigationShell.currentIndex;
+
     // set up listener for foreground messages
     ref.read(notificationsProvider.notifier).handleForeGroundMessages();
     messageStreamController.listen((message) {
@@ -45,14 +49,41 @@ class _TabShellRouteState extends ConsumerState<TabShellRoute> {
       index,
       initialLocation: index == widget.navigationShell.currentIndex,
     );
+    setState(() {
+      _currentPageIndex = index;
+    });
+  }
+
+// enable users to swipe between tabs
+  void _handleSwipe(DragEndDetails details) {
+    if (details.primaryVelocity! > 0) {
+      // Swiped right
+      if (_currentPageIndex > 0) {
+        widget.navigationShell.goBranch(_currentPageIndex - 1);
+        setState(() {
+          _currentPageIndex--;
+        });
+      }
+    } else if (details.primaryVelocity! < 0) {
+      // Swiped left
+      if (_currentPageIndex < 5) {
+        widget.navigationShell.goBranch(_currentPageIndex + 1);
+        setState(() {
+          _currentPageIndex++;
+        });
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: widget.navigationShell,
+      body: GestureDetector(
+        onHorizontalDragEnd: _handleSwipe,
+        child: widget.navigationShell,
+      ),
       bottomNavigationBar: NavigationBar(
-        selectedIndex: widget.navigationShell.currentIndex,
+        selectedIndex: _currentPageIndex,
         onDestinationSelected: _goBranch,
         destinations: [
           NavigationDestination(
