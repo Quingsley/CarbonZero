@@ -1,12 +1,11 @@
-import 'dart:convert';
-
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:carbon_zero/app.dart';
-import 'package:carbon_zero/core/constants/constants.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/core/theme/theme.dart';
+import 'package:carbon_zero/core/utils/utils.dart';
 import 'package:carbon_zero/features/splash/presentation/pages/splash_screen.dart';
 import 'package:carbon_zero/firebase_options.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -25,26 +24,32 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     print('Message notification: ${message.notification?.title}');
     print('Message notification: ${message.notification?.body}');
   }
-  // fix should be stored in local storage
-  final dataStored = storage.get(notificationKey);
-  if (dataStored != null) {
-    final pendingNotifications =
-        jsonDecode(dataStored.toString()) as List<RemoteMessage>..add(message);
-    await storage.setString(notificationKey, jsonEncode(pendingNotifications));
-  } else {
-    final initialList = <RemoteMessage>[message];
-    await storage.setString(notificationKey, jsonEncode(initialList));
-  }
+  await storeNotifications(message, storage);
 }
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await preloadSVG([
+    'assets/images/coin.svg',
+    'assets/images/community-icon.svg',
+    'assets/images/community.svg',
+    'assets/images/ecology_light.svg',
+    'assets/images/home.svg',
+    'assets/images/hobby_activity.svg',
+    'assets/images/nature_gardening.svg',
+    'assets/images/rewards.svg',
+    'assets/images/settings.svg',
+    'assets/images/statistics.svg',
+    'assets/images/storage_work.svg',
+  ]);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await FirebaseAppCheck.instance.activate(
     androidProvider: AndroidProvider.debug,
   );
+  final analytics = FirebaseAnalytics.instance;
+  await analytics.setAnalyticsCollectionEnabled(true);
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   FlutterError.onError = (errorDetails) {
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
@@ -120,6 +125,7 @@ class AppStartUpWidget extends ConsumerWidget {
         home: Scaffold(
           body: Center(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('Error: $e'),
                 ElevatedButton(

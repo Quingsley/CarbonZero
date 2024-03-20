@@ -1,6 +1,7 @@
 import 'package:carbon_zero/services/notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 /// will contain user notifications
 class NotificationScreen extends ConsumerStatefulWidget {
@@ -12,8 +13,6 @@ class NotificationScreen extends ConsumerStatefulWidget {
 }
 
 class _NotificationScreenState extends ConsumerState<NotificationScreen> {
-
-
   @override
   Widget build(BuildContext context) {
     final notifications = ref.watch(notificationMessagesProvider);
@@ -31,8 +30,12 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
               itemBuilder: (context, index) {
                 final notification = notifications[index];
                 return ListTile(
+                  key: ValueKey(notification.messageId),
                   title: Text(notification.notification!.title!),
                   subtitle: Text(notification.notification!.body!),
+                  trailing: Text(
+                    DateFormat('dd/MM/yyyy').format(notification.sentTime!),
+                  ),
                 );
               },
             ),

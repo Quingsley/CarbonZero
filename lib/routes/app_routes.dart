@@ -30,6 +30,7 @@ import 'package:carbon_zero/features/statistics/presentation/pages/statistics_sc
 import 'package:carbon_zero/features/user_onboarding/presentation/pages/carbon_footprint_results.dart';
 import 'package:carbon_zero/features/user_onboarding/presentation/pages/user_onboarding.dart';
 import 'package:carbon_zero/routes/go_router_refresh_stream.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -52,6 +53,9 @@ class AppRoutes {
     return GoRouter(
       navigatorKey: AppRoutes._rootNavigator,
       initialLocation: '/',
+      observers: [
+        FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
+      ],
       refreshListenable: GoRouterRefreshStream(auth.authStateChanges()),
       redirect: (context, state) {
         if (state.fullPath == '/') {

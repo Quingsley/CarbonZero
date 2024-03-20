@@ -61,9 +61,15 @@ class SettingsScreen extends ConsumerWidget {
               ),
               SettingsTile(
                 title: isDarkMode ? 'Light Theme' : 'Dark Theme',
-                onTap: () {
+                onTap: () async {
                   ref.read(isDarkModeStateProvider.notifier).state =
                       !ref.read(isDarkModeStateProvider);
+                  final preference =
+                      await ref.read(sharedPreferencesProvider.future);
+                  await preference.setBool(
+                    'themeState',
+                    !ref.read(isDarkModeStateProvider),
+                  );
                 },
                 icon: Icon(!isDarkMode ? Icons.dark_mode : Icons.light_mode),
                 iconColor: context.colors.primary,
