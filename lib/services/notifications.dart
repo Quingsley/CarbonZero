@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:carbon_zero/core/providers/shared_providers.dart';
+import 'package:carbon_zero/core/utils/utils.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,7 +32,7 @@ class NotificationService extends AsyncNotifier<void> {
 
   /// will handle foreground messages
   void handleForeGroundMessages() {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       if (kDebugMode) {
         print('Handling a foreground message: ${message.messageId}');
         print('Message data: ${message.data}');
@@ -39,6 +40,8 @@ class NotificationService extends AsyncNotifier<void> {
         print('Message notification: ${message.notification?.body}');
       }
       messageStreamController.sink.add(message);
+      final storage = await ref.read(sharedPreferencesProvider.future);
+      await storeNotifications(message, storage);
     });
   }
 

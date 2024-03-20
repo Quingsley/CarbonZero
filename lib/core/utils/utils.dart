@@ -1,5 +1,11 @@
+import 'dart:convert';
+
+import 'package:carbon_zero/core/constants/constants.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Returns a hash code for a [DateTime] object.
 int getHashCode(DateTime key) {
@@ -31,7 +37,36 @@ Future<void> openCustomTab(BuildContext context, String url) async {
       ),
     );
   } catch (e) {
-    // If the URL launch fails, an exception will be thrown. (For example, if no browser app is installed on the Android device.)
+    // If the URL launch fails, an exception will be thrown.
+    //(For example, if no browser app is installed on the Android device.)
     debugPrint(e.toString());
+  }
+}
+
+/// will preload svg and cache them before the app starts
+Future<void> preloadSVG(List<String> assetPaths) async {
+  for (final path in assetPaths) {
+    final loader = SvgAssetLoader(path);
+    await svg.cache.putIfAbsent(
+      loader.cacheKey(null),
+      () => loader.loadBytes(null),
+    );
+  }
+}
+
+/// will store notification data in shared preferences
+Future<void> storeNotifications(
+  RemoteMessage message,
+  SharedPreferences storage,
+) async {
+  final dataStored = storage.get(notificationKey);
+  if (dataStored != null) {
+    final pendingNotifications =
+        jsonDecode(dataStored.toString()) as Map<String, dynamic>;
+    pendingNotifications[message.messageId!] = message.toMap();
+    await storage.setString(notificationKey, jsonEncode(pendingNotifications));
+  } else {
+    final initialList = {message.messageId!: message.toMap()};
+    await storage.setString(notificationKey, jsonEncode(initialList));
   }
 }
