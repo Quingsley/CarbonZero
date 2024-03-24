@@ -144,7 +144,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
               ],
             ),
-            const Text('Hope you  planted a tree today'),
+            Text(
+              user.value?.welcomeMessage ?? 'Hope you  planted a tree today',
+            ),
             const SizedBox(
               height: 20,
             ),
@@ -157,20 +159,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             const SizedBox(
               height: 8,
             ),
-            const Row(
+            Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Expanded(
                   child: HomeCard(
                     title: 'Reach to goal',
-                    description: '9453 co2',
+                    description:
+                        '${user.value?.footPrintGoal.toStringAsFixed(2)} kg CO2e',
                     icon: Icons.line_axis,
                   ),
                 ),
                 Expanded(
                   child: HomeCard(
                     title: 'Community goal',
-                    description: '10489 co2',
+                    description:
+                        '${user.value?.communityGoal.toStringAsFixed(2)} kg CO2e',
                     icon: Icons.people,
                   ),
                 ),
