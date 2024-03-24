@@ -344,7 +344,7 @@ const dietMessage =
 /// checks if email isValid
 bool isEmailValid(String email) {
   // Define a regular expression for email validation
-  final RegExp emailRegex = RegExp(
+  final emailRegex = RegExp(
     r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
   );
 
@@ -359,3 +359,20 @@ const String privacyUrl =
 /// terms
 const String terms =
     'https://doc-hosting.flycricket.io/carbonzero-terms-of-use/be1512b4-fe46-42e3-9725-249a77b97e01/terms';
+
+/// ntf types
+enum NotificationTypes {
+  /// chat
+  chat('chat'),
+
+  /// daily tip
+  tip('tip'),
+
+  /// new challenge
+  communityChallenge('communityChallenge');
+
+  const NotificationTypes(this.name);
+
+  /// name of the notification type
+  final String name;
+}
