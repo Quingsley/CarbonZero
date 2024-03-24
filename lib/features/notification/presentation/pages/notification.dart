@@ -1,5 +1,5 @@
 import 'package:carbon_zero/core/constants/constants.dart';
-import 'package:carbon_zero/core/extensions.dart';
+import 'package:carbon_zero/core/widgets/expansion_tile_card.dart';
 import 'package:carbon_zero/services/notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -37,21 +37,17 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
                     : ntfData == NotificationTypes.tip.name
                         ? NotificationTypes.tip
                         : NotificationTypes.communityChallenge;
-                return ListTile(
+                return CustomExpansionTile(
                   key: ValueKey(notification.messageId),
-                  leading: Icon(
-                    ntfType == NotificationTypes.chat
-                        ? Icons.chat
-                        : ntfType == NotificationTypes.tip
-                            ? Icons.lightbulb
-                            : Icons.people,
-                    color: context.colors.primary,
-                  ),
-                  title: Text(notification.notification!.title!),
-                  subtitle: Text(notification.notification!.body!),
-                  trailing: Text(
-                    DateFormat('dd/MM/yyyy').format(notification.sentTime!),
-                  ),
+                  icon: ntfType == NotificationTypes.chat
+                      ? Icons.chat
+                      : ntfType == NotificationTypes.tip
+                          ? Icons.lightbulb
+                          : Icons.people,
+                  title: notification.notification!.title!,
+                  subtitle: notification.notification!.body!,
+                  trailing:
+                      DateFormat('dd/MM/yyyy').format(notification.sentTime!),
                 );
               },
             ),
