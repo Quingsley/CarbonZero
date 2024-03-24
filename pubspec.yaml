@@ -12,6 +12,7 @@ dependencies:
   cloud_firestore: ^4.15.2
   country_picker: ^2.0.24
   equatable: ^2.0.5
+  expansion_tile_card: ^3.0.0
   firebase_analytics: ^10.8.5
   firebase_app_check: ^0.2.1+13
   firebase_auth: ^4.17.2
@@ -37,6 +38,7 @@ dependencies:
   google_sign_in: ^6.2.1
   image_picker: ^1.0.7
 
+  infinite_carousel: ^1.1.1
   intl: ^0.19.0
   modal_bottom_sheet: ^3.0.0-pre
   multi_select_flutter: ^4.1.3
