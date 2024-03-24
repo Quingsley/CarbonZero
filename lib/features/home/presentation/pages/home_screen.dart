@@ -11,7 +11,10 @@ import 'package:carbon_zero/features/community/data/models/community_model.dart'
 import 'package:carbon_zero/features/community/presentation/view_models/community_view_model.dart';
 import 'package:carbon_zero/features/home/presentation/widgets/activity_tile.dart';
 import 'package:carbon_zero/features/home/presentation/widgets/carbon_foot_print.dart';
+import 'package:carbon_zero/features/home/presentation/widgets/carousel.dart';
 import 'package:carbon_zero/features/home/presentation/widgets/home_card.dart';
+import 'package:carbon_zero/services/notifications.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,6 +35,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   bool isDay = true;
   final _fabKey = GlobalKey<ExpandableFabState>();
   List<CommunityModel> communities = [];
+  final List<RemoteMessage> _tips = [];
+
+  @override
+  void initState() {
+    super.initState();
+    final notifications = ref.read(notificationMessagesProvider);
+    _tips.addAll(
+      notifications.where((message) => message.data['type'] == 'tip'),
+    );
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -180,13 +194,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
               ],
             ),
-            const HomeCard(
-              title: null,
-              description: '''
+            if (_tips.isEmpty)
+              const HomeCard(
+                title: null,
+                description: '''
 Using reusable bags instead of plastic bags when shopping can help reduce 
 carbon emissions by reducing the amount of plastic waste produced''',
-              icon: Icons.lightbulb,
-            ),
+                icon: Icons.lightbulb,
+              ),
+            if (_tips.isNotEmpty && _tips.length == 1)
+              HomeCard(
+                title: _tips.first.notification!.title,
+                description: _tips.first.notification!.body!,
+                icon: Icons.lightbulb,
+              ),
+            if (_tips.isNotEmpty && _tips.length > 1)
+              HomeCarousel(itemCount: _tips.length, tips: _tips),
             const SizedBox(
               height: 4,
             ),
