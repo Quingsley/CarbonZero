@@ -61,7 +61,7 @@ final appStartupProvider = FutureProvider<void>((ref) async {
   } else {
     final themeState = preference.getBool('themeState');
     if (themeState != null && themeState) {
-      ref.read(isDarkModeStateProvider.notifier).state = !themeState;
+      ref.read(isDarkModeStateProvider.notifier).state = themeState;
     }
     ref.read(didUserOnBoardProvider.notifier).state = true;
     final ntfDataStored = preference.get(notificationKey);
