@@ -12,8 +12,11 @@ class UserModel extends Equatable {
     this.totalCarbonPoints = 0,
     this.userId,
     this.photoId,
+    this.welcomeMessage,
+    this.footPrintGoal = 0,
     this.carbonFootPrintNow = 0,
     this.initialCarbonFootPrint = 0,
+    this.communityGoal = 0,
     this.pushTokens = const [],
     this.monthlyFootPrintData = const {},
   });
@@ -35,6 +38,9 @@ class UserModel extends Equatable {
           'pushTokens': final List<dynamic> pushTokens,
           'monthlyFootPrintData': final Map<String, dynamic>
               monthlyFootPrintData,
+          'footPrintGoal': final double footPrintGoal,
+          'welcomeMessage': final String? welcomeMessage,
+          'communityGoal': final double communityGoal,
         }) {
       return UserModel(
         userId: userId,
@@ -48,6 +54,9 @@ class UserModel extends Equatable {
         carbonFootPrintNow: carbonFootPrintNow,
         initialCarbonFootPrint: initialCarbonFootPrint,
         pushTokens: List.from(pushTokens),
+        footPrintGoal: footPrintGoal,
+        communityGoal: communityGoal,
+        welcomeMessage: welcomeMessage,
         monthlyFootPrintData: monthlyFootPrintData.map(
           (key, value) => MapEntry(key, value as double),
         ),
@@ -94,6 +103,15 @@ class UserModel extends Equatable {
   ///monthlyFootPrintData
   final Map<String, double> monthlyFootPrintData;
 
+  /// footPrintGoal of the user
+  final double footPrintGoal;
+
+  /// communityGoal of the user
+  final double communityGoal;
+
+  /// welcome message for the user
+  final String? welcomeMessage;
+
   /// copy with method to create a new instance of [UserModel]
   /// with updated values
   UserModel copyWith({
@@ -109,6 +127,9 @@ class UserModel extends Equatable {
     double? initialCarbonFootPrint,
     List<String>? pushTokens,
     Map<String, double>? monthlyFootPrintData,
+    double? footPrintGoal,
+    String? welcomeMessage,
+    double? communityGoal,
   }) {
     return UserModel(
       userId: userId ?? this.userId,
@@ -124,6 +145,9 @@ class UserModel extends Equatable {
           initialCarbonFootPrint ?? this.initialCarbonFootPrint,
       pushTokens: pushTokens ?? this.pushTokens,
       monthlyFootPrintData: monthlyFootPrintData ?? this.monthlyFootPrintData,
+      footPrintGoal: footPrintGoal ?? this.footPrintGoal,
+      communityGoal: communityGoal ?? this.communityGoal,
+      welcomeMessage: welcomeMessage ?? this.welcomeMessage,
     );
   }
 
@@ -142,6 +166,9 @@ class UserModel extends Equatable {
       'initialCarbonFootPrint': initialCarbonFootPrint,
       'pushTokens': pushTokens,
       'monthlyFootPrintData': monthlyFootPrintData,
+      'footPrintGoal': footPrintGoal,
+      'communityGoal': communityGoal,
+      'welcomeMessage': welcomeMessage,
     };
   }
 
@@ -158,6 +185,10 @@ class UserModel extends Equatable {
         carbonFootPrintNow,
         initialCarbonFootPrint,
         pushTokens,
+        monthlyFootPrintData,
+        communityGoal,
+        footPrintGoal,
+        welcomeMessage,
       ];
 
   @override
