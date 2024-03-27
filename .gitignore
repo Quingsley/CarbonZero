@@ -45,3 +45,4 @@ app.*.map.json
 /lib/firebase_options.dart
 /lib/algorithm.dart
 /lib/oss_licenses.dart
+firebase.json
