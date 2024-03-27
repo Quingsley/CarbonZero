@@ -99,6 +99,7 @@ class _CommunityInboxState extends ConsumerState<CommunityInbox> {
         ),
         showUserAvatars: true,
         showUserNames: true,
+        emptyState: isLoading ? const Text('Loading messages...') : null,
         messages: messages.when(
           data: (data) {
             data.sort(
@@ -131,9 +132,18 @@ class _CommunityInboxState extends ConsumerState<CommunityInbox> {
                 .toList();
           },
           error: (error, stackTrace) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: const Text('Error fetching images'),
+                backgroundColor: context.colors.error,
+              ),
+            );
+
             return [];
           },
-          loading: () => [],
+          loading: () {
+            return [];
+          },
         ),
         onSendPressed: !isLoading
             ? (value) async {
