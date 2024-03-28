@@ -1,6 +1,7 @@
 import 'package:carbon_zero/core/error/failure.dart';
 import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
+import 'package:carbon_zero/core/widgets/default_skeleton.dart';
 import 'package:carbon_zero/features/community/presentation/view_models/community_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -91,7 +92,7 @@ class AdminCommunities extends ConsumerWidget {
         error: (error, stackTrace) => Center(
           child: Text(error is Failure ? error.message : error.toString()),
         ),
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: DefaultSkeleton.new,
       ),
     );
   }

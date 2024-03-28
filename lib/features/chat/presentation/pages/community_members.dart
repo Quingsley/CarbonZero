@@ -1,4 +1,5 @@
 import 'package:carbon_zero/core/error/failure.dart';
+import 'package:carbon_zero/core/widgets/default_skeleton.dart';
 import 'package:carbon_zero/features/community/data/repository/community_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -46,11 +47,7 @@ class CommunityMembers extends ConsumerWidget {
               child: Text(error is Failure ? error.message : error.toString()),
             );
           },
-          loading: () {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          },
+          loading: DefaultSkeleton.new,
         ),
       ),
     );

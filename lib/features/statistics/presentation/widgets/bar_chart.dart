@@ -1,6 +1,7 @@
 import 'package:carbon_zero/core/error/failure.dart';
 import 'package:carbon_zero/features/activities/presentation/view_models/activity_view_model.dart';
 import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
+import 'package:carbon_zero/features/statistics/presentation/widgets/bar_chart_skeleton.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -46,7 +47,7 @@ class Carbon2StatsBarChart extends ConsumerWidget {
                         '4' => data[4]['date'] as String,
                         '5' => data[5]['date'] as String,
                         '6' => data[6]['date'] as String,
-                        String() => '',
+                        _ => '',
                       };
                       return SideTitleWidget(
                         axisSide: AxisSide.bottom,
@@ -82,9 +83,7 @@ class Carbon2StatsBarChart extends ConsumerWidget {
       error: (error, _) => Center(
         child: Text(error is Failure ? error.message : error.toString()),
       ),
-      loading: () => const Center(
-        child: CircularProgressIndicator(),
-      ),
+      loading: BarChartSkeleton.new,
     );
   }
 }

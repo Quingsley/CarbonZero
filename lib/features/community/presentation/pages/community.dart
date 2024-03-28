@@ -3,8 +3,10 @@ import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
 import 'package:carbon_zero/features/community/presentation/view_models/community_view_model.dart';
 import 'package:carbon_zero/features/community/presentation/widgets/community_card.dart';
+import 'package:carbon_zero/features/community/presentation/widgets/community_card_skeleton.dart';
 import 'package:carbon_zero/features/community/presentation/widgets/community_search.dart';
 import 'package:carbon_zero/features/community/presentation/widgets/user_community_card.dart';
+import 'package:carbon_zero/features/community/presentation/widgets/user_community_skeleton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -71,7 +73,7 @@ class CommunityScreen extends ConsumerWidget {
                     ),
                   );
                 },
-                loading: () => const Center(child: CircularProgressIndicator()),
+                loading: CommunityLoadingSkeleton.new,
               ),
             ),
             const SizedBox(
@@ -105,7 +107,7 @@ class CommunityScreen extends ConsumerWidget {
                     error is Failure ? error.message : error.toString(),
                   ),
                 ),
-                loading: () => const Center(child: CircularProgressIndicator()),
+                loading: UserCommunityLoadingSkeleton.new,
               ),
             ),
           ],

@@ -3,6 +3,7 @@ import 'package:carbon_zero/core/error/failure.dart';
 import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/core/widgets/bottom_sheet.dart';
+import 'package:carbon_zero/core/widgets/home_loading_skeleton.dart';
 import 'package:carbon_zero/features/activities/presentation/pages/new_activity.dart';
 import 'package:carbon_zero/features/activities/presentation/view_models/activity_view_model.dart';
 import 'package:carbon_zero/features/auth/data/repositories/auth_repo_impl.dart';
@@ -19,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 /// [HomeScreen] the home tab of the app contains activities like
 /// the carbon footprint of the user, daily goals, community goal daily tip ,
@@ -137,23 +139,33 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       onPressed: () => context.push('/notification'),
                       icon: const Icon(Icons.notifications),
                     ),
-                    if (user.value?.photoId != null)
-                      GestureDetector(
-                        onTap: () => context.go('/settings'),
-                        child: user.when(
-                          error: (_, __) => const SizedBox.shrink(),
-                          loading: () => const CircularProgressIndicator(),
-                          data: (value) => CircleAvatar(
-                            backgroundImage:
-                                NetworkImage(user.value?.photoId ?? ''),
+                    // if (user.value?.photoId != null)
+                    Skeletonizer(
+                      enabled: user.value?.photoId == null,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(100),
+                        child: Skeleton.replace(
+                          width: 48,
+                          height: 48,
+                          child: GestureDetector(
+                            onTap: () => context.go('/settings'),
+                            child: user.when(
+                              error: (_, __) => const SizedBox.shrink(),
+                              loading: () => const CircularProgressIndicator(),
+                              data: (value) => CircleAvatar(
+                                backgroundImage:
+                                    NetworkImage(user.value?.photoId ?? ''),
+                              ),
+                            ),
                           ),
                         ),
-                      )
-                    else
-                      IconButton.filled(
-                        onPressed: () => context.go('/settings'),
-                        icon: const Icon(Icons.person),
                       ),
+                    ),
+                    // else
+                    //   IconButton.filled(
+                    //     onPressed: () => context.go('/settings'),
+                    //     icon: const Icon(Icons.person),
+                    //   ),
                   ],
                 ),
               ],
@@ -237,11 +249,7 @@ carbon emissions by reducing the amount of plastic waste produced''',
                     ),
                   );
                 },
-                loading: () {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
+                loading: HomeLoadingSkeleton.new,
               ),
             ),
           ],
