@@ -46,3 +46,6 @@ app.*.map.json
 /lib/algorithm.dart
 /lib/oss_licenses.dart
 firebase.json
+
+# FVM Version Cache
+.fvm/

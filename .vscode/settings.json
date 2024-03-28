@@ -1,3 +1,9 @@
 {
-  "cSpell.words": ["Firestore", "Pescatarian", "PHEV"]
+  "cSpell.words": [
+    "Firestore",
+    "Pescatarian",
+    "PHEV",
+    "Skeletonizer"
+  ],
+  "dart.flutterSdkPath": ".fvm/versions/3.19.4"
 }
