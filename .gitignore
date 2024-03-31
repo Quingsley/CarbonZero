@@ -43,6 +43,7 @@ app.*.map.json
 /android/app/release
 
 /lib/firebase_options.dart
+/lib/firebase_options.dev.dart
 /lib/algorithm.dart
 /lib/oss_licenses.dart
 firebase.json
