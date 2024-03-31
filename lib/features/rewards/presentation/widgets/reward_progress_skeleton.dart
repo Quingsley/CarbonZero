@@ -12,7 +12,10 @@ class RewardProgressSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Skeletonizer(
-      child: ListView.builder(
+      child: ListView.separated(
+        separatorBuilder: (context, index) => const Divider(
+          thickness: 2,
+        ),
         itemCount: _fakeActivities.length,
         itemBuilder: (context, index) {
           return RewardProgressCard(
