@@ -36,7 +36,7 @@ final _fakeActivities = List.filled(
     cO2Emitted: 20,
     type: ActivityType.individual,
     parentId: BoneMock.name,
-    reminderTime: BoneMock.time,
+    reminderTime: DateTime.now().toIso8601String(),
     members: 20,
     progress: .5,
     startDate: BoneMock.time,
