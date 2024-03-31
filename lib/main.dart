@@ -1,10 +1,12 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:carbon_zero/app.dart';
+import 'package:carbon_zero/core/constants/flavors.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/core/theme/theme.dart';
 import 'package:carbon_zero/core/utils/utils.dart';
 import 'package:carbon_zero/features/splash/presentation/pages/splash_screen.dart';
 import 'package:carbon_zero/firebase_options.dart';
+import 'package:carbon_zero/firebase_options.dev.dart' as dev;
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -42,8 +44,12 @@ Future<void> main() async {
     'assets/images/statistics.svg',
     'assets/images/storage_work.svg',
   ]);
+
+  final env = getFlavor();
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+    options: env == Flavor.dev
+        ? dev.DefaultFirebaseOptions.currentPlatform
+        : DefaultFirebaseOptions.currentPlatform,
   );
   await FirebaseAppCheck.instance.activate(
     androidProvider: AndroidProvider.debug,
@@ -111,15 +117,18 @@ class AppStartUpWidget extends ConsumerWidget {
     // 2. eagerly initialize appStartupProvider
     //(and all the providers it depends on)
     final appStartupState = ref.watch(appStartupProvider);
+    final env = getFlavor();
     return appStartupState.when(
       // 3. loading state
       loading: () => MaterialApp(
+        debugShowCheckedModeBanner: env == Flavor.dev,
         darkTheme: darkTheme,
         theme: lightTheme,
         home: const SplashScreen(),
       ),
       // 4. error state
       error: (e, st) => MaterialApp(
+        debugShowCheckedModeBanner: env == Flavor.dev,
         darkTheme: darkTheme,
         theme: lightTheme,
         home: Scaffold(
