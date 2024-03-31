@@ -58,6 +58,21 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    flavorDimensions "app"
+
+    productFlavors {
+        dev {
+            dimension "app"
+            resValue "string", "app_name", "CarbonZero Dev"
+            versionNameSuffix "-dev"
+            applicationId "com.quingsley.carbon_zero.dev"
+        }
+        prod {
+            dimension "app"
+            resValue "string", "app_name", "CarbonZero"
+        }
+    }
 }
 
 flutter {
