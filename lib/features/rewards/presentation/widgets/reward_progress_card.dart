@@ -39,7 +39,7 @@ class RewardProgressCard extends ConsumerWidget {
           child: Row(
             children: [
               Container(
-                width: 120,
+                width: MediaQuery.sizeOf(context).width * .3,
                 height: 80,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
@@ -50,8 +50,8 @@ class RewardProgressCard extends ConsumerWidget {
                   ),
                 ),
               ),
-              const SizedBox(
-                width: 6,
+              SizedBox(
+                width: MediaQuery.sizeOf(context).width * .03,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
