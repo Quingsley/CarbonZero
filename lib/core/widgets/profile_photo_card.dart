@@ -50,7 +50,10 @@ class _ProfilePhotoCardState extends ConsumerState<ProfilePhotoCard> {
             );
           },
           data: (data) {
-            imagePath = data[ImageType.profile]; // check if this is needed
+            final hasKey = data.containsKey(ImageType.profile);
+            if (hasKey) {
+              imagePath = data[ImageType.profile];
+            }
             final auth = ref.read(authStateChangesProvider);
             if (auth.value != null && imagePath != null) {
               ScaffoldMessenger.of(context).showSnackBar(

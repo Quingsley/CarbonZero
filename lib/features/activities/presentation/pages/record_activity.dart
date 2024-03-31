@@ -48,7 +48,7 @@ class _RecordActivityState extends ConsumerState<RecordActivity> {
       final recordedActivity = ActivityRecordingModel(
         activityId: widget.activityModel.id!,
         parentId: widget.activityModel.parentId,
-        date: widget.selectedDate.toIso8601String(),
+        date: widget.selectedDate.toUtc().toIso8601String(),
         description: descriptionController.text,
         imageUrl: imageController.text,
         userId: user.value!.userId!,

@@ -5,6 +5,7 @@ import 'package:carbon_zero/features/activities/presentation/view_models/activit
 import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
 import 'package:carbon_zero/features/rewards/presentation/widgets/redeem_card.dart';
 import 'package:carbon_zero/features/rewards/presentation/widgets/reward_progress_card.dart';
+import 'package:carbon_zero/features/rewards/presentation/widgets/reward_progress_skeleton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:flutter_svg/flutter_svg.dart';
@@ -133,9 +134,7 @@ class RewardsScreen extends ConsumerWidget {
                     ),
                   );
                 },
-                loading: () => const Center(
-                  child: CircularProgressIndicator(),
-                ),
+                loading: RewardProgressSkeleton.new,
               ),
             ),
             const SizedBox(

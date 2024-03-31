@@ -1,4 +1,5 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:carbon_zero/core/constants/flavors.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/core/theme/theme.dart';
 import 'package:carbon_zero/routes/app_routes.dart';
@@ -49,8 +50,9 @@ class _CarbonZeroState extends ConsumerState<CarbonZero> {
   ) {
     final router = ref.watch(AppRoutes.router);
     final isDarkMode = ref.watch(isDarkModeStateProvider);
+    final env = getFlavor();
     return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: env == Flavor.dev,
       title: 'CarbonZero',
       darkTheme: darkTheme,
       theme: lightTheme,

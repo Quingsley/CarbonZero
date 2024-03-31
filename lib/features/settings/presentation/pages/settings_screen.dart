@@ -68,7 +68,7 @@ class SettingsScreen extends ConsumerWidget {
                       await ref.read(sharedPreferencesProvider.future);
                   await preference.setBool(
                     'themeState',
-                    !ref.read(isDarkModeStateProvider),
+                    !isDarkMode,
                   );
                 },
                 icon: Icon(!isDarkMode ? Icons.dark_mode : Icons.light_mode),

@@ -3,6 +3,7 @@ import 'package:carbon_zero/core/error/failure.dart';
 import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/core/widgets/bottom_sheet.dart';
+import 'package:carbon_zero/core/widgets/home_loading_skeleton.dart';
 import 'package:carbon_zero/features/activities/presentation/pages/new_activity.dart';
 import 'package:carbon_zero/features/activities/presentation/view_models/activity_view_model.dart';
 import 'package:carbon_zero/features/auth/data/repositories/auth_repo_impl.dart';
@@ -11,11 +12,15 @@ import 'package:carbon_zero/features/community/data/models/community_model.dart'
 import 'package:carbon_zero/features/community/presentation/view_models/community_view_model.dart';
 import 'package:carbon_zero/features/home/presentation/widgets/activity_tile.dart';
 import 'package:carbon_zero/features/home/presentation/widgets/carbon_foot_print.dart';
+import 'package:carbon_zero/features/home/presentation/widgets/carousel.dart';
 import 'package:carbon_zero/features/home/presentation/widgets/home_card.dart';
+import 'package:carbon_zero/services/notifications.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 /// [HomeScreen] the home tab of the app contains activities like
 /// the carbon footprint of the user, daily goals, community goal daily tip ,
@@ -32,6 +37,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   bool isDay = true;
   final _fabKey = GlobalKey<ExpandableFabState>();
   List<CommunityModel> communities = [];
+  final List<RemoteMessage> _tips = [];
+
+  @override
+  void initState() {
+    super.initState();
+    final notifications = ref.read(notificationMessagesProvider);
+    _tips.addAll(
+      notifications.where((message) => message.data['type'] == 'tip'),
+    );
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -123,28 +139,40 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       onPressed: () => context.push('/notification'),
                       icon: const Icon(Icons.notifications),
                     ),
-                    if (user.value?.photoId != null)
-                      GestureDetector(
-                        onTap: () => context.go('/settings'),
-                        child: user.when(
-                          error: (_, __) => const SizedBox.shrink(),
-                          loading: () => const CircularProgressIndicator(),
-                          data: (value) => CircleAvatar(
-                            backgroundImage:
-                                NetworkImage(user.value?.photoId ?? ''),
+                    // if (user.value?.photoId != null)
+                    Skeletonizer(
+                      enabled: user.value?.photoId == null,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(100),
+                        child: Skeleton.replace(
+                          width: 48,
+                          height: 48,
+                          child: GestureDetector(
+                            onTap: () => context.go('/settings'),
+                            child: user.when(
+                              error: (_, __) => const SizedBox.shrink(),
+                              loading: () => const CircularProgressIndicator(),
+                              data: (value) => CircleAvatar(
+                                backgroundImage:
+                                    NetworkImage(user.value?.photoId ?? ''),
+                              ),
+                            ),
                           ),
                         ),
-                      )
-                    else
-                      IconButton.filled(
-                        onPressed: () => context.go('/settings'),
-                        icon: const Icon(Icons.person),
                       ),
+                    ),
+                    // else
+                    //   IconButton.filled(
+                    //     onPressed: () => context.go('/settings'),
+                    //     icon: const Icon(Icons.person),
+                    //   ),
                   ],
                 ),
               ],
             ),
-            const Text('Hope you  planted a tree today'),
+            Text(
+              user.value?.welcomeMessage ?? 'Hope you  planted a tree today',
+            ),
             const SizedBox(
               height: 20,
             ),
@@ -157,32 +185,43 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             const SizedBox(
               height: 8,
             ),
-            const Row(
+            Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Expanded(
                   child: HomeCard(
                     title: 'Reach to goal',
-                    description: '9453 co2',
+                    description:
+                        '${user.value?.footPrintGoal.toStringAsFixed(2)} kg CO2e',
                     icon: Icons.line_axis,
                   ),
                 ),
                 Expanded(
                   child: HomeCard(
                     title: 'Community goal',
-                    description: '10489 co2',
+                    description:
+                        '${user.value?.communityGoal.toStringAsFixed(2)} kg CO2e',
                     icon: Icons.people,
                   ),
                 ),
               ],
             ),
-            const HomeCard(
-              title: null,
-              description: '''
+            if (_tips.isEmpty)
+              const HomeCard(
+                title: null,
+                description: '''
 Using reusable bags instead of plastic bags when shopping can help reduce 
 carbon emissions by reducing the amount of plastic waste produced''',
-              icon: Icons.lightbulb,
-            ),
+                icon: Icons.lightbulb,
+              ),
+            if (_tips.isNotEmpty && _tips.length == 1)
+              HomeCard(
+                title: _tips.first.notification!.title,
+                description: _tips.first.notification!.body!,
+                icon: Icons.lightbulb,
+              ),
+            if (_tips.isNotEmpty && _tips.length > 1)
+              HomeCarousel(itemCount: _tips.length, tips: _tips),
             const SizedBox(
               height: 4,
             ),
@@ -210,11 +249,7 @@ carbon emissions by reducing the amount of plastic waste produced''',
                     ),
                   );
                 },
-                loading: () {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
+                loading: HomeLoadingSkeleton.new,
               ),
             ),
           ],

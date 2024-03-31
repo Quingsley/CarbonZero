@@ -85,9 +85,9 @@ class NotificationController {
       // since notification has already been scheduled for today
       if (lastScheduledDate.dateComparison(today)) return;
     }
-// get start date and end date
-    final startDate = DateTime.parse(activity.startDate);
-    final endDate = DateTime.parse(activity.endDate);
+// get start date and end date they are in utc so convert to local time
+    final startDate = DateTime.parse(activity.startDate).toLocal();
+    final endDate = DateTime.parse(activity.endDate).toLocal();
 // compare current time with start date and date date to ensure that
 //the activity is not over
     if (currentTime.isAfter(startDate) && currentTime.isBefore(endDate)) {

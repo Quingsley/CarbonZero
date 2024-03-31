@@ -168,7 +168,7 @@ class ActivityDataSource implements IActivityDataSource {
         });
       } else {
         //TODO: should be done by a cloud function using pub sub
-        final now = DateTime.now();
+        final now = DateTime.now().toUtc();
         final startOfDay = DateTime(now.year, now.month, now.day);
         final endOfDay = DateTime(now.year, now.month, now.day, 23, 59, 59);
 

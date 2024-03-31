@@ -29,7 +29,7 @@ class HomeCard extends StatelessWidget {
           // radius: 16,
           child: Icon(
             icon,
-            // color: context.colors.onBackground,
+            color: context.colors.primary,
           ),
         ),
         title: Text(

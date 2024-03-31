@@ -1,6 +1,7 @@
 import 'package:carbon_zero/core/error/failure.dart';
 import 'package:carbon_zero/features/activities/presentation/view_models/activity_view_model.dart';
 import 'package:carbon_zero/features/rewards/presentation/widgets/reward_progress_card.dart';
+import 'package:carbon_zero/features/rewards/presentation/widgets/reward_progress_skeleton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -46,9 +47,7 @@ class OngoingChallenges extends ConsumerWidget {
           error: (error, _) => Center(
             child: Text(error is Failure ? error.message : error.toString()),
           ),
-          loading: () => const Center(
-            child: CircularProgressIndicator(),
-          ),
+          loading: RewardProgressSkeleton.new,
         ),
       ),
     );

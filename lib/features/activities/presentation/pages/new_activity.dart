@@ -112,8 +112,8 @@ class _NewActivityState extends ConsumerState<NewActivity> {
     ref.read(showErrorProvider.notifier).state = false;
     if (isValid != null && isValid) {
       final activity = ActivityModel(
-        startDate: startDateController.text,
-        endDate: endDateController.text,
+        startDate: startDate.toUtc().toIso8601String(),
+        endDate: endDate.toUtc().toIso8601String(),
         name: goalNameController.text,
         description: descriptionController.text,
         type: widget.type,
