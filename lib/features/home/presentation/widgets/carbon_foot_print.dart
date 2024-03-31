@@ -54,7 +54,7 @@ class CarbonFootPrintData extends StatelessWidget {
           },
         ),
       ),
-      max: 10000, // global average
+      max: per == 'year' ? 50000 : 10000, // FIXME global average
       initialValue: value,
     );
   }
