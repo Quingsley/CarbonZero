@@ -9,6 +9,7 @@ environment:
 dependencies:
   awesome_notifications: ^0.9.2
   awesome_notifications_core: ^0.9.1
+  carousel_slider: ^4.2.1
   cloud_firestore: ^4.15.2
   country_picker: ^2.0.24
   equatable: ^2.0.5
@@ -38,7 +39,6 @@ dependencies:
   google_sign_in: ^6.2.1
   image_picker: ^1.0.7
 
-  infinite_carousel: ^1.1.1
   intl: ^0.19.0
   modal_bottom_sheet: ^3.0.0-pre
   multi_select_flutter: ^4.1.3

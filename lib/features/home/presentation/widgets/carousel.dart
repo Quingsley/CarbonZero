@@ -1,7 +1,7 @@
 import 'package:carbon_zero/features/home/presentation/widgets/home_card.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:infinite_carousel/infinite_carousel.dart';
 
 /// Carousel widget for the home screen
 /// will display the text of sustainable tips
@@ -17,18 +17,23 @@ class HomeCarousel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InfiniteCarousel.builder(
-      itemCount: itemCount,
-      itemExtent: 40,
-      onIndexChanged: (index) {},
-      axisDirection: Axis.vertical,
-      itemBuilder: (context, itemIndex, realIndex) {
+    return CarouselSlider(
+      disableGesture: true,
+      options: CarouselOptions(
+        height: 100,
+        autoPlay: true,
+        autoPlayInterval: const Duration(seconds: 3),
+        enlargeCenterPage: true,
+      ),
+      items: tips.map((
+        tip,
+      ) {
         return HomeCard(
-          title: tips[realIndex].notification!.title,
-          description: tips[realIndex].notification!.body!,
+          title: tip.notification!.title,
+          description: tip.notification!.body!,
           icon: Icons.lightbulb,
         );
-      },
+      }).toList(),
     );
   }
 }
