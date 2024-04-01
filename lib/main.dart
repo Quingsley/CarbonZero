@@ -52,7 +52,9 @@ Future<void> main() async {
         : DefaultFirebaseOptions.currentPlatform,
   );
   await FirebaseAppCheck.instance.activate(
-    androidProvider: AndroidProvider.debug,
+    androidProvider: env == Flavor.dev
+        ? AndroidProvider.debug
+        : AndroidProvider.playIntegrity,
   );
   final analytics = FirebaseAnalytics.instance;
   await analytics.setAnalyticsCollectionEnabled(true);

@@ -2,6 +2,7 @@ import 'package:carbon_zero/core/constants/constants.dart';
 import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/core/utils/utils.dart';
 import 'package:carbon_zero/core/widgets/bottom_sheet.dart';
+import 'package:carbon_zero/core/widgets/form_layout.dart';
 import 'package:carbon_zero/core/widgets/primary_button.dart';
 import 'package:carbon_zero/features/user_onboarding/presentation/widgets/box_image.dart';
 import 'package:carbon_zero/features/user_onboarding/presentation/widgets/footer_reference.dart';
@@ -19,48 +20,37 @@ class ModeOfTransportQ extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          "Let's talk about your mode of transport for the past year. How did you travel?(Can pick more than one option)",
-          style: context.textTheme.titleLarge,
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 20),
-        Expanded(
-          flex: 10,
-          child: Material(
-            elevation: 3,
-            borderRadius: BorderRadius.circular(10),
-            child: ListView(
-              children: ModeOfTransport.values.map(
-                (mode) {
-                  final isFlight = mode == ModeOfTransport.shortFlight ||
-                      mode == ModeOfTransport.mediumFlight ||
-                      mode == ModeOfTransport.longFlight;
-                  final widgetToShow = isFlight
-                      ? FlightInputQ(mode: mode)
-                      : DistanceInput(mode: mode);
-                  return ListTile(
-                    leading: BoxImage(
-                      path: getTransportAssetName(mode),
-                    ),
-                    title: Text(mode.label),
-                    subtitle: Text('Select if you use ${mode.label}'),
-                    onTap: () async {
-                      await kShowBottomSheet(
-                        context: context,
-                        child: widgetToShow,
-                        height: isFlight
-                            ? MediaQuery.sizeOf(context).height * 0.55
-                            : null,
-                      );
-                    },
-                    trailing: IconButton.filledTonal(
-                      style: IconButton.styleFrom(
-                        backgroundColor: context.colors.tertiary,
+    return FormLayout(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            "Let's talk about your mode of transport for the past year. How did you travel?(Can pick more than one option)",
+            style: context.textTheme.titleLarge,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            height: MediaQuery.sizeOf(context).height * 0.5,
+            child: Material(
+              elevation: 3,
+              borderRadius: BorderRadius.circular(10),
+              child: ListView(
+                children: ModeOfTransport.values.map(
+                  (mode) {
+                    final isFlight = mode == ModeOfTransport.shortFlight ||
+                        mode == ModeOfTransport.mediumFlight ||
+                        mode == ModeOfTransport.longFlight;
+                    final widgetToShow = isFlight
+                        ? FlightInputQ(mode: mode)
+                        : DistanceInput(mode: mode);
+                    return ListTile(
+                      leading: BoxImage(
+                        path: getTransportAssetName(mode),
                       ),
-                      onPressed: () async {
+                      title: Text(mode.label),
+                      subtitle: Text('Select if you use ${mode.label}'),
+                      onTap: () async {
                         await kShowBottomSheet(
                           context: context,
                           child: widgetToShow,
@@ -69,34 +59,48 @@ class ModeOfTransportQ extends StatelessWidget {
                               : null,
                         );
                       },
-                      icon: const Icon(Icons.add),
-                    ),
-                  );
-                },
-              ).toList(),
+                      trailing: IconButton.filledTonal(
+                        style: IconButton.styleFrom(
+                          backgroundColor: context.colors.tertiary,
+                        ),
+                        onPressed: () async {
+                          await kShowBottomSheet(
+                            context: context,
+                            child: widgetToShow,
+                            height: isFlight
+                                ? MediaQuery.sizeOf(context).height * 0.55
+                                : null,
+                          );
+                        },
+                        icon: const Icon(Icons.add),
+                      ),
+                    );
+                  },
+                ).toList(),
+              ),
             ),
           ),
-        ),
-        const Spacer(),
-        FooterReference(
-          onTap: () async {
-            await openCustomTab(
-              context,
-              'https://www.visualcapitalist.com/comparing-the-carbon-footprint-of-transportation-options/',
-            );
-          },
-        ),
-        PrimaryButton(
-          text: 'Continue',
-          onPressed: () {
-            controller.nextPage(
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.easeIn,
-            );
-          },
-        ),
-        const SizedBox(height: 20),
-      ],
+          const Spacer(),
+          FooterReference(
+            onTap: () async {
+              await openCustomTab(
+                context,
+                'https://www.visualcapitalist.com/comparing-the-carbon-footprint-of-transportation-options/',
+              );
+            },
+          ),
+          PrimaryButton(
+            text: 'Continue',
+            onPressed: () {
+              controller.nextPage(
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeIn,
+              );
+            },
+          ),
+          const SizedBox(height: 20),
+        ],
+      ),
     );
   }
 }
