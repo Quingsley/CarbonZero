@@ -33,11 +33,7 @@ class _TabShellRouteState extends ConsumerState<TabShellRoute> {
 
     // set up listener for foreground messages
     ref.read(notificationsProvider.notifier).handleForeGroundMessages();
-    messageStreamController.listen((message) {
-      if (message.notification != null) {
-        ref.read(notificationMessagesProvider.notifier).state.add(message);
-      }
-    });
+
     Future.delayed(Duration.zero, () async {
       await NotificationController.scheduleDailyNotification();
     });
