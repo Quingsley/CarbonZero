@@ -5,10 +5,6 @@ import 'package:carbon_zero/core/utils/utils.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rxdart/rxdart.dart';
-
-/// used to pass messages from event handler to the UI
-final messageStreamController = BehaviorSubject<RemoteMessage>();
 
 /// contain all the notification services
 /// methods
@@ -39,7 +35,7 @@ class NotificationService extends AsyncNotifier<void> {
         print('Message notification: ${message.notification?.title}');
         print('Message notification: ${message.notification?.body}');
       }
-      messageStreamController.sink.add(message);
+      ref.read(notificationMessagesProvider.notifier).state.add(message);
       final storage = await ref.read(sharedPreferencesProvider.future);
       await storeNotifications(message, storage);
     });
