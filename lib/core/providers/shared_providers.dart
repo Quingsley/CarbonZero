@@ -69,7 +69,9 @@ final appStartupProvider = FutureProvider<void>((ref) async {
       final pendingNotifications =
           jsonDecode(ntfDataStored.toString()) as Map<String, dynamic>;
       for (final message in pendingNotifications.values) {
-        messageStreamController.sink
+        ref
+            .read(notificationMessagesProvider.notifier)
+            .state
             .add(RemoteMessage.fromMap(message as Map<String, dynamic>));
       }
     }
