@@ -1,4 +1,5 @@
 import 'package:carbon_zero/core/extensions.dart';
+import 'package:carbon_zero/core/widgets/archive_activity.dart';
 import 'package:carbon_zero/features/activities/data/models/activity_model.dart';
 import 'package:carbon_zero/services/local_notifications.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +34,14 @@ class _ActivityTileState extends State<ActivityTile> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () => context.push('/activity-details', extra: widget.activity),
+      onTap: () async {
+        final endDate = DateTime.parse(widget.activity.endDate);
+        if (endDate.isBefore(DateTime.now())) {
+          await archiveActivity(widget.activity, context);
+          return;
+        }
+        await context.push('/activity-details', extra: widget.activity);
+      },
       leading: SizedBox(
         height: 30,
         width: 30,
