@@ -58,9 +58,15 @@ class CustomExpansionTile extends ConsumerWidget {
           thickness: 1,
           height: 1,
         ),
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: Text(subtitle),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Text(
+              subtitle,
+              textAlign: TextAlign.left,
+            ),
+          ),
         ),
         Align(
           alignment: Alignment.bottomRight,
