@@ -6,7 +6,6 @@ import 'package:carbon_zero/core/widgets/bottom_sheet.dart';
 import 'package:carbon_zero/core/widgets/home_loading_skeleton.dart';
 import 'package:carbon_zero/features/activities/presentation/pages/new_activity.dart';
 import 'package:carbon_zero/features/activities/presentation/view_models/activity_view_model.dart';
-import 'package:carbon_zero/features/auth/data/repositories/auth_repo_impl.dart';
 import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
 import 'package:carbon_zero/features/community/data/models/community_model.dart';
 import 'package:carbon_zero/features/community/presentation/view_models/community_view_model.dart';
@@ -34,7 +33,6 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  bool isDay = true;
   final _fabKey = GlobalKey<ExpandableFabState>();
   List<CommunityModel> communities = [];
   final List<RemoteMessage> _tips = [];
@@ -49,13 +47,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    isDaytime();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final isDarkMode = ref.watch(isDarkModeStateProvider);
     final user = ref.watch(userStreamProvider);
     // ignore: cascade_invocations
     user.whenOrNull(
@@ -74,19 +67,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         (user.value?.userId, ActivityType.individual),
       ),
     );
-    final messagingInstance = ref.watch(firebaseMessagingProvider);
-    messagingInstance.onTokenRefresh.listen((token) async {
-      final user = ref.read(userStreamProvider);
-      debugPrint('updated token------------- $token---------');
-      if (user.value != null) {
-        final isPresent = user.value!.pushTokens.contains(token);
-        if (!isPresent) {
-          await ref
-              .read(authRepositoryProvider)
-              .updatePushToken(token, user.value!.userId!);
-        }
-      }
-    });
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -114,7 +94,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       WidgetSpan(
                         child: AnimatedCrossFade(
                           duration: const Duration(seconds: 1),
-                          crossFadeState: isDay
+                          crossFadeState: !isDarkMode
                               ? CrossFadeState.showFirst
                               : CrossFadeState.showSecond,
                           sizeCurve: Curves.easeIn,
@@ -337,16 +317,5 @@ carbon emissions by reducing the amount of plastic waste produced''',
         ],
       ),
     );
-  }
-
-  /// checks  if it is day or night
-  void isDaytime() {
-    final now = DateTime.now();
-    final currentHour = now.hour;
-
-    // Assuming daytime is between 6 AM and 6 PM, adjust the range as needed
-    setState(() {
-      isDay = currentHour >= 6 && currentHour < 18;
-    });
   }
 }
