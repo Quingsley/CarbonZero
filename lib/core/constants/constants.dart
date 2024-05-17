@@ -1,6 +1,9 @@
 /// key used to store background notification messages
 const String notificationKey = 'NOTIFICATIONS';
 
+/// store
+const String fcmNtfKey = "FCMNOTIFICATIONSKEY";
+
 ///enum for app tabs
 enum AppTabs {
   /// home 0
@@ -353,12 +356,10 @@ bool isEmailValid(String email) {
 }
 
 /// privacy policy url
-const String privacyUrl =
-    'https://doc-hosting.flycricket.io/carbonzero-privacy-policy/db0ec803-a6e1-4c06-b22b-868fdba8ed8a/privacy';
+const String privacyUrl = 'https://carbonzero-coral.vercel.app/privacy';
 
 /// terms
-const String terms =
-    'https://doc-hosting.flycricket.io/carbonzero-terms-of-use/be1512b4-fe46-42e3-9725-249a77b97e01/terms';
+const String terms = 'https://carbonzero-coral.vercel.app/terms';
 
 /// ntf types
 enum NotificationTypes {
