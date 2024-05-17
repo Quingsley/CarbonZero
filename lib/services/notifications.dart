@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:carbon_zero/core/constants/constants.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/core/utils/utils.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -12,6 +13,7 @@ class NotificationService extends AsyncNotifier<void> {
   /// request permission for notification
   Future<void> requestPermission() async {
     final firebaseMessaging = ref.read(firebaseMessagingProvider);
+    final preference = await ref.read(sharedPreferencesProvider.future);
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       final notificationSettings = await firebaseMessaging.requestPermission();
@@ -21,6 +23,9 @@ class NotificationService extends AsyncNotifier<void> {
         final token = await firebaseMessaging.getToken();
         if (token != null) {
           ref.read(pushTokenProvider.notifier).state = token;
+
+          // store the push token locally
+          await preference.setString(fcmNtfKey, token);
         }
       }
     });
