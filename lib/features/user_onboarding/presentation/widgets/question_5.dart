@@ -8,7 +8,7 @@ import 'package:carbon_zero/features/user_onboarding/presentation/widgets/footer
 import 'package:carbon_zero/features/user_onboarding/providers/user_onboarding_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:go_router/go_router.dart';
+import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 /// Energy consumption question
 class EnergyConsumptionQ extends ConsumerWidget {
@@ -22,6 +22,7 @@ class EnergyConsumptionQ extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final numOfPeople = ref.watch(numOfPeopleProvider);
     return FormLayout(
+      applyPadding: false,
       child: Column(
         children: [
           Text(
@@ -47,18 +48,36 @@ class EnergyConsumptionQ extends ConsumerWidget {
               ),
             ],
           ),
-          Slider(
+          SfSlider(
             value: numOfPeople.toDouble(),
             min: 1,
-            label: '$numOfPeople',
-            divisions: 49,
             max: 50,
+            interval: 5,
+            showTicks: true,
+            showLabels: true,
+            enableTooltip: true,
+            minorTicksPerInterval: 1,
+            tooltipShape: const SfPaddleTooltipShape(),
             onChanged: (val) {
-              ref.read(numOfPeopleProvider.notifier).state = val.toInt();
+              ref.read(numOfPeopleProvider.notifier).state =
+                  (val as double).toInt();
             },
           ),
+          const SizedBox(
+            height: 10,
+          ),
+          // Slider(
+          //   value: numOfPeople.toDouble(),
+          //   min: 1,
+          //   label: '$numOfPeople',
+          //   divisions: 49,
+          //   max: 50,
+          //   onChanged: (val) {
+          //     ref.read(numOfPeopleProvider.notifier).state = val.toInt();
+          //   },
+          // ),
           SizedBox(
-            height: MediaQuery.sizeOf(context).height * .5,
+            height: MediaQuery.sizeOf(context).height * .35,
             child: Material(
               borderRadius: BorderRadius.circular(10),
               elevation: 3,
@@ -141,6 +160,15 @@ class EnergyConsumptionQ extends ConsumerWidget {
                 );
               },
             ),
+          ),
+          PrimaryButton(
+            text: 'Go Back',
+            onPressed: () {
+              controller.previousPage(
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeInOut,
+              );
+            },
           ),
           PrimaryButton(
             text: 'Continue',

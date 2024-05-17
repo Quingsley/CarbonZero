@@ -9,6 +9,7 @@ import 'package:carbon_zero/features/user_onboarding/presentation/widgets/footer
 import 'package:carbon_zero/features/user_onboarding/providers/user_onboarding_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 /// Mode of transport question
 class ModeOfTransportQ extends StatelessWidget {
@@ -90,6 +91,15 @@ class ModeOfTransportQ extends StatelessWidget {
             },
           ),
           PrimaryButton(
+            text: 'Go Back',
+            onPressed: () {
+              controller.previousPage(
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeInOut,
+              );
+            },
+          ),
+          PrimaryButton(
             text: 'Continue',
             onPressed: () {
               controller.nextPage(
@@ -134,15 +144,23 @@ class _DistanceInputState extends ConsumerState<DistanceInput> {
         const SizedBox(height: 10),
         const InfoMessage(),
         Chip(label: Text('Default Value: $_distance KM')),
-        Slider(
+        SfSlider(
+          min: 50,
           max: 22000,
+          interval: 1000,
+          showTicks: true,
+          // showLabels: true,
+          stepSize: 50,
+          enableTooltip: true,
+
+          tooltipShape: const SfPaddleTooltipShape(),
           value: _distance.toDouble(),
           onChanged: (value) {
             setState(() {
-              _distance = value.toInt();
+              _distance = (value as double).toInt();
             });
             ref.read(modeOfTransportProvider.notifier).state[widget.mode] =
-                value.toInt();
+                (value as double).toInt();
           },
         ),
         PrimaryButton(
@@ -210,35 +228,43 @@ class _FlightInputQState extends ConsumerState<FlightInputQ> {
           height: 8,
         ),
         SizedBox(
-          child: Slider(
+          child: SfSlider(
             value: _distance.toDouble(),
             min: 100,
-            label: '$_distance km',
-            divisions: 1000,
+            interval: 1000,
+            // label: '$_distance km',
+            // divisions: 1000,
             max: 22000,
+            showTicks: true,
+            // showLabels: true,
+            enableTooltip: true,
             onChanged: (val) {
               setState(() {
-                _distance = val.toInt();
+                _distance = (val as double).toInt();
               });
               ref.read(modeOfTransportProvider.notifier).state[widget.mode] =
-                  val.toInt();
+                  (val as double).toInt();
             },
           ),
         ),
         const Divider(),
         Chip(label: Text('Average Hours Traveled $_timeTaken Hours')),
         SizedBox(
-          child: Slider(
+          child: SfSlider(
             value: _timeTaken.toDouble(),
             max: 1000,
-            divisions: 100,
-            label: '$_timeTaken Hours',
+            interval: 10,
+            showTicks: true,
+            // showLabels: true,
+            enableTooltip: true,
+            // divisions: 100,
+            // label: '$_timeTaken Hours',
             onChanged: (val) {
               setState(() {
-                _timeTaken = val.toInt();
+                _timeTaken = (val as double).toInt();
               });
               ref.read(flightHoursProvider.notifier).state[widget.mode] =
-                  val.toInt();
+                  (val as double).toInt();
             },
           ),
         ),
