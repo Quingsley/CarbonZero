@@ -53,28 +53,28 @@ class _UserOnboardingState extends ConsumerState<UserOnboarding> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (controller.hasClients && currentPage != 0)
-                  Material(
-                    color: context.colors.primary,
-                    borderRadius: BorderRadius.circular(50),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(50),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(50),
-                        splashFactory: NoSplash.splashFactory,
-                        onTap: () {
-                          controller.previousPage(
-                            duration: const Duration(milliseconds: 500),
-                            curve: Curves.easeInOut,
-                          );
-                        },
-                        child: Icon(
-                          Icons.arrow_back_ios_outlined,
-                          color: context.colors.onPrimary,
-                        ),
-                      ),
-                    ),
-                  ),
+                // if (controller.hasClients && currentPage != 0)
+                //   Material(
+                //     color: context.colors.primary,
+                //     borderRadius: BorderRadius.circular(50),
+                //     child: ClipRRect(
+                //       borderRadius: BorderRadius.circular(50),
+                //       child: InkWell(
+                //         borderRadius: BorderRadius.circular(50),
+                //         splashFactory: NoSplash.splashFactory,
+                //         onTap: () {
+                //           controller.previousPage(
+                //             duration: const Duration(milliseconds: 500),
+                //             curve: Curves.easeInOut,
+                //           );
+                //         },
+                //         child: Icon(
+                //           Icons.arrow_back_ios_outlined,
+                //           color: context.colors.onPrimary,
+                //         ),
+                //       ),
+                //     ),
+                //   ),
                 KTimelineTile(
                   isFirst: true,
                   isLast: false,
