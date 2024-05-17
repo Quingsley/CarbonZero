@@ -2,7 +2,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:carbon_zero/core/constants/flavors.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/core/theme/theme.dart';
-import 'package:carbon_zero/features/auth/data/repositories/auth_repo_impl.dart';
+import 'package:carbon_zero/core/utils/utils.dart';
 import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
 import 'package:carbon_zero/routes/app_routes.dart';
 import 'package:carbon_zero/services/local_notifications.dart';
@@ -21,19 +21,6 @@ class CarbonZero extends ConsumerStatefulWidget {
 class _CarbonZeroState extends ConsumerState<CarbonZero> {
   @override
   void initState() {
-    final messagingInstance = ref.read(firebaseMessagingProvider);
-    messagingInstance.onTokenRefresh.listen((token) async {
-      final user = ref.read(userStreamProvider);
-      debugPrint('updated token------------- $token---------');
-      if (user.value != null) {
-        final isPresent = user.value!.pushTokens.contains(token);
-        if (!isPresent) {
-          await ref
-              .read(authRepositoryProvider)
-              .updatePushToken(token, user.value!.userId!);
-        }
-      }
-    });
     Future.delayed(Duration.zero, () async {
       // Only after at least the action method is set,
       //the notification events are delivered
@@ -65,6 +52,13 @@ class _CarbonZeroState extends ConsumerState<CarbonZero> {
   ) {
     final router = ref.watch(AppRoutes.router);
     final isDarkMode = ref.watch(isDarkModeStateProvider);
+    ref.listen(userStreamProvider, (previous, next) {
+      next.whenOrNull(
+        data: (user) {
+          checkPushToken(ref, user!);
+        },
+      );
+    });
     final env = getFlavor();
     return MaterialApp.router(
       debugShowCheckedModeBanner: env == Flavor.dev,
