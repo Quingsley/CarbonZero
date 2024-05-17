@@ -101,6 +101,18 @@ class PersonalityQ extends ConsumerWidget {
               await messageDialog(context, lifeStyleMessage);
             },
           ),
+          const SizedBox(
+            height: 20,
+          ),
+          PrimaryButton(
+            text: 'Go Back',
+            onPressed: () {
+              controller.previousPage(
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeInOut,
+              );
+            },
+          ),
           PrimaryButton(
             text: 'Continue',
             onPressed: personality != null
@@ -111,9 +123,6 @@ class PersonalityQ extends ConsumerWidget {
                     );
                   }
                 : null,
-          ),
-          const SizedBox(
-            height: 20,
           ),
         ],
       ),
