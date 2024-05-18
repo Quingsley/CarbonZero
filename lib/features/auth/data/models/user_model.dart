@@ -58,7 +58,7 @@ class UserModel extends Equatable {
         communityGoal: communityGoal,
         welcomeMessage: welcomeMessage,
         monthlyFootPrintData: monthlyFootPrintData.map(
-          (key, value) => MapEntry(key, value as double),
+          (key, value) => MapEntry(key, double.parse('$value')), // value🙃??
         ),
       );
     } else {
