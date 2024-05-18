@@ -20,7 +20,7 @@ class HomeCarousel extends StatelessWidget {
     return CarouselSlider(
       disableGesture: true,
       options: CarouselOptions(
-        height: 100,
+        height: 130,
         autoPlay: true,
         autoPlayInterval: const Duration(seconds: 3),
         enlargeCenterPage: true,
