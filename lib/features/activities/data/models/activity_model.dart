@@ -20,6 +20,7 @@ class ActivityModel extends Equatable {
     this.members = 1,
     this.cO2Emitted = 0,
     this.carbonPoints = 0,
+    this.isArchived = false,
   });
 
   /// converts the json to ActivityModel type
@@ -41,6 +42,7 @@ class ActivityModel extends Equatable {
           'reminderTime': final String reminderTime,
           'carbonPoints': final int carbonPoints,
           'participants': final List<dynamic> participants,
+          'isArchived': final bool isArchived,
         }) {
       return ActivityModel(
         id: id,
@@ -56,6 +58,7 @@ class ActivityModel extends Equatable {
         members: members,
         cO2Emitted: cO2Emitted,
         color: color,
+        isArchived: isArchived,
         participants: List.from(participants),
         type: type == ActivityType.individual.name
             ? ActivityType.individual
@@ -84,6 +87,7 @@ class ActivityModel extends Equatable {
       'reminderTime': reminderTime,
       'carbonPoints': carbonPoints,
       'participants': participants,
+      'isArchived': isArchived,
     };
   }
 
@@ -104,6 +108,7 @@ class ActivityModel extends Equatable {
     String? reminderTime,
     int? carbonPoints,
     List<String>? participants,
+    bool? isArchived,
   }) {
     return ActivityModel(
       id: id ?? this.id,
@@ -121,6 +126,7 @@ class ActivityModel extends Equatable {
       cO2Emitted: cO2Emitted ?? this.cO2Emitted,
       carbonPoints: carbonPoints ?? this.carbonPoints,
       participants: participants ?? this.participants,
+      isArchived: isArchived ?? this.isArchived,
     );
   }
 
@@ -170,6 +176,9 @@ class ActivityModel extends Equatable {
   /// community activities
   final List<String> participants;
 
+  /// Archive the activity
+  final bool isArchived;
+
   @override
   List<Object?> get props => [
         id,
@@ -185,6 +194,7 @@ class ActivityModel extends Equatable {
         color,
         cO2Emitted,
         participants,
+        isArchived,
       ];
 
   @override

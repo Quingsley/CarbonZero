@@ -1,4 +1,5 @@
 import 'package:carbon_zero/core/extensions.dart';
+import 'package:carbon_zero/core/widgets/archive_activity.dart';
 import 'package:carbon_zero/core/widgets/primary_button.dart';
 import 'package:carbon_zero/features/activities/data/models/activity_model.dart';
 import 'package:carbon_zero/features/activities/presentation/view_models/activity_view_model.dart';
@@ -32,7 +33,14 @@ class RewardProgressCard extends ConsumerWidget {
         borderRadius: BorderRadius.circular(12),
         splashFactory: NoSplash.splashFactory,
         splashColor: context.colors.primary,
-        onTap: () => context.push('/activity-details', extra: activityModel),
+        onTap: () async {
+          final endDate = DateTime.parse(activityModel.endDate);
+          if (endDate.isBefore(DateTime.now())) {
+            await archiveActivity(activityModel, context);
+            return;
+          }
+          await context.push('/activity-details', extra: activityModel);
+        },
         child: Material(
           borderRadius: BorderRadius.circular(12),
           elevation: 3,

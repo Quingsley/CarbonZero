@@ -49,6 +49,9 @@ abstract class IActivityDataSource {
 
   /// Get the data for the chart
   Future<List<Map<String, dynamic>>> getChartData(String userId);
+
+  /// archive activity
+  Future<void> archiveActivity(String activityId);
 }
 
 /// This is the remote data source for the activity feature.
@@ -107,6 +110,7 @@ class ActivityDataSource implements IActivityDataSource {
             .collection('activities')
             .withActivityModelConverter()
             .where('parentId', isEqualTo: parentId)
+            .where('isArchived', isEqualTo: false)
             .snapshots();
 
         return snapshot
@@ -115,6 +119,7 @@ class ActivityDataSource implements IActivityDataSource {
         final snapshot = _db
             .collection('activities')
             .withActivityModelConverter()
+            .where('isArchived', isEqualTo: false)
             .where('type', isEqualTo: ActivityType.community.name)
             .where('participants', arrayContains: parentId)
             .snapshots();
@@ -276,6 +281,7 @@ class ActivityDataSource implements IActivityDataSource {
           .withActivityModelConverter()
           .where('type', isEqualTo: ActivityType.community.name)
           .where('parentId', isEqualTo: communityId)
+          .where('isArchived', isEqualTo: false)
           .snapshots();
       return snapshot
           .map((event) => event.docs.map((doc) => doc.data()).toList());
@@ -357,6 +363,17 @@ class ActivityDataSource implements IActivityDataSource {
       return chartData;
     } on FirebaseException catch (e) {
       throw Failure(message: e.message ?? e.toString());
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> archiveActivity(String activityId) async {
+    try {
+      await _db.collection('activities').doc(activityId).update({
+        'isArchived': true,
+      });
     } catch (e) {
       rethrow;
     }

@@ -31,7 +31,8 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
               itemCount: notifications.length,
               itemBuilder: (context, index) {
                 final notification = notifications[index];
-                final ntfData = notification.data['type'] as String;
+                // don't want it to throw null when testing using firebase
+                final ntfData = (notification.data['type']) ?? 'chat';
                 final ntfType = ntfData == NotificationTypes.chat.name
                     ? NotificationTypes.chat
                     : ntfData == NotificationTypes.tip.name

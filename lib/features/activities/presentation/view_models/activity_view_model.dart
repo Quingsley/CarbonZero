@@ -45,6 +45,13 @@ class ActivityViewModel extends AsyncNotifier<void> {
       () => repo.addParticipants(activityId, userId),
     );
   }
+
+  /// Archive the activity
+  Future<void> archiveActivity(String activityId) async {
+    final repo = ref.read(activityRepositoryProvider);
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() => repo.archiveActivity(activityId));
+  }
 }
 
 /// provides the activity VM to the UI
