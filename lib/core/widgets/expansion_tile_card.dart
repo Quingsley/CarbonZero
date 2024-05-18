@@ -29,55 +29,59 @@ class CustomExpansionTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isOpen = ref.watch(isOpenProvider);
-    return ExpansionTileCard(
-      initiallyExpanded: true,
-      onExpansionChanged: (val) {
-        if (val) {
-          ref.read(isOpenProvider.notifier).state = false;
-        } else {
-          ref.read(isOpenProvider.notifier).state = true;
-        }
-      },
-      leading: Icon(
-        icon,
-        color: context.colors.primary,
-      ),
-      title: Text(title),
-      trailing: IconButton(
-        onPressed: () {
-          ref.read(isOpenProvider.notifier).state = !isOpen;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+      child: ExpansionTileCard(
+        baseColor: context.colors.inversePrimary,
+        initiallyExpanded: true,
+        onExpansionChanged: (val) {
+          if (val) {
+            ref.read(isOpenProvider.notifier).state = false;
+          } else {
+            ref.read(isOpenProvider.notifier).state = true;
+          }
         },
-        icon: Icon(
-          isOpen ? Icons.arrow_drop_up : Icons.arrow_drop_down,
-          size: 30,
+        leading: Icon(
+          icon,
           color: context.colors.primary,
         ),
-      ),
-      children: <Widget>[
-        const Divider(
-          thickness: 1,
-          height: 1,
-        ),
-        Align(
-          alignment: Alignment.topLeft,
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Text(
-              subtitle,
-              textAlign: TextAlign.left,
-            ),
+        title: Text(title),
+        trailing: IconButton(
+          onPressed: () {
+            ref.read(isOpenProvider.notifier).state = !isOpen;
+          },
+          icon: Icon(
+            !isOpen ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+            size: 30,
+            color: context.colors.primary,
           ),
         ),
-        Align(
-          alignment: Alignment.bottomRight,
-          child: trailing != null
-              ? Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Text(trailing!),
-                )
-              : null,
-        ),
-      ],
+        children: <Widget>[
+          const Divider(
+            thickness: 1,
+            height: 1,
+          ),
+          Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Text(
+                subtitle,
+                textAlign: TextAlign.left,
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: trailing != null
+                ? Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Text(trailing!),
+                  )
+                : null,
+          ),
+        ],
+      ),
     );
   }
 }
