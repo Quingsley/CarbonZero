@@ -24,14 +24,14 @@ class HomeCard extends StatelessWidget {
     return Card(
       color: context.colors.inversePrimary,
       child: ListTile(
-        leading: CircleAvatar(
-          // backgroundColor: context.colors.background,
-          // radius: 16,
-          child: Icon(
-            icon,
-            color: context.colors.primary,
-          ),
-        ),
+        // leading: CircleAvatar(
+        //   // backgroundColor: context.colors.background,
+        //   // radius: 16,
+        //   child: Icon(
+        //     icon,
+        //     color: context.colors.primary,
+        //   ),
+        // ),
         title: Text(
           title ?? description,
           textAlign: TextAlign.left,
@@ -51,45 +51,3 @@ class HomeCard extends StatelessWidget {
     );
   }
 }
-
-// Container(
-//         padding = const EdgeInsets.only(top: 8, bottom: 8, right: 2),
-//         child = Row(
-//           mainAxisSize: MainAxisSize.min,
-//           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//           children: [
-//             Expanded(
-//               child: CircleAvatar(
-//                 backgroundColor: context.colors.background,
-//                 radius: 16,
-//                 child: Icon(
-//                   icon,
-//                   color: context.colors.primaryContainer,
-//                 ),
-//               ),
-//             ),
-//             Expanded(
-//               flex: titleLarge != null ? 2 : 1,
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   Text(
-//                     title ?? description,
-//                     textAlign: TextAlign.left,
-//                     style: context.textTheme.labelMedium?.copyWith(
-//                       color: context.colors.onPrimary,
-//                       fontWeight: FontWeight.bold,
-//                     ),
-//                   ),
-//                   if (title != null)
-//                     Text(
-//                       description,
-//                       style: context.textTheme.labelSmall
-//                           ?.copyWith(color: context.colors.onPrimary),
-//                     ),
-//                 ],
-//               ),
-//             ),
-//           ],
-//         ),
-//       )
