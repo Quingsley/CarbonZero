@@ -61,7 +61,7 @@ I am open to collaboration. If you have any ideas or suggestions, feel free to o
 ## Try It Out
 
 - (Play store link coming soon)
-- [Become an internal tester](https://appdistribution.firebase.google.com/pub/i/dcad4029de88cde6)
+- [Become an internal tester](https://appdistribution.firebase.google.com/testerapps/1:581400212875:android:a68d8eeea6323ec5a7ab8e/releases/6l3s3l6k8inpg?utm_source=firebase-console)
 
 ## Tech Stack
 
