@@ -56,6 +56,10 @@ final appStartupProvider = FutureProvider<void>((ref) async {
   // all asynchronous app initialization code should belong here:
   final preference = await ref.watch(sharedPreferencesProvider.future);
   final storedValue = preference.getString('didUserOnboard');
+  final pushToken = preference.getString(fcmNtfKey);
+  if (pushToken != null) {
+    ref.read(pushTokenProvider.notifier).state = pushToken;
+  }
   if (storedValue == null) {
     await preference.setString('didUserOnboard', 'didUserOnboard');
   } else {

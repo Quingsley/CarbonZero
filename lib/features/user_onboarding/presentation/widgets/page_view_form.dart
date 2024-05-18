@@ -47,7 +47,9 @@ class _PageViewFormState extends State<PageViewForm> {
           RecyclingQ(
             controller: widget.controller,
           ),
-          const EnableNotifications(),
+          EnableNotifications(
+            controller: widget.controller,
+          ),
         ],
       ),
     );

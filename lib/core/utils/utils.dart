@@ -1,9 +1,14 @@
 import 'dart:convert';
 
 import 'package:carbon_zero/core/constants/constants.dart';
+import 'package:carbon_zero/core/providers/shared_providers.dart';
+import 'package:carbon_zero/features/auth/data/models/user_model.dart';
+import 'package:carbon_zero/features/auth/data/repositories/auth_repo_impl.dart';
+import 'package:carbon_zero/services/notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -68,5 +73,34 @@ Future<void> storeNotifications(
   } else {
     final initialList = {message.messageId!: message.toMap()};
     await storage.setString(notificationKey, jsonEncode(initialList));
+  }
+}
+
+/// will check the current push token and update it if null or update if it
+///  is not in the user tokens
+Future<void> checkPushToken(WidgetRef ref, UserModel user) async {
+  final preference = await ref.read(sharedPreferencesProvider.future);
+  final pushToken = preference.getString(fcmNtfKey);
+  print(('local push token--------', pushToken));
+
+  if (pushToken == null) {
+    // request for a new push token
+    await ref.read(notificationsProvider.notifier).requestPermission();
+    final newPushToken = ref.read(pushTokenProvider);
+    print(('new push token-----------', newPushToken));
+    if (pushToken != null) {
+      print('-------updating token-----------');
+      await ref
+          .read(authRepositoryProvider)
+          .updatePushToken(newPushToken!, user.userId!);
+    }
+  } else {
+    final token = ref.read(pushTokenProvider);
+    final isPresent = user.pushTokens.contains(token);
+    if (!isPresent && token != null) {
+      await ref
+          .read(authRepositoryProvider)
+          .updatePushToken(token, user.userId!);
+    }
   }
 }

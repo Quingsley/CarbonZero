@@ -34,7 +34,7 @@ class DietaryQ extends ConsumerWidget {
             height: 50,
           ),
           SizedBox(
-            height: 350,
+            height: 400,
             child: Material(
               elevation: 3,
               borderRadius: BorderRadius.circular(10),
@@ -82,6 +82,16 @@ class DietaryQ extends ConsumerWidget {
               await messageDialog(context, dietMessage);
             },
           ),
+          const Spacer(),
+          PrimaryButton(
+            text: 'Go Back',
+            onPressed: () {
+              controller.previousPage(
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeInOut,
+              );
+            },
+          ),
           PrimaryButton(
             text: 'Continue',
             onPressed: dietType != null
@@ -92,9 +102,6 @@ class DietaryQ extends ConsumerWidget {
                     );
                   }
                 : null,
-          ),
-          const SizedBox(
-            height: 50,
           ),
         ],
       ),

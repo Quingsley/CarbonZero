@@ -4,6 +4,7 @@ import 'package:carbon_zero/features/emission/presentation/providers/transport_e
 import 'package:carbon_zero/features/user_onboarding/presentation/widgets/box_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 /// will have the form to input the transport emissions
 class TransportEmissionForm extends ConsumerWidget {
@@ -90,13 +91,17 @@ class TransportEmissionForm extends ConsumerWidget {
             style: context.textTheme.titleLarge,
           ),
           const SizedBox(height: 10),
-          Slider(
+          SfSlider(
             max: 22000,
-            divisions: 1000,
-            label: '$distance km',
+            interval: 1000,
+            showTicks: true,
+            enableTooltip: true,
+            tooltipShape: const SfPaddleTooltipShape(),
+            // label: '$distance km',
             value: distance.toDouble(),
             onChanged: (val) {
-              ref.read(distanceCoveredProvider.notifier).state = val.toInt();
+              ref.read(distanceCoveredProvider.notifier).state =
+                  (val as double).toInt();
             },
           ),
           if (isFlight)
@@ -105,13 +110,17 @@ class TransportEmissionForm extends ConsumerWidget {
               style: context.textTheme.titleLarge,
             ),
           if (isFlight)
-            Slider(
+            SfSlider(
               max: 1000,
-              divisions: 100,
-              label: '$hours hours',
+              interval: 100,
+              // label: '$hours hours',
               value: hours.toDouble(),
+              showTicks: true,
+              enableTooltip: true,
+              tooltipShape: const SfPaddleTooltipShape(),
               onChanged: (val) {
-                ref.read(hoursTakenProvider.notifier).state = val.toInt();
+                ref.read(hoursTakenProvider.notifier).state =
+                    (val as double).toInt();
               },
             ),
         ],

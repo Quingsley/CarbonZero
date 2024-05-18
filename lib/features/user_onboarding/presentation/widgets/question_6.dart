@@ -73,6 +73,15 @@ class RecyclingQ extends ConsumerWidget {
           ),
           const Spacer(),
           PrimaryButton(
+            text: 'Go Back',
+            onPressed: () {
+              controller.previousPage(
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeInOut,
+              );
+            },
+          ),
+          PrimaryButton(
             text: 'Next',
             onPressed: () {
               controller.nextPage(
