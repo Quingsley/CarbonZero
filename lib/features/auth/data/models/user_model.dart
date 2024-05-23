@@ -38,9 +38,9 @@ class UserModel extends Equatable {
           'pushTokens': final List<dynamic> pushTokens,
           'monthlyFootPrintData': final Map<String, dynamic>
               monthlyFootPrintData,
-          'footPrintGoal': final double footPrintGoal,
+          'footPrintGoal': final num footPrintGoal,
           'welcomeMessage': final String? welcomeMessage,
-          'communityGoal': final double communityGoal,
+          'communityGoal': final num communityGoal,
         }) {
       return UserModel(
         userId: userId,
@@ -53,16 +53,16 @@ class UserModel extends Equatable {
         communityIds: List.from(communityIds),
         carbonFootPrintNow: carbonFootPrintNow.toDouble(),
         initialCarbonFootPrint: initialCarbonFootPrint,
-        pushTokens: List.from(pushTokens),
-        footPrintGoal: footPrintGoal,
-        communityGoal: communityGoal,
+        pushTokens: List<String>.from(pushTokens),
+        footPrintGoal: footPrintGoal.toDouble(),
+        communityGoal: communityGoal.toDouble(),
         welcomeMessage: welcomeMessage,
         monthlyFootPrintData: monthlyFootPrintData.map(
           (key, value) => MapEntry(key, double.parse('$value')), // value🙃??
         ),
       );
     } else {
-      throw const FormatException('Invalid user model');
+      throw FormatException('Invalid user model: $json');
     }
   }
 
