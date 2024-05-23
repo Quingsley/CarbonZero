@@ -21,6 +21,7 @@ class SettingsScreen extends ConsumerWidget {
     final authVm = ref.watch(authViewModelProvider);
     final isLoading = authVm is AsyncLoading;
     final user = ref.watch(userStreamProvider);
+    final appInfo = ref.read(appInfoProvider);
 
     final isDarkMode = ref.read(isDarkModeStateProvider);
 
@@ -134,6 +135,19 @@ class SettingsScreen extends ConsumerWidget {
               Text(
                 'Made with ☕ and ❤️ by Jerome Jumah\n © 2024 CarbonZero. All rights reserved.',
                 style: TextStyle(color: context.colors.primary),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text.rich(
+                TextSpan(
+                  text: 'Version: ${appInfo[AppInfo.versionName]} ',
+                  children: [
+                    TextSpan(
+                      text: 'Build number: ${appInfo[AppInfo.buildNumber]}',
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
