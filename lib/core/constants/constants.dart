@@ -2,7 +2,7 @@
 const String notificationKey = 'NOTIFICATIONS';
 
 /// store
-const String fcmNtfKey = "FCMNOTIFICATIONSKEY";
+const String fcmNtfKey = 'FCMNOTIFICATIONSKEY';
 
 ///enum for app tabs
 enum AppTabs {
