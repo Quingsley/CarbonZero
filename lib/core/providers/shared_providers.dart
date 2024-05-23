@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// will provide an instance of [FirebaseFirestore]
@@ -80,6 +81,11 @@ final appStartupProvider = FutureProvider<void>((ref) async {
       }
     }
   }
+  final packageInfo = await PackageInfo.fromPlatform();
+  ref.read(appInfoProvider.notifier).state = {
+    AppInfo.buildNumber: packageInfo.buildNumber,
+    AppInfo.versionName: packageInfo.version,
+  };
 });
 
 /// will provide an instance of [FirebaseMessaging]
@@ -90,4 +96,21 @@ final firebaseMessagingProvider = Provider<FirebaseMessaging>((ref) {
 /// will highlight the text or imageContainer
 final showErrorProvider = StateProvider<bool>((ref) {
   return false;
+});
+
+/// will get app information
+enum AppInfo {
+  /// build number
+  buildNumber,
+
+  /// version name 1.0.0
+  versionName
+}
+
+/// hold state for app information
+final appInfoProvider = StateProvider<Map<AppInfo, String>>((ref) {
+  return {
+    AppInfo.buildNumber: '',
+    AppInfo.versionName: '',
+  };
 });
