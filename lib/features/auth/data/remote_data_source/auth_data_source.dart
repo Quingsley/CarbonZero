@@ -158,10 +158,7 @@ class AuthDataSource {
   Stream<UserModel?> getCurrentUserSnapshot() {
     final userStream = _db
         .collection('users')
-        .withConverter<UserModel>(
-          fromFirestore: (snapshot, _) => UserModel.fromJson(snapshot.data()!),
-          toFirestore: (value, _) => value.toJson(),
-        )
+        .withUserModelConverter()
         .doc(_authInstance.currentUser?.uid)
         .snapshots()
         .map((snapshot) => snapshot.data());
