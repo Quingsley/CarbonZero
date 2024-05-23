@@ -91,7 +91,7 @@ class _TabShellRouteState extends ConsumerState<TabShellRoute> {
                     ? Theme.of(context).colorScheme.primary
                     : Theme.of(context)
                         .colorScheme
-                        .onBackground
+                        .onSurface
                         .withOpacity(.62),
                 BlendMode.srcIn,
               ),
@@ -107,7 +107,7 @@ class _TabShellRouteState extends ConsumerState<TabShellRoute> {
                     ? Theme.of(context).colorScheme.primary
                     : Theme.of(context)
                         .colorScheme
-                        .onBackground
+                        .onSurface
                         .withOpacity(.62),
                 BlendMode.srcIn,
               ),
@@ -123,7 +123,7 @@ class _TabShellRouteState extends ConsumerState<TabShellRoute> {
                     ? Theme.of(context).colorScheme.primary
                     : Theme.of(context)
                         .colorScheme
-                        .onBackground
+                        .onSurface
                         .withOpacity(.62),
                 BlendMode.srcIn,
               ),
@@ -139,7 +139,7 @@ class _TabShellRouteState extends ConsumerState<TabShellRoute> {
                     ? Theme.of(context).colorScheme.primary
                     : Theme.of(context)
                         .colorScheme
-                        .onBackground
+                        .onSurface
                         .withOpacity(.62),
                 BlendMode.srcIn,
               ),
@@ -155,7 +155,7 @@ class _TabShellRouteState extends ConsumerState<TabShellRoute> {
                     ? Theme.of(context).colorScheme.primary
                     : Theme.of(context)
                         .colorScheme
-                        .onBackground
+                        .onSurface
                         .withOpacity(.62),
                 BlendMode.srcIn,
               ),

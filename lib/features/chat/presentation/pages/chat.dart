@@ -82,14 +82,14 @@ class _CommunityInboxState extends ConsumerState<CommunityInbox> {
       ),
       body: Chat(
         theme: DefaultChatTheme(
-          backgroundColor: context.colors.background,
+          backgroundColor: context.colors.surface,
           primaryColor: context.colors.primary,
           secondaryColor: context.colors.secondary,
           errorColor: context.colors.error,
           inputContainerDecoration: BoxDecoration(
-            color: context.colors.background,
+            color: context.colors.surface,
           ),
-          inputTextColor: context.colors.onBackground,
+          inputTextColor: context.colors.onSurface,
           inputTextDecoration: const InputDecoration(
             hintText: 'Type here..',
             enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),

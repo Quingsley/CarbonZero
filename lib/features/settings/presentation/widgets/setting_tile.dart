@@ -37,8 +37,8 @@ class SettingsTile extends StatelessWidget {
         contentPadding: EdgeInsets.zero,
         leading: IconButton.filledTonal(
           style: ButtonStyle(
-            backgroundColor: MaterialStatePropertyAll<Color?>(fillColor),
-            shape: MaterialStatePropertyAll(
+            backgroundColor: WidgetStatePropertyAll<Color?>(fillColor),
+            shape: WidgetStatePropertyAll(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),

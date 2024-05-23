@@ -48,7 +48,7 @@ class SettingsScreen extends ConsumerWidget {
                 },
                 child: Chip(
                   label: Text('${user.value?.fName} ${user.value?.lName}'),
-                  color: MaterialStatePropertyAll<Color>(
+                  color: WidgetStatePropertyAll<Color>(
                     context.colors.primaryContainer,
                   ),
                 ),

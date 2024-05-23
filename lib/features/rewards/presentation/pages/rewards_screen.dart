@@ -50,7 +50,7 @@ class RewardsScreen extends ConsumerWidget {
                   IconButton.filled(
                     onPressed: () {},
                     style: ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll(
+                      backgroundColor: WidgetStatePropertyAll(
                         Colors.amberAccent.withOpacity(.62),
                       ),
                     ),

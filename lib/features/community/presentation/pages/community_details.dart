@@ -116,7 +116,7 @@ class CommunityDetails extends ConsumerWidget {
                                     .toList(),
                                 faceSize: 50,
                                 facePercentOverlap: .4,
-                                backgroundColor: context.colors.background,
+                                backgroundColor: context.colors.surface,
                               );
                             },
                             error: (error, _) => Text(

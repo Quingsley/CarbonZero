@@ -1,4 +1,3 @@
-import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/features/user_onboarding/presentation/widgets/k_timeline_tile.dart';
 import 'package:carbon_zero/features/user_onboarding/presentation/widgets/page_view_form.dart';
 import 'package:carbon_zero/features/user_onboarding/providers/user_onboarding_providers.dart';

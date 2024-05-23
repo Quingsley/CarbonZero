@@ -20,10 +20,10 @@ class ActivityProgressCard extends StatelessWidget {
       contentPadding: EdgeInsets.zero,
       leading: IconButton.filled(
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(
+          backgroundColor: WidgetStateProperty.all<Color>(
             Color(activityModel.color).withOpacity(.52),
           ),
-          minimumSize: MaterialStateProperty.all<Size>(const Size(20, 20)),
+          minimumSize: WidgetStateProperty.all<Size>(const Size(20, 20)),
         ),
         color: Color(activityModel.color),
         icon: Text(activityModel.icon),
