@@ -2,6 +2,7 @@ import 'package:carbon_zero/core/constants/constants.dart';
 import 'package:carbon_zero/core/error/failure.dart';
 import 'package:carbon_zero/core/extensions.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
+import 'package:carbon_zero/core/utils/utils.dart';
 import 'package:carbon_zero/core/widgets/bottom_sheet.dart';
 import 'package:carbon_zero/core/widgets/home_loading_skeleton.dart';
 import 'package:carbon_zero/features/activities/presentation/pages/new_activity.dart';
@@ -54,6 +55,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     user.whenOrNull(
       data: (user) {
         if (user != null) {
+          checkPushToken(ref, user);
           final communities =
               ref.watch(adminCommunityFutureProvider(user.userId!));
           setState(() {
