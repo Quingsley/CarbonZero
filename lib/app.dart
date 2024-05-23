@@ -2,8 +2,6 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:carbon_zero/core/constants/flavors.dart';
 import 'package:carbon_zero/core/providers/shared_providers.dart';
 import 'package:carbon_zero/core/theme/theme.dart';
-import 'package:carbon_zero/core/utils/utils.dart';
-import 'package:carbon_zero/features/auth/presentation/view_models/auth_view_model.dart';
 import 'package:carbon_zero/routes/app_routes.dart';
 import 'package:carbon_zero/services/local_notifications.dart';
 import 'package:flutter/material.dart';
@@ -52,13 +50,7 @@ class _CarbonZeroState extends ConsumerState<CarbonZero> {
   ) {
     final router = ref.watch(AppRoutes.router);
     final isDarkMode = ref.watch(isDarkModeStateProvider);
-    ref.listen(userStreamProvider, (previous, next) {
-      next.whenOrNull(
-        data: (user) {
-          checkPushToken(ref, user!);
-        },
-      );
-    });
+
     final env = getFlavor();
     return MaterialApp.router(
       debugShowCheckedModeBanner: env == Flavor.dev,
