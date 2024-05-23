@@ -81,15 +81,15 @@ Future<void> storeNotifications(
 Future<void> checkPushToken(WidgetRef ref, UserModel user) async {
   final preference = await ref.read(sharedPreferencesProvider.future);
   final pushToken = preference.getString(fcmNtfKey);
-  print(('local push token--------', pushToken));
+  debugPrint(('local push token--------', pushToken).toString());
 
   if (pushToken == null) {
     // request for a new push token
     await ref.read(notificationsProvider.notifier).requestPermission();
     final newPushToken = ref.read(pushTokenProvider);
-    print(('new push token-----------', newPushToken));
+    debugPrint(('new push token-----------', newPushToken).toString());
     if (pushToken != null) {
-      print('-------updating token-----------');
+      debugPrint('-------updating token-----------');
       await ref
           .read(authRepositoryProvider)
           .updatePushToken(newPushToken!, user.userId!);
