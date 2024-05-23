@@ -50,3 +50,6 @@ firebase.json
 
 # FVM Version Cache
 .fvm/
+
+build_apk.sh
+build_numbers.json
