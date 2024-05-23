@@ -71,77 +71,79 @@ class NotificationController {
   static Future<void> scheduleNotification(
     ActivityModel activity,
   ) async {
+    try {
 // get current time
-    final currentTime = DateTime.now();
-    final today =
-        DateTime(currentTime.year, currentTime.month, currentTime.day);
+      final currentTime = DateTime.now();
+      final today =
+          DateTime(currentTime.year, currentTime.month, currentTime.day);
 
-    final preference = await SharedPreferences.getInstance();
+      final preference = await SharedPreferences.getInstance();
 
-    final storedDate = preference.getString('lastScheduledDate');
-    if (storedDate != null) {
-      final lastScheduledDate = DateTime.parse(storedDate);
-      // if the last scheduled date is the same as today, return
-      // since notification has already been scheduled for today
-      if (lastScheduledDate.dateComparison(today)) return;
-    }
+      final storedDate = preference.getString('lastScheduledDate');
+      if (storedDate != null) {
+        final lastScheduledDate = DateTime.parse(storedDate);
+        // if the last scheduled date is the same as today, return
+        // since notification has already been scheduled for today
+        if (lastScheduledDate.dateComparison(today)) return;
+      }
 // get start date and end date they are in utc so convert to local time
-    final startDate = DateTime.parse(activity.startDate).toLocal();
-    final endDate = DateTime.parse(activity.endDate).toLocal();
+      final startDate =
+          DateTime.parse(activity.startDate).toLocal(); // can fail
+      final endDate = DateTime.parse(activity.endDate).toLocal(); // can fail
 // compare current time with start date and date date to ensure that
 //the activity is not over
-    if (currentTime.isAfter(startDate) && currentTime.isBefore(endDate)) {
+      if (currentTime.isAfter(startDate) && currentTime.isBefore(endDate)) {
 // if the activity is not over, schedule a notification
 // time to schedule the notification format  (4: 47 PM)
-      // final [hour, minute] = activity.reminderTime.split(':');
-      // final time = NotificationController.convertTo24HourFormat(
-      //   activity.reminderTime,
-      // );
-      final [hour, minute] = activity.reminderTime.split(':');
-      final scheduleTime = DateTime(
-        currentTime.year,
-        currentTime.month,
-        currentTime.day,
-        int.parse(hour),
-        int.parse(minute),
-      );
-      // final cronExpression = Schedule(
-      //   hours: int.parse(hour),
-      //   minutes: int.parse(minute),
-      //   seconds: 0,
-      // ).toCronString();
-      // final preciseDates = generateDateRange(startDate, endDate);
-      final localTimeZone =
-          await AwesomeNotifications().getLocalTimeZoneIdentifier();
-      await AwesomeNotifications().createNotification(
-        content: NotificationContent(
-          id: DateTime.now().millisecond,
-          channelKey: 'activity_channel',
-          groupKey: 'activity_channel_group',
-          title: ' ${activity.icon} ${activity.name}',
-          body:
-              'Its time to add a completion on ${activity.name} to your daily activities.',
-          wakeUpScreen: true,
-          category: NotificationCategory.Reminder,
-          notificationLayout: NotificationLayout.BigText,
-          payload: {'activity': jsonEncode(activity.toJson())},
-          autoDismissible: false,
-          bigPicture: activity.icon,
-        ),
-        schedule: NotificationCalendar(
-          day: scheduleTime.day,
-          hour: scheduleTime.hour,
-          minute: scheduleTime.minute,
-          month: scheduleTime.month,
-          year: scheduleTime.year,
-          weekday: scheduleTime.weekday,
-          timeZone: localTimeZone,
-        ),
-      );
-      await preference.setString(
-        'lastScheduledDate',
-        currentTime.toIso8601String(),
-      );
+        // final [hour, minute] = activity.reminderTime.split(':');
+        // final time = NotificationController.convertTo24HourFormat(
+        //   activity.reminderTime,
+        // );
+        final [hour, minute] = activity.reminderTime.split(':');
+        final scheduleTime = DateTime(
+          currentTime.year,
+          currentTime.month,
+          currentTime.day,
+          int.parse(hour),
+          int.parse(minute),
+        );
+
+        final localTimeZone =
+            await AwesomeNotifications().getLocalTimeZoneIdentifier();
+        await AwesomeNotifications().createNotification(
+          content: NotificationContent(
+            id: DateTime.now().millisecond,
+            channelKey: 'activity_channel',
+            groupKey: 'activity_channel_group',
+            title: ' ${activity.icon} ${activity.name}',
+            body:
+                'Its time to add a completion on ${activity.name} to your daily activities.',
+            wakeUpScreen: true,
+            category: NotificationCategory.Reminder,
+            notificationLayout: NotificationLayout.BigText,
+            payload: {'activity': jsonEncode(activity.toJson())},
+            autoDismissible: false,
+            bigPicture: activity.icon,
+          ),
+          schedule: NotificationCalendar(
+            day: scheduleTime.day,
+            hour: scheduleTime.hour,
+            minute: scheduleTime.minute,
+            month: scheduleTime.month,
+            year: scheduleTime.year,
+            weekday: scheduleTime.weekday,
+            timeZone: localTimeZone,
+          ),
+        );
+        await preference.setString(
+          'lastScheduledDate',
+          currentTime.toIso8601String(),
+        );
+      }
+    } catch (e) {
+      // usually fails when parsing start and end date
+      // occurs due to the shimmer effect
+      debugPrint(e.toString());
     }
   }
 
