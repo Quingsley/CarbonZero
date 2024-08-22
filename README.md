@@ -60,7 +60,7 @@ I am open to collaboration. If you have any ideas or suggestions, feel free to o
 
 ## Try It Out
 
-- (Play store link coming soon)
+- [App Link](https://play.google.com/store/apps/details?id=com.quingsley.carbon_zero)
 - [Become an internal tester](https://forms.gle/SdjPHvYdzKW6f9pW7)
 
 ## Tech Stack
